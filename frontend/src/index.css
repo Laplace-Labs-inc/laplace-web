@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* 다크 모드 기본 배경색 세팅 */
+body {
+  background-color: #030712; /* Tailwind의 gray-950 */
+  color: #ffffff;
+}

@@ -1,0 +1,36 @@
+# Rust
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+
+# Deno
+.deno/
+coverage/
+
+# Laplace specific
+.laplace/
+
+# TLA+ TLC 생성 파일들
+*_TTrace_*.tla
+*.bin
+*.out
+states/
+MC.out
+MC.cfg
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+task.md
+probe_audit_report.md
