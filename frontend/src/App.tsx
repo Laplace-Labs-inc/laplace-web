@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Cpu, Settings, LogIn } from 'lucide-react';
+import { Settings, LogIn } from 'lucide-react';
 
 // 페이지 컴포넌트 임포트
 import { LandingPage } from './pages/LandingPage';
