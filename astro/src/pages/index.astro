@@ -1,0 +1,21 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/shared/Nav.astro";
+import Footer from "../components/shared/Footer.astro";
+import Hero from "../components/landing/Hero.astro";
+import ProofStrip from "../components/landing/ProofStrip.astro";
+import ProductTrio from "../components/landing/ProductTrio.astro";
+import TechDepth from "../components/landing/TechDepth.astro";
+import Waitlist from "../components/landing/Waitlist.astro";
+---
+<Base title="Laplace Labs" description="Ki-DPOR formal verification for production Rust systems. Eradicate heisenbugs provably.">
+  <Nav />
+  <main>
+    <Hero />
+    <ProofStrip />
+    <ProductTrio />
+    <TechDepth />
+    <Waitlist />
+  </main>
+  <Footer />
+</Base>

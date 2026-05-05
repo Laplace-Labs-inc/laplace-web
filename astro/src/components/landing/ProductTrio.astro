@@ -1,0 +1,81 @@
+---
+const products = [
+  {
+    name: "Axiom",
+    tagline: "Deterministic Concurrency Verification",
+    description:
+      "Ki-DPOR exhaustively explores every thread interleaving. No random sampling, no false negatives. Every deadlock, every race condition - found.",
+    logo: "/images/Laplace_Axiom.png",
+    accentText: "text-axiom",
+    accentArrow: "text-axiom",
+    borderHover: "hover:border-axiom",
+    features: [
+      "Ki-DPOR + A* heuristic scheduling",
+      "Kani formal proofs on core algorithms",
+      "ARD forensic binary dump",
+      "BYOC macro - no code changes",
+    ],
+  },
+  {
+    name: "Kraken",
+    tagline: "Ruthless Deterministic Load Generation",
+    description:
+      "ChaCha8 seeded, reproducible chaos. Replay exact failure conditions every time. Your load tests, finally deterministic.",
+    logo: "/images/Laplace_Kraken.png",
+    accentText: "text-kraken",
+    accentArrow: "text-kraken",
+    borderHover: "hover:border-kraken",
+    features: [
+      "Deterministic VU seed management",
+      "Scenario DSL (YAML/JSON)",
+      "DPOR-integrated chaos scheduling",
+      "Concurrent credit deduction verified",
+    ],
+  },
+  {
+    name: "Probe",
+    tagline: "Edge-Based State Collection",
+    description:
+      "QUIC 0-RTT mesh. LZ4 compressed event streams. TrackedMutex auto-instruments your sync primitives - zero manual annotation.",
+    logo: "/images/Laplace_Probe.png",
+    accentText: "text-probe",
+    accentArrow: "text-probe",
+    borderHover: "hover:border-probe",
+    features: [
+      "QUIC 0-RTT transport (quinn)",
+      "TrackedMutex<T> - std & async",
+      "eBPF lock-hunt (pthread uprobes)",
+      "SSE real-time event stream",
+    ],
+  },
+];
+---
+<section class="mx-auto max-w-7xl px-6 py-24">
+  <div class="mb-16 text-center">
+    <h2 class="mb-4 text-4xl font-bold tracking-tight md:text-5xl">The Sovereign Trinity</h2>
+    <p class="mx-auto max-w-2xl text-xl text-brand-muted">
+      Three engines. One credit pool. Total visibility into your concurrent system.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+    {products.map((p) => (
+      <div class={`flex flex-col rounded-2xl border border-brand-border bg-brand-surface p-8 transition-all duration-300 hover:bg-brand-surface/80 ${p.borderHover}`}>
+        <div class="mb-6 flex h-28 items-center justify-center">
+          <img src={p.logo} alt={p.name} class="max-h-full object-contain" />
+        </div>
+        <h3 class="mb-1 text-2xl font-bold">{p.name}</h3>
+        <p class={`mb-4 text-sm font-semibold ${p.accentText}`}>{p.tagline}</p>
+        <p class="mb-6 flex-1 text-sm leading-relaxed text-brand-muted">{p.description}</p>
+        <ul class="space-y-2">
+          {p.features.map((f) => (
+            <li class="flex items-center gap-2 text-sm text-brand-muted">
+              <span class={p.accentArrow}>-></span>
+              {f}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>

@@ -1,4 +1,4 @@
-name: Deploy static content to Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -13,38 +13,48 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }} # 이 부분이 수정되었습니다.
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: ./docs
-        
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
-          cache-dependency-path: './docs/package-lock.json'
-          
-      - name: Install dependencies
+          cache-dependency-path: |
+            astro/package-lock.json
+            docs/package-lock.json
+
+      - name: Install Astro deps
         run: npm install
-        
-      - name: Build
+        working-directory: ./astro
+
+      - name: Build Astro
+        run: npm run build
+        working-directory: ./astro
+
+      - name: Install Docs deps
+        run: npm install
+        working-directory: ./docs
+
+      - name: Build Docs
         run: npm run docs:build
-        
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        working-directory: ./docs
+
+      - name: Merge into deploy dir
+        run: |
+          mkdir -p deploy
+          cp -r astro/dist/. deploy/
+          mkdir -p deploy/docs
+          cp -r docs/.vitepress/dist/. deploy/docs/
+
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
         with:
-          path: './docs/.vitepress/dist' 
-          
+          path: "./deploy"
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

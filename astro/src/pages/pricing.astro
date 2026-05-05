@@ -1,0 +1,174 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/shared/Nav.astro";
+import Footer from "../components/shared/Footer.astro";
+
+const tiers = [
+  {
+    name: "FREE",
+    price: "$0",
+    period: "forever",
+    tagline: "Explore formal verification",
+    highlight: false,
+    badge: null,
+    features: [
+      "Axiom verification engine",
+      "500 credits / month",
+      "Ki-DPOR depth limit: 500",
+      "ARD forensic dump",
+      "Community support",
+      "Data consent opt-in: +50 bonus credits",
+    ],
+    cta: "Start for Free",
+    ctaHref: "#waitlist",
+    ctaStyle: "border",
+  },
+  {
+    name: "PLUS",
+    price: "$29",
+    period: "per month",
+    tagline: "More depth, more confidence",
+    highlight: false,
+    badge: null,
+    features: [
+      "Everything in FREE",
+      "5,000 credits / month",
+      "Ki-DPOR depth limit: 2,000",
+      "Priority email support",
+      "Usage dashboard",
+      "Credit expiry: 12 months",
+    ],
+    cta: "Join Waitlist",
+    ctaHref: "#waitlist",
+    ctaStyle: "border",
+  },
+  {
+    name: "PRO",
+    price: "$99",
+    period: "per month",
+    tagline: "Full TRINITY minus observability",
+    highlight: true,
+    badge: "Most Popular",
+    features: [
+      "Everything in PLUS",
+      "Axiom + Kraken engines",
+      "20,000 credits / month - shared pool",
+      "Deterministic chaos load scenarios",
+      "Ki-DPOR depth limit: 10,000",
+      "Slack / Discord support",
+      "Early access to new features",
+    ],
+    cta: "Join Waitlist",
+    ctaHref: "#waitlist",
+    ctaStyle: "accent",
+  },
+];
+---
+<Base title="Pricing" description="Simple, transparent pricing for every team size.">
+  <Nav />
+  <main class="mx-auto max-w-7xl px-6 py-24">
+    <div class="mb-16 text-center">
+      <h1 class="mb-4 text-5xl font-black tracking-tighter md:text-6xl">
+        Simple, transparent pricing.
+      </h1>
+      <p class="mx-auto max-w-2xl text-xl text-brand-muted">
+        Start free. Scale as you verify.
+        All plans include a 30-day trial at the next tier.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 items-start gap-6 md:grid-cols-3">
+      {tiers.map((tier) => (
+        <div
+          class={`relative flex flex-col rounded-2xl border p-8 ${
+            tier.highlight
+              ? "border-brand-accent bg-brand-surface shadow-[0_0_40px_rgba(0,229,204,0.08)]"
+              : "border-brand-border bg-brand-surface/50"
+          }`}
+        >
+          {tier.badge && (
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span class="whitespace-nowrap rounded-full bg-brand-accent px-3 py-1 text-xs font-bold text-brand-bg">
+                {tier.badge}
+              </span>
+            </div>
+          )}
+
+          <div class="mb-6">
+            <h2 class={`mb-1 text-lg font-bold ${tier.highlight ? "text-brand-accent" : "text-brand-muted"}`}>
+              {tier.name}
+            </h2>
+            <p class="text-sm text-white">{tier.tagline}</p>
+          </div>
+
+          <div class="mb-8">
+            <span class="text-5xl font-black tracking-tighter">{tier.price}</span>
+            <span class="ml-2 text-sm text-brand-muted">{tier.period}</span>
+          </div>
+
+          <a
+            href={tier.ctaHref}
+            class={`mb-8 w-full rounded-full px-6 py-3 text-center text-sm font-semibold transition-opacity ${
+              tier.ctaStyle === "accent"
+                ? "bg-brand-accent text-brand-bg hover:opacity-90"
+                : "border border-brand-border text-white hover:bg-brand-surface"
+            }`}
+          >
+            {tier.cta}
+          </a>
+
+          <ul class="flex-1 space-y-3">
+            {tier.features.map((f) => (
+              <li class="flex items-start gap-3 text-sm">
+                <span class="mt-0.5 shrink-0 text-brand-accent">✓</span>
+                <span class="text-brand-muted">{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 flex flex-col items-center justify-between gap-6 rounded-2xl border border-brand-border p-8 md:flex-row">
+      <div>
+        <h3 class="mb-1 text-xl font-bold">ENTERPRISE & TRINITY</h3>
+        <p class="max-w-xl text-sm text-brand-muted">
+          BYOC, Phantom Monopoly 슬롯, Vanguard 실시간 방어, 전용 지원.
+          팀 규모와 요구사항에 맞춰 협의합니다.
+        </p>
+      </div>
+      <a
+        href="mailto:contact@laplace-labs.com"
+        class="shrink-0 whitespace-nowrap rounded-full border border-brand-border px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-surface"
+      >
+        Contact Sales →
+      </a>
+    </div>
+
+    <div class="mx-auto mt-16 max-w-2xl">
+      <h3 class="mb-8 text-center text-2xl font-bold">Common questions</h3>
+      <dl class="space-y-6">
+        {[
+          {
+            q: "What is a credit?",
+            a: "Credits represent compute time consumed by Ki-DPOR exploration. 1 credit ≈ 1 vCPU-minute of verification. Priced at $0.10–0.15 per vCPU-minute.",
+          },
+          {
+            q: "Can I switch plans?",
+            a: "Yes, upgrade or downgrade at any time. Unused credits carry over for 30 days after downgrade.",
+          },
+          {
+            q: "Is BYOC available on PRO?",
+            a: "BYOC (Bring Your Own Code - external library auditing) is available on ENTERPRISE and above. PRO includes first-party BYOC macros only.",
+          },
+        ].map((item) => (
+          <div class="border-b border-brand-border pb-6">
+            <dt class="mb-2 font-semibold text-white">{item.q}</dt>
+            <dd class="text-sm leading-relaxed text-brand-muted">{item.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </main>
+  <Footer />
+</Base>
