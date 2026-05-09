@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 290" fill="none">
+  <defs>
+    <style>
+      .l { stroke: #1a2744; stroke-width: 1.8; stroke-linecap: round; fill: none; }
+      .c { stroke: #1a2744; stroke-width: 1.8; fill: none; }
+      .d { fill: #00E5CC; }
+    </style>
+  </defs>
+
+  <!--
+    Symbol: center (200,115), outer radius R=95
+    Vertices (pointy-top hexagon):
+      A = top      (200, 20)
+      B = top-right (282, 68)
+      C = bot-right (282, 162)
+      D = bottom   (200, 210)
+      E = bot-left  (118, 162)
+      F = top-left  (118, 68)
+      G = center   (200, 115)
+  -->
+
+  <!-- Outer hexagon -->
+  <polygon class="l" points="200,20 282,68 282,162 200,210 118,162 118,68"/>
+
+  <!-- 6 spokes: center to each vertex -->
+  <line class="l" x1="200" y1="115" x2="200" y2="20"/>
+  <line class="l" x1="200" y1="115" x2="282" y2="68"/>
+  <line class="l" x1="200" y1="115" x2="282" y2="162"/>
+  <line class="l" x1="200" y1="115" x2="200" y2="210"/>
+  <line class="l" x1="200" y1="115" x2="118" y2="162"/>
+  <line class="l" x1="200" y1="115" x2="118" y2="68"/>
+
+  <!-- Inner triangle 1 (upward ▲): A–C–E -->
+  <line class="l" x1="200" y1="20"  x2="282" y2="162"/>
+  <line class="l" x1="282" y1="162" x2="118" y2="162"/>
+  <line class="l" x1="118" y1="162" x2="200" y2="20"/>
+
+  <!-- Inner triangle 2 (downward ▽): B–D–F -->
+  <line class="l" x1="282" y1="68"  x2="200" y2="210"/>
+  <line class="l" x1="200" y1="210" x2="118" y2="68"/>
+  <line class="l" x1="118" y1="68"  x2="282" y2="68"/>
+
+  <!--
+    3 inscribed circles in the 3 rhombus faces:
+      Face-top   (F-A-B-G): center (200, 68), r≈41
+      Face-right (B-C-D-G): center (241, 139), r≈41
+      Face-left  (D-E-F-G): center (159, 139), r≈41
+  -->
+  <circle class="c" cx="200" cy="68"  r="41"/>
+  <circle class="c" cx="241" cy="139" r="41"/>
+  <circle class="c" cx="159" cy="139" r="41"/>
+
+  <!-- Outer ring dots (6 hexagon vertices) -->
+  <circle class="d" cx="200" cy="20"  r="4.5"/>
+  <circle class="d" cx="282" cy="68"  r="4.5"/>
+  <circle class="d" cx="282" cy="162" r="4.5"/>
+  <circle class="d" cx="200" cy="210" r="4.5"/>
+  <circle class="d" cx="118" cy="162" r="4.5"/>
+  <circle class="d" cx="118" cy="68"  r="4.5"/>
+
+  <!-- Inner ring dots (midpoints of spokes = intersection of inner triangles with spokes) -->
+  <circle class="d" cx="200" cy="68"  r="3.5"/>
+  <circle class="d" cx="241" cy="92"  r="3.5"/>
+  <circle class="d" cx="241" cy="139" r="3.5"/>
+  <circle class="d" cx="200" cy="163" r="3.5"/>
+  <circle class="d" cx="159" cy="139" r="3.5"/>
+  <circle class="d" cx="159" cy="92"  r="3.5"/>
+
+  <!-- Center dot -->
+  <circle class="d" cx="200" cy="115" r="3.5"/>
+
+  <!-- Wordmark: LAPLACE LABS -->
+  <text
+    x="200" y="245"
+    text-anchor="middle"
+    font-family="'Inter', system-ui, sans-serif"
+    font-size="30"
+    font-weight="700"
+    letter-spacing="9"
+    fill="#1a2744">LAPLACE LABS</text>
+
+  <!-- Subtitle -->
+  <text
+    x="200" y="268"
+    text-anchor="middle"
+    font-family="'Inter', system-ui, sans-serif"
+    font-size="8.5"
+    font-weight="400"
+    letter-spacing="2.5"
+    fill="#6b7a8d">ENTERPRISE DISTRIBUTED SYSTEMS VERIFICATION PLATFORM</text>
+</svg>
