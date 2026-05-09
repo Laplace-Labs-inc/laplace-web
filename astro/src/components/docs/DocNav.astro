@@ -1,0 +1,48 @@
+---
+import { allDocItems } from "../../data/docs-nav";
+
+interface Props {
+  currentSlug: string;
+}
+const { currentSlug } = Astro.props;
+
+const idx = allDocItems.findIndex((item) => item.slug === currentSlug);
+const prev = idx > 0 ? allDocItems[idx - 1] : null;
+const next = idx < allDocItems.length - 1 ? allDocItems[idx + 1] : null;
+---
+
+<div class="mt-12 pt-6 border-t border-brand-border flex justify-between items-center">
+  {
+    prev ? (
+      <a
+        href={`/docs/${prev.slug}`}
+        class="flex items-center gap-2 text-brand-muted hover:text-white transition-colors group"
+      >
+        <span class="text-xl group-hover:-translate-x-1 transition-transform">←</span>
+        <span class="text-sm">
+          <span class="block text-xs text-brand-muted">Previous</span>
+          {prev.title}
+        </span>
+      </a>
+    ) : (
+      <div />
+    )
+  }
+
+  {
+    next ? (
+      <a
+        href={`/docs/${next.slug}`}
+        class="flex items-center gap-2 text-brand-muted hover:text-white transition-colors group text-right"
+      >
+        <span class="text-sm">
+          <span class="block text-xs text-brand-muted">Next</span>
+          {next.title}
+        </span>
+        <span class="text-xl group-hover:translate-x-1 transition-transform">→</span>
+      </a>
+    ) : (
+      <div />
+    )
+  }
+</div>
