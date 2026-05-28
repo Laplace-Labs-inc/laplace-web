@@ -2,6 +2,13 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  // The VitePress site is mounted under /docs/ inside laplace-web's GitHub
+  // Pages deploy (deploy.yml copies docs/.vitepress/dist/ -> deploy/docs/).
+  // Without this base, every asset URL is rooted at /assets/... and 404s
+  // because the Astro site occupies that prefix; only deep pages (e.g.
+  // /docs/getting-started/) appeared to work since they hit the Astro
+  // catch-all fallback instead of the broken VitePress index.
+  base: "/docs/",
   title: "Laplace Docs",
   description: "The Sovereign Architecture for High-Performance AI Agents",
   themeConfig: {
