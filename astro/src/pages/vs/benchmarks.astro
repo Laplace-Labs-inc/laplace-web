@@ -1,7 +1,6 @@
 ---
 import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 import Base from "../../layouts/Base.astro";
 import Nav from "../../components/shared/Nav.astro";
 import Footer from "../../components/shared/Footer.astro";
@@ -34,8 +33,12 @@ type BenchmarkResult = {
 
 const resultDate = "2026-05-28";
 const toolOrder = ["laplace", "loom", "shuttle", "stateright", "madsim"];
-const pageDir = dirname(fileURLToPath(import.meta.url));
-const fixtureDir = resolve(pageDir, "../../../../../laplace-cloud/benchmarks/lq9", resultDate);
+// Fixtures are committed inside laplace-web (src/data/lq9-benchmarks/<date>/)
+// so the GitHub Pages build does not need the private laplace-cloud sibling
+// repo. Resolve from process.cwd() (= the astro/ project root) instead of
+// import.meta.url so bundled output under dist/ still locates the JSON.
+// The LQ-Perf phase will replace this static read with an API fetch.
+const fixtureDir = resolve(process.cwd(), "src/data/lq9-benchmarks", resultDate);
 
 function readResult(tool: string): BenchmarkResult {
   return JSON.parse(readFileSync(resolve(fixtureDir, `${tool}.json`), "utf8"));

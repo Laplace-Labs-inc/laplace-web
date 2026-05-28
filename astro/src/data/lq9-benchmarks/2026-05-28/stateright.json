@@ -1,0 +1,104 @@
+{
+  "schema_version": "lq9.benchmark.v1",
+  "generated_at": "2026-05-28T00:00:00Z",
+  "sample_kind": "deterministic_fixture",
+  "measurement_scope": "Fixture values are deterministic placeholders for CI shape checks and static page rendering. Promote to true GitHub Actions ubuntu-22.04 measurements before claims.",
+  "hardware": {
+    "runner": "ubuntu-22.04",
+    "cpu": "GitHub-hosted runner class",
+    "memory": "GitHub-hosted runner class"
+  },
+  "tool": {
+    "name": "stateright",
+    "version": "0.31.0",
+    "category": "State-space model checking",
+    "runner": "stateright::Model"
+  },
+  "scenarios": [
+    {
+      "id": "abba_4_thread_deadlock",
+      "name": "ABBA 4-thread deadlock",
+      "description": "Four workers acquire two locks in opposing order.",
+      "metrics": {
+        "wall_clock_ms": {
+          "median": 1050,
+          "p99": 1280,
+          "unit": "ms"
+        },
+        "peak_rss_mb": {
+          "peak": 128,
+          "unit": "MiB"
+        }
+      },
+      "verdict": "fixture_only"
+    },
+    {
+      "id": "producer_consumer_bounded",
+      "name": "Producer-Consumer bounded queue",
+      "description": "Four producers and two consumers contend on a bounded queue.",
+      "metrics": {
+        "wall_clock_ms": {
+          "median": 880,
+          "p99": 1100,
+          "unit": "ms"
+        },
+        "peak_rss_mb": {
+          "peak": 116,
+          "unit": "MiB"
+        }
+      },
+      "verdict": "fixture_only"
+    },
+    {
+      "id": "rwlock_reader_starvation",
+      "name": "RwLock reader starvation",
+      "description": "Reader-heavy schedule delays a writer behind recurring readers.",
+      "metrics": {
+        "wall_clock_ms": {
+          "median": 930,
+          "p99": 1190,
+          "unit": "ms"
+        },
+        "peak_rss_mb": {
+          "peak": 120,
+          "unit": "MiB"
+        }
+      },
+      "verdict": "fixture_only"
+    },
+    {
+      "id": "tokio_watch_mutex_race",
+      "name": "tokio watch mutex race",
+      "description": "Watch channel notification races with mutex-guarded state.",
+      "metrics": {
+        "wall_clock_ms": {
+          "median": 1100,
+          "p99": 1360,
+          "unit": "ms"
+        },
+        "peak_rss_mb": {
+          "peak": 132,
+          "unit": "MiB"
+        }
+      },
+      "verdict": "fixture_only"
+    },
+    {
+      "id": "dining_philosophers_5p",
+      "name": "Dining Philosophers (5p)",
+      "description": "Five philosophers acquire adjacent forks with symmetric ordering.",
+      "metrics": {
+        "wall_clock_ms": {
+          "median": 970,
+          "p99": 1250,
+          "unit": "ms"
+        },
+        "peak_rss_mb": {
+          "peak": 124,
+          "unit": "MiB"
+        }
+      },
+      "verdict": "fixture_only"
+    }
+  ]
+}

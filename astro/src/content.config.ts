@@ -16,7 +16,7 @@ const docs = defineCollection({
 const caseStudies = defineCollection({
   loader: glob({
     pattern: "F*.md",
-    base: "../../laplace-cloud/docs/Laplace-Labs-Docs/blog/case-studies",
+    base: "./src/content/case-studies",
   }),
   schema: z.object({
     title: z.string(),
