@@ -1,0 +1,229 @@
+---
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import Base from "../../layouts/Base.astro";
+import Nav from "../../components/shared/Nav.astro";
+import Footer from "../../components/shared/Footer.astro";
+
+type MetricSet = {
+  wall_clock_ms: { median: number; p99: number; unit: string };
+  peak_rss_mb: { peak: number; unit: string };
+};
+
+type ScenarioResult = {
+  id: string;
+  name: string;
+  description: string;
+  metrics: MetricSet;
+};
+
+type BenchmarkResult = {
+  schema_version: string;
+  sample_kind: string;
+  measurement_scope: string;
+  generated_at: string;
+  tool: {
+    name: string;
+    version: string;
+    category: string;
+    runner: string;
+  };
+  scenarios: ScenarioResult[];
+};
+
+const resultDate = "2026-05-28";
+const toolOrder = ["laplace", "loom", "shuttle", "stateright", "madsim"];
+const pageDir = dirname(fileURLToPath(import.meta.url));
+const fixtureDir = resolve(pageDir, "../../../../../laplace-cloud/benchmarks/lq9", resultDate);
+
+function readResult(tool: string): BenchmarkResult {
+  return JSON.parse(readFileSync(resolve(fixtureDir, `${tool}.json`), "utf8"));
+}
+
+const results = toolOrder.map(readResult);
+const scenarios = results[0].scenarios;
+const generatedAt = new Date(results[0].generated_at).toISOString().slice(0, 10);
+
+function formatMs(value: number): string {
+  return `${(value / 1000).toFixed(2)}s`;
+}
+
+function formatMemory(value: number): string {
+  return `${value} MiB`;
+}
+
+function scenarioFor(result: BenchmarkResult, id: string): ScenarioResult {
+  const scenario = result.scenarios.find((entry) => entry.id === id);
+  if (!scenario) {
+    throw new Error(`Missing LQ-9 scenario ${id} for ${result.tool.name}`);
+  }
+  return scenario;
+}
+
+function bestMedianFor(id: string): number {
+  return Math.min(...results.map((result) => scenarioFor(result, id).metrics.wall_clock_ms.median));
+}
+
+function bestMemoryFor(id: string): number {
+  return Math.min(...results.map((result) => scenarioFor(result, id).metrics.peak_rss_mb.peak));
+}
+---
+<Base
+  title="Concurrency Benchmark Comparison"
+  description="LQ-9 benchmark comparison for Laplace, Loom, Shuttle, Stateright, and madsim."
+>
+  <Nav />
+  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
+    <section class="border-b border-brand-border pb-10">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div class="max-w-3xl">
+          <p class="mb-3 font-mono text-xs font-medium uppercase text-brand-accent">LQ-9 Benchmark War Page</p>
+          <h1 class="text-4xl font-black leading-tight md:text-5xl">
+            Concurrency tool benchmark matrix
+          </h1>
+          <p class="mt-4 text-base leading-7 text-brand-muted md:text-lg">
+            Five portable scenarios across Laplace, Loom, Shuttle, Stateright, and madsim.
+            Current values are deterministic fixtures for the static contract and CI gate.
+          </p>
+        </div>
+        <div class="grid min-w-72 grid-cols-2 gap-3 text-sm">
+          <div class="border border-brand-border bg-brand-surface/60 p-4">
+            <div class="font-mono text-xs uppercase text-brand-muted">Result date</div>
+            <div class="mt-1 text-lg font-semibold">{generatedAt}</div>
+          </div>
+          <div class="border border-brand-border bg-brand-surface/60 p-4">
+            <div class="font-mono text-xs uppercase text-brand-muted">Schema</div>
+            <div class="mt-1 text-lg font-semibold">{results[0].schema_version}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-10">
+      <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 class="text-2xl font-bold">Tool Pins</h2>
+          <p class="mt-1 text-sm text-brand-muted">Pinned runner surfaces used by the fixture generator.</p>
+        </div>
+        <p class="font-mono text-xs uppercase text-brand-muted">ubuntu-22.04 target hardware</p>
+      </div>
+      <div class="overflow-x-auto border border-brand-border">
+        <table class="min-w-full divide-y divide-brand-border text-left text-sm">
+          <thead class="bg-brand-surface/80 text-xs uppercase text-brand-muted">
+            <tr>
+              <th class="px-4 py-3 font-medium">Tool</th>
+              <th class="px-4 py-3 font-medium">Version</th>
+              <th class="px-4 py-3 font-medium">Category</th>
+              <th class="px-4 py-3 font-medium">Runner</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-brand-border">
+            {results.map((result) => (
+              <tr>
+                <td class="px-4 py-3 font-semibold capitalize text-white">{result.tool.name}</td>
+                <td class="px-4 py-3 font-mono text-brand-accent">{result.tool.version}</td>
+                <td class="px-4 py-3 text-brand-muted">{result.tool.category}</td>
+                <td class="px-4 py-3 font-mono text-xs text-brand-muted">{result.tool.runner}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="py-10">
+      <div class="mb-5">
+        <h2 class="text-2xl font-bold">Wall-clock Time</h2>
+        <p class="mt-1 text-sm text-brand-muted">Median and p99 time to first violation, lower is better.</p>
+      </div>
+      <div class="overflow-x-auto border border-brand-border">
+        <table class="min-w-full divide-y divide-brand-border text-left text-sm">
+          <thead class="bg-brand-surface/80 text-xs uppercase text-brand-muted">
+            <tr>
+              <th class="min-w-64 px-4 py-3 font-medium">Scenario</th>
+              {results.map((result) => (
+                <th class="min-w-36 px-4 py-3 font-medium capitalize">{result.tool.name}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-brand-border">
+            {scenarios.map((scenario) => {
+              const best = bestMedianFor(scenario.id);
+              return (
+                <tr>
+                  <td class="px-4 py-4">
+                    <div class="font-semibold text-white">{scenario.name}</div>
+                    <div class="mt-1 max-w-xl text-xs leading-5 text-brand-muted">{scenario.description}</div>
+                  </td>
+                  {results.map((result) => {
+                    const item = scenarioFor(result, scenario.id);
+                    const isBest = item.metrics.wall_clock_ms.median === best;
+                    return (
+                      <td class={`px-4 py-4 ${isBest ? "bg-brand-accent/10" : ""}`}>
+                        <div class="font-mono text-base font-semibold text-white">
+                          {formatMs(item.metrics.wall_clock_ms.median)}
+                        </div>
+                        <div class="mt-1 font-mono text-xs text-brand-muted">
+                          p99 {formatMs(item.metrics.wall_clock_ms.p99)}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="py-10">
+      <div class="mb-5">
+        <h2 class="text-2xl font-bold">Peak Memory</h2>
+        <p class="mt-1 text-sm text-brand-muted">Peak RSS per scenario, lower is better.</p>
+      </div>
+      <div class="overflow-x-auto border border-brand-border">
+        <table class="min-w-full divide-y divide-brand-border text-left text-sm">
+          <thead class="bg-brand-surface/80 text-xs uppercase text-brand-muted">
+            <tr>
+              <th class="min-w-64 px-4 py-3 font-medium">Scenario</th>
+              {results.map((result) => (
+                <th class="min-w-36 px-4 py-3 font-medium capitalize">{result.tool.name}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-brand-border">
+            {scenarios.map((scenario) => {
+              const best = bestMemoryFor(scenario.id);
+              return (
+                <tr>
+                  <td class="px-4 py-4 font-semibold text-white">{scenario.name}</td>
+                  {results.map((result) => {
+                    const item = scenarioFor(result, scenario.id);
+                    const isBest = item.metrics.peak_rss_mb.peak === best;
+                    return (
+                      <td class={`px-4 py-4 font-mono text-base font-semibold text-white ${isBest ? "bg-brand-accent/10" : ""}`}>
+                        {formatMemory(item.metrics.peak_rss_mb.peak)}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-10 border border-brand-border bg-brand-surface/50 p-6">
+      <h2 class="text-xl font-bold">Raw Data Contract</h2>
+      <p class="mt-3 max-w-4xl text-sm leading-6 text-brand-muted">
+        The committed files under <code class="font-mono text-brand-accent">benchmarks/lq9/{resultDate}</code>
+        are the source of this page. Fixture values keep the page and CI gate deterministic until the
+        LQ-Perf phase promotes these runners to true GitHub Actions measurements.
+      </p>
+    </section>
+  </main>
+  <Footer />
+</Base>

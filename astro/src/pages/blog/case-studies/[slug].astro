@@ -1,0 +1,139 @@
+---
+import "../../../styles/global.css";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { getCollection, getEntry, render } from "astro:content";
+import type { CollectionEntry, GetStaticPaths } from "astro:content";
+import Nav from "../../../components/shared/Nav.astro";
+import Footer from "../../../components/shared/Footer.astro";
+
+interface Props {
+  entryId: CollectionEntry<"caseStudies">["id"];
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const entries = await getCollection("caseStudies");
+  return entries.map((entry) => ({
+    params: { slug: entry.data.slug },
+    props: { entryId: entry.id },
+  }));
+};
+
+const { entryId } = Astro.props as Props;
+const entry = await getEntry("caseStudies", entryId);
+if (!entry) {
+  throw new Error(`Case study entry not found for id: ${entryId}`);
+}
+
+const { Content, headings } = await render(entry);
+const published = entry.data.publishedAt.toISOString().slice(0, 10);
+const updated = entry.data.updatedAt.toISOString().slice(0, 10);
+const jsonLd = JSON.stringify(entry.data.seo.jsonLd);
+const coverPath = path.resolve(
+  process.cwd(),
+  "../../laplace-cloud",
+  entry.data.cover.image.replace(/^\//, ""),
+);
+const coverSvg = await readFile(coverPath, "utf8");
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{entry.data.title} - Laplace Labs</title>
+    <meta name="description" content={entry.data.description} />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={entry.data.title} />
+    <meta property="og:description" content={entry.data.description} />
+    <meta property="og:image" content={entry.data.seo.ogImage} />
+    <meta name="twitter:card" content={entry.data.seo.twitterCard} />
+    <meta name="twitter:title" content={entry.data.title} />
+    <meta name="twitter:description" content={entry.data.description} />
+    <meta name="twitter:image" content={entry.data.seo.ogImage} />
+    <script type="application/ld+json" set:html={jsonLd} />
+  </head>
+  <body class="bg-brand-bg text-white font-sans antialiased">
+    <Nav />
+
+    <main class="mx-auto max-w-6xl px-6 pb-20 pt-14 lg:px-10">
+      <a href="/docs/" class="text-sm font-medium text-brand-accent hover:underline">Docs</a>
+
+      <article class="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
+        <div class="min-w-0">
+          <p class="font-mono text-sm uppercase tracking-[0.18em] text-brand-accent">
+            {entry.data.scenario}
+          </p>
+          <h1 class="mt-4 max-w-4xl text-4xl font-extrabold leading-tight text-white md:text-6xl">
+            {entry.data.title}
+          </h1>
+          <p class="mt-5 max-w-3xl text-lg leading-8 text-brand-muted">
+            {entry.data.description}
+          </p>
+
+          <dl class="mt-8 grid gap-4 border-y border-brand-border py-5 text-sm text-brand-muted sm:grid-cols-3">
+            <div>
+              <dt class="font-mono uppercase text-white">Library</dt>
+              <dd class="mt-1">{entry.data.library}</dd>
+            </div>
+            <div>
+              <dt class="font-mono uppercase text-white">Published</dt>
+              <dd class="mt-1">{published}</dd>
+            </div>
+            <div>
+              <dt class="font-mono uppercase text-white">Updated</dt>
+              <dd class="mt-1">{updated}</dd>
+            </div>
+          </dl>
+
+          <div class="mt-8 overflow-hidden rounded border border-brand-border bg-brand-surface">
+            <div aria-label={entry.data.cover.alt} set:html={coverSvg} />
+          </div>
+
+          <div
+            class="
+              prose prose-invert mt-10 max-w-none
+              prose-headings:font-semibold prose-headings:text-white
+              prose-h2:border-t prose-h2:border-brand-border prose-h2:pt-8
+              prose-p:text-brand-muted prose-p:leading-relaxed
+              prose-a:text-brand-accent prose-a:no-underline hover:prose-a:underline
+              prose-code:text-brand-accent prose-code:bg-brand-surface prose-code:px-1 prose-code:rounded
+              prose-pre:bg-brand-surface prose-pre:border prose-pre:border-brand-border
+              prose-strong:text-white
+              prose-li:text-brand-muted
+              prose-table:border-collapse
+              prose-th:bg-brand-surface prose-th:text-white prose-th:p-2 prose-th:border prose-th:border-brand-border
+              prose-td:p-2 prose-td:border prose-td:border-brand-border prose-td:text-brand-muted
+            "
+          >
+            <Content />
+          </div>
+        </div>
+
+        <aside class="hidden lg:block">
+          <div class="sticky top-24 rounded border border-brand-border bg-brand-surface p-5">
+            <h2 class="font-mono text-sm uppercase text-white">Sections</h2>
+            <nav class="mt-4 space-y-3 text-sm text-brand-muted">
+              {
+                headings
+                  .filter((heading) => heading.depth === 2)
+                  .map((heading) => (
+                    <a class="block hover:text-white" href={`#${heading.slug}`}>
+                      {heading.text}
+                    </a>
+                  ))
+              }
+            </nav>
+            <div class="mt-6 border-t border-brand-border pt-4 text-xs leading-5 text-brand-muted">
+              <p>{entry.data.cover.license}</p>
+              <p class="mt-2">{entry.data.disclosure.status}</p>
+            </div>
+          </div>
+        </aside>
+      </article>
+    </main>
+
+    <Footer />
+  </body>
+</html>

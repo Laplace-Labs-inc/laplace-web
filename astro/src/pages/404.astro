@@ -1,0 +1,64 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/shared/Nav.astro";
+import Footer from "../components/shared/Footer.astro";
+---
+
+<Base
+  title="Page Not Found"
+  description="The page you requested could not be found on laplace-labs.com."
+>
+  <Nav />
+
+  <main class="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-start justify-center px-6 py-20 lg:px-10">
+    <p class="font-mono text-sm uppercase tracking-[0.18em] text-brand-accent">404</p>
+    <h1 class="mt-4 text-4xl font-extrabold leading-tight md:text-5xl">
+      We could not find that page.
+    </h1>
+    <p class="mt-5 max-w-xl text-base leading-7 text-brand-muted md:text-lg">
+      The link may be out of date or the page may have moved. Here are a few
+      places that usually have what you are looking for.
+    </p>
+
+    <ul class="mt-8 grid w-full gap-3 sm:grid-cols-2">
+      <li>
+        <a
+          href="/docs/"
+          class="block rounded-lg border border-brand-border bg-brand-surface/40 p-5 transition-colors hover:border-brand-accent"
+        >
+          <p class="text-sm font-semibold text-white">Documentation</p>
+          <p class="mt-1 text-xs text-brand-muted">Quickstart, concepts, tasks, reference.</p>
+        </a>
+      </li>
+      <li>
+        <a
+          href="/blog/case-studies/"
+          class="block rounded-lg border border-brand-border bg-brand-surface/40 p-5 transition-colors hover:border-brand-accent"
+        >
+          <p class="text-sm font-semibold text-white">Case Studies</p>
+          <p class="mt-1 text-xs text-brand-muted">Real concurrency bugs Laplace surfaces.</p>
+        </a>
+      </li>
+      <li>
+        <a
+          href="/vs/benchmarks/"
+          class="block rounded-lg border border-brand-border bg-brand-surface/40 p-5 transition-colors hover:border-brand-accent"
+        >
+          <p class="text-sm font-semibold text-white">Benchmark Comparison</p>
+          <p class="mt-1 text-xs text-brand-muted">Laplace vs Loom / Shuttle / Stateright / madsim.</p>
+        </a>
+      </li>
+      <li>
+        <a
+          href="/"
+          class="block rounded-lg border border-brand-border bg-brand-surface/40 p-5 transition-colors hover:border-brand-accent"
+        >
+          <p class="text-sm font-semibold text-white">Home</p>
+          <p class="mt-1 text-xs text-brand-muted">Back to the landing page.</p>
+        </a>
+      </li>
+    </ul>
+  </main>
+
+  <Footer />
+</Base>
