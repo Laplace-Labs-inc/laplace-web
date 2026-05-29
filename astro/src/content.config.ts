@@ -7,7 +7,7 @@ const docs = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     section: z
-      .enum(["getting-started", "concepts", "tasks", "reference"])
+      .enum(["getting-started", "concepts", "tasks", "tutorials", "reference"])
       .optional(),
     order: z.number().optional(),
   }),

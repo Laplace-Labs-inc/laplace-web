@@ -23,10 +23,18 @@ export const docsNav: NavSection[] = [
     section: "Concepts",
     icon: "💡",
     items: [
+      { title: "Sovereign Architecture", slug: "concepts/architecture" },
       { title: "Axiom — Ki-DPOR Verification", slug: "concepts/axiom" },
       { title: "Kraken — Load Engine", slug: "concepts/kraken" },
       { title: "Probe — Observation Mesh", slug: "concepts/probe" },
       { title: "Tiers & Pricing", slug: "concepts/tiers" },
+    ],
+  },
+  {
+    section: "Tutorials",
+    icon: "📘",
+    items: [
+      { title: "빠른 시작 (Quickstart)", slug: "tutorials/quickstart" },
     ],
   },
   {

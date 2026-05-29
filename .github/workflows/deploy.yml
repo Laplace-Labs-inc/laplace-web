@@ -9,6 +9,13 @@ permissions:
   pages: write
   id-token: write
 
+# Monorepo policy (2026-05-28): the VitePress site under docs/ stays in the
+# repo as a placeholder for future migration but is NOT built or deployed.
+# All public documentation is served from the Astro site under
+# astro/src/pages/docs/. Removing VitePress from CI also resolves the
+# /docs/ CSS 404 issue caused by VitePress dist/ overwriting Astro's
+# /docs/ output during the merge step.
+
 jobs:
   deploy:
     environment:
@@ -22,9 +29,7 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
-          cache-dependency-path: |
-            astro/package-lock.json
-            docs/package-lock.json
+          cache-dependency-path: astro/package-lock.json
 
       - name: Install Astro deps
         run: npm install
@@ -34,20 +39,10 @@ jobs:
         run: npm run build
         working-directory: ./astro
 
-      - name: Install Docs deps
-        run: npm install
-        working-directory: ./docs
-
-      - name: Build Docs
-        run: npm run docs:build
-        working-directory: ./docs
-
-      - name: Merge into deploy dir
+      - name: Stage deploy dir
         run: |
           mkdir -p deploy
           cp -r astro/dist/. deploy/
-          mkdir -p deploy/docs
-          cp -r docs/.vitepress/dist/. deploy/docs/
 
       - uses: actions/configure-pages@v4
 
