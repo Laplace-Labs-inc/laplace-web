@@ -1,0 +1,146 @@
+---
+import Base from "../../layouts/Base.astro";
+import Nav from "../../components/shared/Nav.astro";
+import Footer from "../../components/shared/Footer.astro";
+import {
+  benchmarkDate,
+  benchmarkResults,
+  comparisonDimensions,
+  comparisonJsonLd,
+  competitorProfiles,
+  formatMiB,
+  formatMs,
+  latestVersionStatus,
+  scenarioFor,
+} from "../../data/competitor-matrix";
+
+const competitor = "loom";
+const profile = competitorProfiles[competitor];
+const comparedTools = ["laplace", competitor] as const;
+const scenarios = benchmarkResults.laplace.scenarios;
+const jsonLd = JSON.stringify(comparisonJsonLd(`https://laplace-labs.com/vs/${competitor}/`, [...comparedTools]));
+---
+<Base
+  title="Laplace vs Loom — Deterministic Concurrency Verification Comparison"
+  description="Compare Laplace and Loom for deterministic Rust concurrency verification, migration patterns, and LQ-9 fixture results."
+>
+  <Nav />
+  <script type="application/ld+json" set:html={jsonLd} />
+  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
+    <section class="border-b border-brand-border pb-10">
+      <p class="mb-3 font-mono text-xs font-medium uppercase text-brand-accent">Laplace vs {profile.titleName}</p>
+      <h1 class="max-w-4xl text-4xl font-black leading-tight md:text-5xl">
+        Deterministic forensic replay versus loom-native model tests.
+      </h1>
+      <p class="mt-4 max-w-3xl text-base leading-7 text-brand-muted md:text-lg">
+        Loom is still the right answer for focused Rust library tests that can adopt loom primitives. Laplace is aimed
+        at teams that need replayable artifacts, BYOC dependency coverage, and benchmark-backed migration guidance.
+      </p>
+    </section>
+
+    <section class="py-10">
+      <h2 class="text-2xl font-bold">TL;DR Comparison</h2>
+      <div class="mt-5 overflow-x-auto border border-brand-border">
+        <table class="min-w-full divide-y divide-brand-border text-left text-sm">
+          <thead class="bg-brand-surface/80 text-xs uppercase text-brand-muted">
+            <tr>
+              <th class="min-w-56 px-4 py-3 font-medium">Dimension</th>
+              {comparedTools.map((tool) => <th class="min-w-64 px-4 py-3 font-medium capitalize">{tool}</th>)}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-brand-border">
+            {comparisonDimensions.map((dimension) => (
+              <tr>
+                <td class="px-4 py-4 font-semibold text-white">{dimension.label}</td>
+                {comparedTools.map((tool) => (
+                  <td class="px-4 py-4 align-top">
+                    <div class="font-semibold text-white">{dimension.cells[tool].label}</div>
+                    <div class="mt-1 text-xs leading-5 text-brand-muted">{dimension.cells[tool].detail}</div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="grid gap-6 py-10 lg:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-bold">When Loom Is the Better Choice</h2>
+        <ul class="mt-4 space-y-3 text-sm leading-6 text-brand-muted">
+          {profile.betterChoice.map((item) => <li class="border-l border-brand-border pl-4">{item}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold">When Laplace Is the Better Choice</h2>
+        <ul class="mt-4 space-y-3 text-sm leading-6 text-brand-muted">
+          {profile.laplaceChoice.map((item) => <li class="border-l border-brand-accent pl-4">{item}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section id="migration-guide" class="py-10">
+      <h2 class="text-2xl font-bold">Migration Guide</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-brand-muted">
+        The full diff-style guide lives in <span class="font-mono text-brand-accent">src/content/vs/loom-migration.md</span>.
+        The Cargo project at <span class="font-mono text-brand-accent">tests/lq10/migration-examples/from-loom</span>
+        compiles the after examples for the five LQ-9 scenarios.
+      </p>
+      <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        {profile.migrationExamples.map((item) => (
+          <div class="border border-brand-border bg-brand-surface/70 p-4">
+            <h3 class="font-semibold text-white">{item}</h3>
+            <p class="mt-2 text-xs leading-5 text-brand-muted">Convert this pattern to tracked Laplace harness primitives.</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="py-10">
+      <h2 class="text-2xl font-bold">LQ-9 Fixture Metrics</h2>
+      <p class="mt-2 text-sm text-brand-muted">Fixture date {benchmarkDate}. Scope: {benchmarkResults.laplace.measurement_scope}</p>
+      <div class="mt-5 overflow-x-auto border border-brand-border">
+        <table class="min-w-full divide-y divide-brand-border text-left text-sm">
+          <thead class="bg-brand-surface/80 text-xs uppercase text-brand-muted">
+            <tr>
+              <th class="min-w-64 px-4 py-3 font-medium">Scenario</th>
+              <th class="px-4 py-3 font-medium">Laplace median / memory</th>
+              <th class="px-4 py-3 font-medium">Loom median / memory</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-brand-border">
+            {scenarios.map((scenario) => {
+              const laplace = scenarioFor("laplace", scenario.id);
+              const other = scenarioFor(competitor, scenario.id);
+              return (
+                <tr>
+                  <td class="px-4 py-4">
+                    <div class="font-semibold text-white">{scenario.name}</div>
+                    <div class="mt-1 text-xs text-brand-muted">{scenario.description}</div>
+                  </td>
+                  <td class="px-4 py-4 font-mono text-brand-accent">{formatMs(laplace.metrics.wall_clock_ms.median)} / {formatMiB(laplace.metrics.peak_rss_mb.peak)}</td>
+                  <td class="px-4 py-4 font-mono text-white">{formatMs(other.metrics.wall_clock_ms.median)} / {formatMiB(other.metrics.peak_rss_mb.peak)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs text-brand-muted">Version status: Loom {benchmarkResults.loom.tool.version}, {latestVersionStatus.loom}.</p>
+    </section>
+
+    <section class="py-10">
+      <h2 class="text-2xl font-bold">FAQ</h2>
+      <div class="mt-5 grid gap-4 md:grid-cols-2">
+        {profile.faq.map((item) => (
+          <article class="border border-brand-border bg-brand-surface/70 p-4">
+            <h3 class="font-semibold text-white">{item.question}</h3>
+            <p class="mt-2 text-sm leading-6 text-brand-muted">{item.answer}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

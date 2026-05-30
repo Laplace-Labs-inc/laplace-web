@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Lighthouse CI artifacts (run-local only)
+.lighthouseci/
+**/.lighthouseci/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

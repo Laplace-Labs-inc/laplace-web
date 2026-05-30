@@ -6,6 +6,13 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
   site: "https://laplace-labs.com",
   output: "static",
+  i18n: {
+    locales: ["en", "ko", "ja", "zh-CN"],
+    defaultLocale: "en",
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },

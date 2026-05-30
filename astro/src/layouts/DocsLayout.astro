@@ -6,6 +6,7 @@ import Sidebar from "../components/docs/Sidebar.astro";
 import TOC from "../components/docs/TOC.astro";
 import Breadcrumb from "../components/docs/Breadcrumb.astro";
 import DocNav from "../components/docs/DocNav.astro";
+import Search from "../components/Search.astro";
 
 interface Props {
   title: string;
@@ -24,6 +25,10 @@ const { title, description, headings, currentSlug } = Astro.props;
 
     <main class="flex-1 px-6 lg:px-10 py-10 min-w-0">
       <div class="max-w-3xl mx-auto">
+        <div class="mb-6">
+          <Search />
+        </div>
+
         <Breadcrumb slug={currentSlug} />
 
         <article
