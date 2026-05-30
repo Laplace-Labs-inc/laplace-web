@@ -1,0 +1,13 @@
+{"version":2,"width":80,"height":24,"timestamp":1782691380,"env":{"SHELL":"/bin/bash","TERM":"xterm-256color","ASCIINEMA_REC":"1","LAPLACE_DEMO":"probe-integration-60s","FONT":"JetBrains Mono 14"}}
+[0.000,"o","\u001b[2J\u001b[H$ laplace probe agent start --service api --bind 127.0.0.1:4318\r\n"]
+[3.600,"o","probe agent listening on 127.0.0.1:4318\r\nstream: otlp/http -> laplace-probe\r\n"]
+[8.100,"o","$ cargo run -p billing-api --features laplace-probe\r\n"]
+[12.400,"o","billing-api ready on http://127.0.0.1:8080\r\n"]
+[16.800,"o","$ laplace probe tui --service api\r\n"]
+[19.600,"o","┌ Laplace Probe Console ─────────────────────────────────────────────┐\r\n│ service api   events/sec 0   locks 0   traces 0                    │\r\n└────────────────────────────────────────────────────────────────────┘\r\n"]
+[25.200,"o","$ hey -n 200 -c 16 http://127.0.0.1:8080/invoices/42 >/dev/null\r\n"]
+[31.500,"o","┌ Laplace Probe Console ─────────────────────────────────────────────┐\r\n│ service api   events/sec 348   locks 12   traces 200               │\r\n│ hot lock       invoice-cache    p99 wait 4.7ms                     │\r\n│ schedule seed  probe:api:2026-05-28:00019                          │\r\n└────────────────────────────────────────────────────────────────────┘\r\n"]
+[43.300,"o","$ cargo laplace verify --probe-seed probe:api:2026-05-28:00019\r\n"]
+[47.900,"o","replaying live schedule from probe stream\r\n"]
+[52.600,"o","BUG DETECTED: async-ref deadlock\r\nartifact: target/laplace/probe/api-00019.ard\r\n"]
+[59.800,"o","$ "]

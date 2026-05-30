@@ -28,6 +28,9 @@ export const docsNav: NavSection[] = [
       { title: "Kraken — Load Engine", slug: "concepts/kraken" },
       { title: "Probe — Observation Mesh", slug: "concepts/probe" },
       { title: "Tiers & Pricing", slug: "concepts/tiers" },
+      { title: "Ki-DPOR vs DPOR", slug: "en/concepts/ki-dpor-vs-dpor" },
+      { title: "TrackedMutex Internals", slug: "en/concepts/trackedmutex-internals" },
+      { title: "Sovereign Pool Sharding", slug: "en/concepts/sovereign-pool-sharding" },
     ],
   },
   {
@@ -35,6 +38,23 @@ export const docsNav: NavSection[] = [
     icon: "📘",
     items: [
       { title: "빠른 시작 (Quickstart)", slug: "tutorials/quickstart" },
+      { title: "Quickstart in 30 Minutes", slug: "en/tutorials/quickstart-30min" },
+      { title: "BYOC First Verify", slug: "en/tutorials/byoc-first-verify" },
+      { title: "ABBA Debugging", slug: "en/tutorials/abba-debugging" },
+      { title: "Probe Integration", slug: "en/tutorials/probe-integration" },
+      { title: "CI Integration", slug: "en/tutorials/ci-integration" },
+    ],
+  },
+  {
+    section: "How-to Guides",
+    icon: "How-to",
+    items: [
+      { title: "Migrate hyper", slug: "en/how-to/migrate-hyper" },
+      { title: "Migrate tower", slug: "en/how-to/migrate-tower" },
+      { title: "Migrate axum", slug: "en/how-to/migrate-axum" },
+      { title: "Migrate sqlx", slug: "en/how-to/migrate-sqlx" },
+      { title: "Migrate sled", slug: "en/how-to/migrate-sled" },
+      { title: "cargo-laplace Usage", slug: "en/how-to/cargo-laplace-usage" },
     ],
   },
   {
@@ -52,6 +72,10 @@ export const docsNav: NavSection[] = [
     items: [
       { title: "CLI Reference", slug: "reference/cli" },
       { title: "API Reference", slug: "reference/api" },
+      { title: "CLI Options", slug: "en/reference/cli-options" },
+      { title: "ARD File Format", slug: "en/reference/ard-file-format" },
+      { title: "FFI ABI v1.1.0", slug: "en/reference/ffi-abi-v1-1-0" },
+      { title: "Ghost Constraints", slug: "en/reference/ghost-constraints-index" },
     ],
   },
 ];

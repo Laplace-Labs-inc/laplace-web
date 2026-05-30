@@ -36,7 +36,7 @@ const caseStudies = defineCollection({
     seo: z.object({
       ogImage: z.string(),
       twitterCard: z.literal("summary_large_image"),
-      jsonLd: z.record(z.any()),
+      jsonLd: z.record(z.string(), z.any()),
     }),
     reproRepository: z.string().url(),
     reproRepositoryStatus: z.string(),

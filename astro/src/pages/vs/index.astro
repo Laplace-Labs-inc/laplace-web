@@ -1,0 +1,110 @@
+---
+import Base from "../../layouts/Base.astro";
+import Nav from "../../components/shared/Nav.astro";
+import Footer from "../../components/shared/Footer.astro";
+import {
+  benchmarkDate,
+  benchmarkResults,
+  comparisonDimensions,
+  comparisonJsonLd,
+  competitorOrder,
+  competitorProfiles,
+  latestVersionStatus,
+  toolOrder,
+} from "../../data/competitor-matrix";
+
+const jsonLd = JSON.stringify(comparisonJsonLd("https://laplace-labs.com/vs/"));
+---
+<Base
+  title="Laplace vs Concurrency Verification Tools"
+  description="Compare Laplace with Loom, Shuttle, Stateright, and madsim using LQ-9 fixture data and migration guidance."
+>
+  <Nav />
+  <script type="application/ld+json" set:html={jsonLd} />
+  <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
+    <section class="border-b border-brand-border pb-10">
+      <p class="mb-3 font-mono text-xs font-medium uppercase text-brand-accent">LQ-10 Comparison Hub</p>
+      <h1 class="max-w-4xl text-4xl font-black leading-tight md:text-5xl">
+        Pick the concurrency verification tool that fits the failure mode.
+      </h1>
+      <p class="mt-4 max-w-3xl text-base leading-7 text-brand-muted md:text-lg">
+        These pages compare Laplace with Loom, Shuttle, Stateright, and madsim. Timing and memory values are read
+        from the checked LQ-9 JSON fixtures dated {benchmarkDate}; unverified community and license fields are marked
+        before publish instead of guessed.
+      </p>
+    </section>
+
+    <section class="grid gap-4 py-10 md:grid-cols-2 xl:grid-cols-4">
+      {competitorOrder.map((id) => {
+        const profile = competitorProfiles[id];
+        return (
+          <a class="border border-brand-border bg-brand-surface/70 p-5 transition hover:border-brand-accent" href={`/vs/${id}/`}>
+            <p class="font-mono text-xs uppercase text-brand-muted">Laplace vs</p>
+            <h2 class="mt-2 text-2xl font-bold">{profile.titleName}</h2>
+            <p class="mt-3 text-sm leading-6 text-brand-muted">{profile.betterChoice[0]}</p>
+            <p class="mt-4 font-mono text-xs text-brand-accent">Open comparison</p>
+          </a>
+        );
+      })}
+    </section>
+
+    <section class="py-10">
+      <div class="mb-5">
+        <h2 class="text-2xl font-bold">10-Dimension Matrix</h2>
+        <p class="mt-1 text-sm text-brand-muted">
+          Numeric efficiency cells are derived directly from LQ-9 JSON scenario values.
+        </p>
+      </div>
+      <div class="overflow-x-auto border border-brand-border">
+        <table class="min-w-full divide-y divide-brand-border text-left text-sm">
+          <thead class="bg-brand-surface/80 text-xs uppercase text-brand-muted">
+            <tr>
+              <th class="min-w-56 px-4 py-3 font-medium">Dimension</th>
+              {toolOrder.map((tool) => (
+                <th class="min-w-48 px-4 py-3 font-medium capitalize">{tool}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-brand-border">
+            {comparisonDimensions.map((dimension) => (
+              <tr>
+                <td class="px-4 py-4 font-semibold text-white">{dimension.label}</td>
+                {toolOrder.map((tool) => (
+                  <td class="px-4 py-4 align-top">
+                    <div class="font-semibold text-white">{dimension.cells[tool].label}</div>
+                    <div class="mt-1 text-xs leading-5 text-brand-muted">{dimension.cells[tool].detail}</div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="py-10">
+      <h2 class="text-2xl font-bold">Version Verification</h2>
+      <div class="mt-5 overflow-x-auto border border-brand-border">
+        <table class="min-w-full divide-y divide-brand-border text-left text-sm">
+          <thead class="bg-brand-surface/80 text-xs uppercase text-brand-muted">
+            <tr>
+              <th class="px-4 py-3 font-medium">Tool</th>
+              <th class="px-4 py-3 font-medium">Fixture version</th>
+              <th class="px-4 py-3 font-medium">Verification status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-brand-border">
+            {toolOrder.map((tool) => (
+              <tr>
+                <td class="px-4 py-3 font-semibold capitalize text-white">{tool}</td>
+                <td class="px-4 py-3 font-mono text-brand-accent">{benchmarkResults[tool].tool.version}</td>
+                <td class="px-4 py-3 text-brand-muted">{latestVersionStatus[tool]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

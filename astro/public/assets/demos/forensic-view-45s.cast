@@ -1,0 +1,13 @@
+{"version":2,"width":80,"height":24,"timestamp":1782691320,"env":{"SHELL":"/bin/bash","TERM":"xterm-256color","ASCIINEMA_REC":"1","LAPLACE_DEMO":"forensic-view-45s","FONT":"JetBrains Mono 14"}}
+[0.000,"o","\u001b[2J\u001b[H$ laplace forensic view target/laplace/bugs/abba-4-thread.ard\r\n"]
+[2.300,"o","Laplace Forensic Viewer  bug=deadlock.abba  states=18  threads=4\r\n"]
+[5.000,"o","┌─ schedule ─────────────────────────────────────────────────────────┐\r\n│ 01 main spawn worker-a                                             │\r\n│ 02 main spawn worker-b                                             │\r\n│ 03 worker-a lock left      acquired                                │\r\n│ 04 worker-b lock right     acquired                                │\r\n│ 05 worker-a lock right     waiting                                 │\r\n│ 06 worker-b lock left      waiting                                 │\r\n└────────────────────────────────────────────────────────────────────┘\r\n"]
+[12.800,"o","/ lock right\r\n"]
+[15.200,"o","matches: state 05 worker-a wait(right)\r\n"]
+[18.000,"o","i\r\n"]
+[20.200,"o","state 05 detail\r\n  thread: worker-a\r\n  held: left@src/lib.rs:42\r\n  waiting: right@src/lib.rs:44\r\n  happens-before: worker-b acquired right at state 04\r\n"]
+[28.400,"o","n\r\n"]
+[30.100,"o","state 06 detail\r\n  thread: worker-b\r\n  held: right@src/lib.rs:51\r\n  waiting: left@src/lib.rs:53\r\n  cycle closed: worker-a <-> worker-b\r\n"]
+[38.900,"o","e\r\n"]
+[40.600,"o","exported markdown: target/laplace/bugs/abba-4-thread.md\r\n"]
+[44.800,"o","$ "]
