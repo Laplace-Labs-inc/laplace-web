@@ -1,0 +1,83 @@
+/*
+ * Laplace raw palette — pure CSS, no framework at-rules.
+ *
+ * SINGLE SOURCE OF TRUTH for the warm cream (light) / warm charcoal (dark)
+ * token values. Safe to import anywhere (Tailwind surfaces via laplace-theme.css,
+ * or a plain Starlight CSS pipeline that has no Tailwind).
+ *
+ * Theme is chosen by data-theme="light|dark" on <html>; without it we follow
+ * prefers-color-scheme so SSR / no-JS still renders correctly.
+ */
+
+:root,
+[data-theme="light"] {
+  --bg: #faf9f5;          /* warm off-white page background */
+  --bg-subtle: #f2f0e8;   /* inset / alternating rows */
+  --surface: #ffffff;     /* cards, panels */
+  --surface-2: #f5f3ec;   /* raised / hover */
+  --border: #e7e3d7;
+  --border-strong: #d8d3c4;
+  --fg: #21201c;          /* warm near-black */
+  --muted: #57544c;
+  --faint: #8a867a;
+  --accent: #0a7d6e;      /* Laplace teal, darkened for contrast on cream */
+  --accent-hover: #086456;
+  --accent-fg: #ffffff;
+  --danger: #c0392b;
+  --warning: #b7791f;
+  --success: #15803d;
+  --shadow: 0 1px 2px rgba(31, 30, 26, 0.06), 0 4px 16px rgba(31, 30, 26, 0.05);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1813;
+  --bg-subtle: #211f19;
+  --surface: #232017;
+  --surface-2: #2c2920;
+  --border: #38342b;
+  --border-strong: #4a4539;
+  --fg: #ece9df;
+  --muted: #a9a496;
+  --faint: #77736a;
+  --accent: #00e5cc;
+  --accent-hover: #2ff0da;
+  --accent-fg: #06231f;
+  --danger: #f87171;
+  --warning: #e3b341;
+  --success: #4ade80;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 18px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #1a1813;
+    --bg-subtle: #211f19;
+    --surface: #232017;
+    --surface-2: #2c2920;
+    --border: #38342b;
+    --border-strong: #4a4539;
+    --fg: #ece9df;
+    --muted: #a9a496;
+    --faint: #77736a;
+    --accent: #00e5cc;
+    --accent-hover: #2ff0da;
+    --accent-fg: #06231f;
+    --danger: #f87171;
+    --warning: #e3b341;
+    --success: #4ade80;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 18px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+  }
+}
+
+/* Brand product hues — constant across themes. */
+:root {
+  --axiom: #7c3aed;
+  --axiom-light: #a78bfa;
+  --kraken: #dc2626;
+  --kraken-light: #f87171;
+  --probe: #16a34a;
+  --probe-light: #4ade80;
+}

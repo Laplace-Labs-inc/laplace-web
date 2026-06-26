@@ -38,10 +38,22 @@ const coverSvg = await readFile(coverPath, "utf8");
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (function () {
+        try {
+          var s = localStorage.getItem("laplace-theme");
+          var t = s === "light" || s === "dark" ? s
+            : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
     <title>{entry.data.title} - Laplace Labs</title>
     <meta name="description" content={entry.data.description} />
     <meta property="og:type" content="article" />
@@ -58,7 +70,7 @@ const coverSvg = await readFile(coverPath, "utf8");
     <Nav />
 
     <main class="mx-auto max-w-6xl px-6 pb-20 pt-14 lg:px-10">
-      <a href="/docs/" class="text-sm font-medium text-brand-accent hover:underline">Docs</a>
+      <a href="https://docs.laplace-labs.com/" class="text-sm font-medium text-brand-accent hover:underline">Docs</a>
 
       <article class="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
         <div class="min-w-0">
