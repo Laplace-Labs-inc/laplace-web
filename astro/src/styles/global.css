@@ -1,3 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @config "../../tailwind.config.mjs";
+/* Shared design tokens (warm cream / warm dark) + Tailwind v4 wiring.
+ * Single source of truth: laplace-web/shared/laplace-theme.css. */
+@import "../../../shared/laplace-theme.css";

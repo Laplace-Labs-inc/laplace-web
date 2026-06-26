@@ -8,4 +8,8 @@ export default defineConfig({
     tailwindcss(), // 👈 이거 추가
     react()
   ],
+  server: {
+    // Allow importing the shared design-token CSS from the repo root (../shared).
+    fs: { allow: [".."] },
+  },
 })

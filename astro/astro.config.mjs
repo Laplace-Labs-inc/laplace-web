@@ -21,6 +21,10 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      // Allow importing the shared design-token CSS from the repo root (../shared).
+      fs: { allow: [".."] },
+    },
   },
   integrations: [react(), mdx()],
   markdown: {

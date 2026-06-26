@@ -1,0 +1,49 @@
+---
+/*
+ * Theme toggle (light ⇄ dark) for the Astro surfaces.
+ * Reads/writes localStorage `laplace-theme`; flips data-theme on <html>.
+ * Pairs with the pre-paint init snippet in Base.astro (no FOUC).
+ */
+---
+<button
+  id="theme-toggle"
+  type="button"
+  aria-label="Toggle color theme"
+  title="Toggle light / dark"
+  class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted hover:text-fg hover:bg-surface-2 transition"
+>
+  <svg class="theme-icon-sun h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"></path>
+  </svg>
+  <svg class="theme-icon-moon h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
+  </svg>
+</button>
+
+<script is:inline>
+  (function () {
+    var btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+    var sun = btn.querySelector(".theme-icon-sun");
+    var moon = btn.querySelector(".theme-icon-moon");
+    function sync() {
+      var dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (sun) sun.classList.toggle("hidden", dark);
+      if (moon) moon.classList.toggle("hidden", !dark);
+    }
+    sync();
+    btn.addEventListener("click", function () {
+      document.documentElement.classList.add("theme-anim");
+      var next =
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "light"
+          : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("laplace-theme", next);
+      } catch (e) {}
+      sync();
+    });
+  })();
+</script>
