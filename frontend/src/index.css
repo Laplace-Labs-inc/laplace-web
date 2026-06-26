@@ -2,3 +2,39 @@
 /* Shared design tokens (warm cream / warm dark) + Tailwind v4 wiring.
  * Single source of truth: laplace-web/shared/laplace-theme.css. */
 @import "../../shared/laplace-theme.css";
+
+/* ── Console-only overrides ──────────────────────────────────────────────
+ * The console targets the Anthropic-console aesthetic: warm paper neutrals
+ * (inherited from the shared palette) + a clay/terracotta accent (the
+ * marketing site & docs keep the Laplace teal). Defined AFTER the shared
+ * import so it wins, and keyed on data-theme so it tracks light/dark. */
+:root,
+[data-theme="light"] {
+  --bg: #faf9f5;
+  --bg-subtle: #f3f1ea;
+  --surface: #ffffff;
+  --surface-2: #f1efe7;
+  --border: #e8e4d8;
+  --border-strong: #d8d3c3;
+  --accent: #bd5d3a;        /* clay */
+  --accent-hover: #a44d2d;
+  --accent-fg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg: #1d1b17;
+  --bg-subtle: #232017;
+  --surface: #26231b;
+  --surface-2: #2f2b22;
+  --border: #3a352b;
+  --border-strong: #4b463a;
+  --accent: #d97757;        /* clay (lighter for dark) */
+  --accent-hover: #e2906f;
+  --accent-fg: #1a1813;
+}
+
+html,
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+}

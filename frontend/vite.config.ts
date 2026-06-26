@@ -12,5 +12,9 @@ export default defineConfig({
   server: {
     // Allow importing the shared design-token CSS from the repo root (../shared).
     fs: { allow: [".."] },
+    allowedHosts: true,
+  },
+  preview: {
+    allowedHosts: true,
   },
 })

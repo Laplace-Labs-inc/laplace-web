@@ -20,6 +20,11 @@ export default defineConfig({
     server: {
       // Allow importing the shared design-token CSS from the repo root (../shared).
       fs: { allow: [".."] },
+      // Permit tunnel/staging hostnames (preview behind Cloudflare Tunnel).
+      allowedHosts: true,
+    },
+    preview: {
+      allowedHosts: true,
     },
   },
   integrations: [react(), mdx()],

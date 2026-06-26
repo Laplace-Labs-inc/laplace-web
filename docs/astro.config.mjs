@@ -11,6 +11,10 @@ export default defineConfig({
     server: {
       // Allow importing the shared palette from the repo root (../shared).
       fs: { allow: [".."] },
+      allowedHosts: true,
+    },
+    preview: {
+      allowedHosts: true,
     },
   },
   integrations: [
