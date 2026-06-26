@@ -83,7 +83,111 @@ export async function authedGet<T>(path: string, token: string): Promise<T> {
     throw new ApiError(401, "Session expired or unauthorized.");
   }
   if (!res.ok) {
-    throw new ApiError(res.status, `Request to ${path} failed (${res.status})`);
+    throw new ApiError(res.status, await errorMessage(res, path));
   }
+  return (await res.json()) as T;
+}
+
+async function errorMessage(res: Response, path: string): Promise<string> {
+  try {
+    const body = (await res.json()) as { error?: { message?: string } };
+    if (body?.error?.message) return body.error.message;
+  } catch {
+    /* non-JSON body */
+  }
+  return `Request to ${path} failed (${res.status})`;
+}
+
+/** Authenticated JSON request (POST/DELETE) with bearer token. */
+export async function authedJson<T>(
+  method: "POST" | "DELETE",
+  path: string,
+  token: string,
+  body?: unknown,
+): Promise<T> {
+  const res = await fetch(`${requireBase()}${path}`, {
+    method,
+    headers: {
+      authorization: `Bearer ${token}`,
+      ...(body !== undefined ? { "content-type": "application/json" } : {}),
+    },
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+  if (res.status === 401) throw new ApiError(401, "Session expired or unauthorized.");
+  if (!res.ok) throw new ApiError(res.status, await errorMessage(res, path));
+  return (await res.json()) as T;
+}
+
+// ── Control-plane management types ──────────────────────────────────────────
+export interface Org {
+  id: string;
+  slug: string;
+  name: string;
+}
+export interface Project {
+  id: string;
+  org_id: string;
+  slug: string;
+  name: string;
+}
+export interface RoleDef {
+  name: string;
+  permissions?: string[];
+}
+export interface RoleBinding {
+  id: string;
+  scope_kind: "org" | "project" | "tenant";
+  scope_id: string;
+  principal_kind: "user" | "service_account" | "api_key" | "device";
+  principal_id: string;
+  role_name: string;
+}
+
+export const listOrgs = (token: string) => authedGet<Org[]>("/api/v1/orgs", token);
+export const createOrg = (token: string, slug: string, name: string) =>
+  authedJson<Org>("POST", "/api/v1/orgs", token, { slug, name });
+
+export const listProjects = (token: string, orgId: string) =>
+  authedGet<Project[]>(`/api/v1/projects?org_id=${encodeURIComponent(orgId)}`, token);
+export const createProject = (token: string, orgId: string, slug: string, name: string) =>
+  authedJson<Project>("POST", "/api/v1/projects", token, { org_id: orgId, slug, name });
+
+export const listRoles = (token: string) =>
+  authedGet<{ roles: RoleDef[] }>("/api/v1/iam/roles", token).then((r) => r.roles);
+
+export const removeBinding = (
+  token: string,
+  bindingId: string,
+  scope: { org_id: string; project_id?: string },
+) => authedJson<{ state: string }>("DELETE", `/api/v1/iam/bindings/${bindingId}`, token, scope);
+
+export const listBindings = (token: string, orgId: string, projectId?: string) => {
+  const q = new URLSearchParams({ org_id: orgId });
+  if (projectId) q.set("project_id", projectId);
+  return authedGet<RoleBinding[]>(`/api/v1/iam/bindings?${q.toString()}`, token);
+};
+export interface AddBindingInput {
+  org_id: string;
+  project_id?: string;
+  scope_kind: "org" | "project";
+  scope_id: string;
+  principal_kind: "user" | "service_account";
+  principal_id: string;
+  role_name: string;
+}
+export const addBinding = (token: string, input: AddBindingInput) =>
+  authedJson<RoleBinding>("POST", "/api/v1/iam/bindings", token, input);
+
+/** Probe telemetry summary; requires org/project scope headers + probe.events.read. */
+export async function getMetrics<T>(token: string, orgId: string, projectId: string): Promise<T> {
+  const res = await fetch(`${requireBase()}/api/metrics`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+      "x-laplace-org-id": orgId,
+      "x-laplace-project-id": projectId,
+    },
+  });
+  if (res.status === 401) throw new ApiError(401, "Session expired or unauthorized.");
+  if (!res.ok) throw new ApiError(res.status, await errorMessage(res, "/api/metrics"));
   return (await res.json()) as T;
 }
