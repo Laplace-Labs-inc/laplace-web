@@ -56,7 +56,11 @@ cargo test test_concurrent_deduct
 
 ```
 ✅ Axiom: CLEAN — 2 threads, 2 resources, 48 events
+   assurance: FullyDeterministic · seed: 0xa1100ace5eed0001
 ```
+
+Add `--strict` to fail the run (exit `1`) unless the assurance grade is `FullyDeterministic`,
+which is what you want when wiring `laplace axiom verify` into a CI gate.
 
 **BUG FOUND**: Deadlock or starvation detected.
 

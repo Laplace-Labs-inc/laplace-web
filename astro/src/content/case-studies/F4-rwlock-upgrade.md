@@ -7,7 +7,7 @@ library: "parking_lot::RwLock"
 author: "Laplace Labs"
 publishedAt: 2026-07-11
 updatedAt: 2026-05-28
-tags: ["case-study", "parking_lot", "RwLock", "upgrade", "Ki-DPOR"]
+tags: ["case-study", "parking_lot", "RwLock", "upgrade", "DPOR+POR"]
 cover:
   image: "/assets/case-studies/rwlock-upgrade.svg"
   alt: "RwLock upgrade search tree cover"
@@ -41,7 +41,7 @@ This case came from an audit pattern rather than a single upstream issue: read-m
 
 The failure is not that upgrades are always bad. The failure is that an upgrade is still a lock acquisition, and it participates in the same ordering rules as any other acquisition. The invalidation mutex made the graph cyclic.
 
-The BYOC harness modelled two cache shards and one invalidation path. Ki-DPOR reduced the search to the schedules where both workers hold read access before either performs the write upgrade. That is the narrow danger zone. If one worker upgrades early, the other waits safely. If both hold read guards and each also owns the other's invalidation dependency, the cycle appears.
+The BYOC harness modelled two cache shards and one invalidation path. DPOR+POR reduced the search to the schedules where both workers hold read access before either performs the write upgrade. That is the narrow danger zone. If one worker upgrades early, the other waits safely. If both hold read guards and each also owns the other's invalidation dependency, the cycle appears.
 
 The external placeholder is `https://github.com/laplace-labs/case-study-04`. No remote repository was created.
 
@@ -95,7 +95,7 @@ case-study-04/
   src/main.rs
 ```
 
-## 3. Ki-DPOR Search Tree
+## 3. DPOR+POR Search Tree
 
 The ARD search tree is built around the two reads:
 
@@ -113,7 +113,7 @@ root
 
 The failing branch requires both read guards to exist before either write lock completes. The invalidation mutex changes which worker can move next, but the cycle is ultimately between read guards and write acquisition.
 
-Ki-DPOR prunes schedules where only one read is present because the first writer can proceed after the other reader is absent. It retains the branch where the two reads are concurrent because `write(shard_a)` and `write(shard_b)` no longer commute with the held reads.
+DPOR+POR prunes schedules where only one read is present because the first writer can proceed after the other reader is absent. It retains the branch where the two reads are concurrent because `write(shard_a)` and `write(shard_b)` no longer commute with the held reads.
 
 ## 4. Equivalence, Sleep Set, Wait-For Graph
 
@@ -166,7 +166,7 @@ The article should avoid implying that `parking_lot` is defective. `parking_lot`
 
 The final case study should explain why upgrade-style bugs feel different from ordinary AB-BA deadlocks. In a simple AB-BA case, each thread takes one mutex and then asks for the other. The shape is visible in the code if both functions are reviewed together. In an upgrade case, each worker begins with a read operation that appears compatible with the other worker's read operation. The danger only appears when read observation turns into write intent while another resource is already involved. The code starts in a shared mode and later wants exclusive mode, so the ordering contract is partly implicit.
 
-This makes the pattern common in cache invalidation paths. A worker reads a shard, decides an entry is stale, takes an invalidation lane, and then tries to write a different shard or upgrade the current shard. Another worker does the mirrored operation. The first read guards do not block each other. That successful beginning makes the later failure surprising. The system feels concurrent right until both workers attempt exclusive access. Ki-DPOR is valuable because it keeps the branch where both readers coexist before either writer wins, instead of letting a lucky serialization hide the cycle.
+This makes the pattern common in cache invalidation paths. A worker reads a shard, decides an entry is stale, takes an invalidation lane, and then tries to write a different shard or upgrade the current shard. Another worker does the mirrored operation. The first read guards do not block each other. That successful beginning makes the later failure surprising. The system feels concurrent right until both workers attempt exclusive access. DPOR+POR is valuable because it keeps the branch where both readers coexist before either writer wins, instead of letting a lucky serialization hide the cycle.
 
 The article should not overfit to the simplified code. The repro uses direct read and write calls because they make the resource states obvious. A real implementation may use `upgradable_read`, a memoization table, a two-phase cache refresh, or a shard map with separate invalidation metadata. Those are variations on the same rule: if a read may become a write, the code must define when upgrade intent is declared and which other resources may be held at that time. Without that rule, the read phase is effectively borrowing a place in a future write queue without telling the rest of the program.
 

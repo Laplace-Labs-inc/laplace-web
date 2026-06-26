@@ -7,7 +7,7 @@ library: "std::sync::RwLock + async runtime"
 author: "Laplace Labs"
 publishedAt: 2026-07-11
 updatedAt: 2026-05-28
-tags: ["case-study", "async", "RwLock", "deadlock", "Ki-DPOR"]
+tags: ["case-study", "async", "RwLock", "deadlock", "DPOR+POR"]
 cover:
   image: "/assets/case-studies/async-ref-deadlock.svg"
   alt: "Async read guard wait-for graph cover"
@@ -90,9 +90,9 @@ case-study-03/
 
 The README should include a fixed async-lock version and a fixed early-clone version so readers can choose between changing the primitive and changing the ownership boundary.
 
-## 3. Ki-DPOR Search Tree
+## 3. DPOR+POR Search Tree
 
-The Ki-DPOR tree is short because only one branch matters: does the writer block the thread before or after the reader drops the guard?
+The DPOR+POR tree is short because only one branch matters: does the writer block the thread before or after the reader drops the guard?
 
 ```text
 root
@@ -163,7 +163,7 @@ This is a good place to explain why "it works on the multi-threaded runtime" is 
 
 The reproduction repository should include a variant with a socket-like wait or channel receive instead of a timer. The timer is easy to understand, but some readers may dismiss it as artificial. A channel receive makes the same point in a shape closer to production: the reader takes a snapshot, waits for an event while still holding the read guard, and the writer blocks trying to update the state that would allow the event path to finish. The exact await is replaceable. The invariant is not.
 
-The Ki-DPOR section should highlight the timer edge as a progress dependency. Traditional wait-for graphs often show only locks. That is not enough here. The writer waits for the reader's guard, the reader waits for a timer, and the timer waits for executor polling. Once the writer blocks the executor thread, the timer cannot complete from the program's perspective. Representing that as a graph teaches readers to reason about async deadlocks as resource cycles that include scheduler progress, not just mutexes.
+The DPOR+POR section should highlight the timer edge as a progress dependency. Traditional wait-for graphs often show only locks. That is not enough here. The writer waits for the reader's guard, the reader waits for a timer, and the timer waits for executor polling. Once the writer blocks the executor thread, the timer cannot complete from the program's perspective. Representing that as a graph teaches readers to reason about async deadlocks as resource cycles that include scheduler progress, not just mutexes.
 
 The Sleep Set explanation can be tied to concrete review questions. If the writer runs before the reader acquires the read guard, the write is safe and the branch can be pruned. If the reader acquires and drops the guard before the writer attempts the write, the branch is also safe. The retained branch is the one where the reader has a live guard and a pending await, and the writer then performs a blocking write acquisition. That branch is small enough that a human can understand it, yet specific enough that random testing is unlikely to guarantee it.
 

@@ -24,11 +24,10 @@ export const docsNav: NavSection[] = [
     icon: "💡",
     items: [
       { title: "Sovereign Architecture", slug: "concepts/architecture" },
-      { title: "Axiom — Ki-DPOR Verification", slug: "concepts/axiom" },
+      { title: "Axiom — DPOR+POR Verification", slug: "concepts/axiom" },
       { title: "Kraken — Load Engine", slug: "concepts/kraken" },
       { title: "Probe — Observation Mesh", slug: "concepts/probe" },
       { title: "Tiers & Pricing", slug: "concepts/tiers" },
-      { title: "Ki-DPOR vs DPOR", slug: "en/concepts/ki-dpor-vs-dpor" },
       { title: "TrackedMutex Internals", slug: "en/concepts/trackedmutex-internals" },
       { title: "Sovereign Pool Sharding", slug: "en/concepts/sovereign-pool-sharding" },
     ],
