@@ -46,6 +46,25 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
+## 🔧 Environment contract (waitlist + docs search)
+
+Two features read build-time `PUBLIC_*` env vars (see [`.env.example`](./.env.example)).
+Copy it to `.env.local` (gitignored) to enable them. When the vars are unset each
+feature degrades to an **honest explicit gate** (visibly disabled / "coming soon"),
+never a silently-broken stub.
+
+| Feature | Env vars | Behaviour when set | Behaviour when unset |
+| :------ | :------- | :----------------- | :------------------- |
+| Waitlist (`src/components/landing/WaitlistForm.tsx`) | `PUBLIC_WAITLIST_ENDPOINT` | Real `POST {"email":"..."}` (JSON, expects 2xx) with loading/success/error states | Disabled input + `mailto:` fallback; no fake "success" |
+| Docs search (`src/components/Search.astro`) | `PUBLIC_ALGOLIA_APP_ID`, `PUBLIC_ALGOLIA_SEARCH_KEY`, `PUBLIC_ALGOLIA_INDEX_NAME` | Algolia DocSearch initialised on the docs pages | Disabled "Search docs (coming soon)" box |
+
+Notes:
+- All values are **public** (the `PUBLIC_` prefix inlines them into client JS).
+  Use only public-safe values — for Algolia, the **search-only** key, never an
+  admin/write key. The waitlist endpoint is a public POST URL, not a credential.
+- On the gated (unset) path, DocSearch JS/CSS is tree-shaken out and the waitlist
+  makes no network calls.
+
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
