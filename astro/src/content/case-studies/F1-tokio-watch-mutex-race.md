@@ -7,10 +7,10 @@ library: "tokio"
 author: "Laplace Labs"
 publishedAt: 2026-07-11
 updatedAt: 2026-05-28
-tags: ["case-study", "tokio", "watch", "mutex", "DPOR+POR"]
+tags: ["case-study", "tokio", "watch", "mutex", "DPOR"]
 cover:
   image: "/assets/case-studies/tokio-watch-mutex-race.svg"
-  alt: "DPOR+POR search tree for the Tokio watch mutex race case study"
+  alt: "DPOR search tree for the Tokio watch mutex race case study"
   license: "CC-BY-4.0"
 seo:
   ogImage: "/assets/case-studies/tokio-watch-mutex-race.svg"
@@ -39,7 +39,7 @@ license: "CC-BY-4.0"
 
 The first version of this scenario came from the L-2 Bug DB work, not from a production incident. The harness was intentionally small: a current-thread Tokio runtime, one `watch` channel, and one synchronous mutex used as if it were a harmless critical-section guard. The interesting part was not that the code was exotic. It was that the code looked like the kind of adapter glue teams write when they bridge an async signal with an old synchronous cache.
 
-The experiment used the BYOC test macro introduced before LQ-6. The macro wrapped the scenario in a Laplace verification session, replaced the ordinary scheduler with a deterministic scheduler, and recorded an ARD trace whenever a wait-for edge stayed live after the schedule budget was exhausted. That gave the team a compact artifact: the runtime did not need millions of random runs, because DPOR+POR kept forcing the two relevant operations next to each other.
+The experiment used the BYOC test macro introduced before LQ-6. The macro wrapped the scenario in a Laplace verification session, replaced the ordinary scheduler with a deterministic scheduler, and recorded an ARD trace whenever a wait-for edge stayed live after the schedule budget was exhausted. That gave the team a compact artifact: the runtime did not need millions of random runs, because DPOR kept forcing the two relevant operations next to each other.
 
 The failing schedule had only three actors. The sender acquired the mutex, sent a watch update, and then yielded while still holding the guard. The receiver woke on `changed()`, observed that a value was ready, and tried to acquire the same mutex before borrowing the new value. A third maintenance future was not needed. The cycle was between the sender's suspended continuation and the receiver's blocking lock attempt on the same single-thread executor.
 
@@ -90,7 +90,7 @@ case-study-01/
 
 The README should include two commands: `cargo run` for the direct demonstration and `laplace verify --scenario tokio_watch_mutex_race` once the repro is wired to the BYOC harness.
 
-## 3. DPOR+POR Search Tree
+## 3. DPOR Search Tree
 
 The ARD trace collapsed a larger set of equivalent schedules into four decision points. The tree below is a text rendering of the cover SVG, not a substitute for the final ARD export.
 
@@ -106,9 +106,9 @@ root
 `-- R0 receiver: changed() pending
 ```
 
-The decisive edge is `sender guard -> receiver lock(shared)`. DPOR+POR prioritizes the `watch::send` wake edge because it creates a new runnable actor. Once the receiver runs, the synchronous mutex turns an ordinary resource wait into an executor-level block. There is no future polling progress left on the only runtime thread.
+The decisive edge is `sender guard -> receiver lock(shared)`. DPOR prioritizes the `watch::send` wake edge because it creates a new runnable actor. Once the receiver runs, the synchronous mutex turns an ordinary resource wait into an executor-level block. There is no future polling progress left on the only runtime thread.
 
-The useful property of the trace is that it explains why naive stress tests are weak here. A stress test needs luck to run the receiver in the tiny window after the send and before the guard drop. DPOR+POR makes that window an explicit branch.
+The useful property of the trace is that it explains why naive stress tests are weak here. A stress test needs luck to run the receiver in the tiny window after the send and before the guard drop. DPOR makes that window an explicit branch.
 
 ## 4. Equivalence, Sleep Set, Wait-For Graph
 
@@ -161,7 +161,7 @@ The final article should also separate three concepts that often get blurred tog
 
 One useful review rule is to treat every notification as a handoff. If a task calls `send`, `notify_one`, `broadcast`, or a similar wake operation while holding a blocking guard, reviewers should ask which newly enabled task can run before the guard is dropped. That question is sharper than the generic rule "do not hold locks across await." In this repro, the sender technically sends before the explicit await, but the send itself wakes the receiver. A reviewer who only searches for `await` inside the lexical guard may miss the hazard. Laplace catches it because the schedule model includes wake edges, not just syntactic await points.
 
-The DPOR+POR trace is especially helpful when explaining the difference between a rare bug and an impossible bug. A stress test can run this sample thousands of times without observing the hang if the sender usually resumes first. That result does not prove safety; it only proves that the default scheduler had a bias. DPOR+POR treats the post-send receiver run as a branch that must be explored because it is not equivalent to resuming the sender. Once the receiver blocks the executor thread, the sender cannot reach the guard drop. The trace turns a timing story into a small graph with a stable cycle.
+The DPOR trace is especially helpful when explaining the difference between a rare bug and an impossible bug. A stress test can run this sample thousands of times without observing the hang if the sender usually resumes first. That result does not prove safety; it only proves that the default scheduler had a bias. DPOR treats the post-send receiver run as a branch that must be explored because it is not equivalent to resuming the sender. Once the receiver blocks the executor thread, the sender cannot reach the guard drop. The trace turns a timing story into a small graph with a stable cycle.
 
 For a published reproduction repository, the README should include a "why this hangs" timeline with exact ownership states. Step one: sender owns `shared`. Step two: sender updates the watch channel and receiver becomes runnable. Step three: scheduler polls receiver. Step four: receiver calls the blocking mutex and parks the only executor thread. Step five: sender's future is ready in principle but cannot be polled. That timeline is more useful than saying "deadlock" alone, because it shows developers where to place the fix. The fix is not to make the receiver sleep longer or to increase a timeout. The fix is to stop notifying while a blocking guard can make the awakened task block the executor.
 

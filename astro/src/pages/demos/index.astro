@@ -77,12 +77,12 @@ function transcriptFor(file: string): string {
               {demo.duration}
             </span>
           </div>
-          <div class="mt-5 max-h-64 max-w-full overflow-auto border border-brand-border bg-black p-4">
+          <div class="mt-5 max-h-64 max-w-full overflow-auto border border-brand-border bg-bg p-4">
             <pre class="whitespace-pre-wrap break-all font-mono text-xs leading-5 text-brand-muted">{transcriptFor(demo.file)}</pre>
           </div>
           <a
             href={demo.file}
-            class="mt-4 inline-flex font-mono text-xs font-medium uppercase text-brand-accent transition-colors hover:text-white"
+            class="mt-4 inline-flex font-mono text-xs font-medium uppercase text-brand-accent transition-colors hover:text-fg"
           >
             Download cast
           </a>

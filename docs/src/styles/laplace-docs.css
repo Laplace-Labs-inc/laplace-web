@@ -1,0 +1,54 @@
+/*
+ * Starlight ⇄ Laplace theme bridge.
+ *
+ * Pull in the shared raw palette (warm cream / warm dark), then map Starlight's
+ * --sl-color-* tokens onto ours. Because the palette redefines --bg/--fg/… under
+ * [data-theme], a single mapping auto-follows light/dark — we just replicate it
+ * across :root and both data-theme selectors so it out-specifies Starlight's
+ * built-in light overrides.
+ */
+@import "../../../shared/palette.css";
+
+:root,
+:root[data-theme="dark"],
+:root[data-theme="light"] {
+  /* accent ramp */
+  --sl-color-accent-low: color-mix(in srgb, var(--accent) 22%, var(--bg));
+  --sl-color-accent: var(--accent);
+  --sl-color-accent-high: color-mix(in srgb, var(--accent) 55%, var(--fg));
+
+  /* text + neutral ramp (1 = strongest text … 6 = subtle surface) */
+  --sl-color-white: var(--fg);
+  --sl-color-gray-1: var(--fg);
+  --sl-color-gray-2: var(--muted);
+  --sl-color-gray-3: var(--faint);
+  --sl-color-gray-4: var(--border-strong);
+  --sl-color-gray-5: var(--border);
+  --sl-color-gray-6: var(--surface);
+  --sl-color-black: var(--bg);
+
+  /* surfaces */
+  --sl-color-bg: var(--bg);
+  --sl-color-bg-nav: color-mix(in srgb, var(--bg) 82%, transparent);
+  --sl-color-bg-sidebar: var(--bg-subtle);
+  --sl-color-bg-inline-code: var(--surface-2);
+  --sl-color-bg-accent: var(--accent);
+
+  /* text roles */
+  --sl-color-text: var(--muted);
+  --sl-color-text-accent: var(--accent);
+  --sl-color-text-invert: var(--accent-fg);
+
+  /* hairlines + shadow */
+  --sl-color-hairline: var(--border);
+  --sl-color-hairline-light: var(--border);
+  --sl-color-hairline-shade: var(--border);
+  --sl-shadow-sm: var(--shadow);
+  --sl-shadow-md: var(--shadow);
+  --sl-shadow-lg: var(--shadow);
+}
+
+/* Optional: tighten the content max width and warm the code blocks slightly. */
+:root {
+  --sl-content-width: 50rem;
+}

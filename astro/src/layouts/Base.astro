@@ -8,11 +8,25 @@ interface Props {
 const { title, description = "Enterprise concurrency verification platform." } = Astro.props;
 ---
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {/* Pre-paint theme bootstrap — MUST stay first to avoid FOUC.
+        Keep byte-identical to shared/theme-init.js. */}
+    <script is:inline>
+      (function () {
+        try {
+          var s = localStorage.getItem("laplace-theme");
+          var t = s === "light" || s === "dark" ? s
+            : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,7 +35,7 @@ const { title, description = "Enterprise concurrency verification platform." } =
     />
     <title>{title} - Laplace Labs</title>
   </head>
-  <body class="bg-brand-bg text-white font-sans antialiased">
+  <body class="bg-brand-bg text-fg font-sans antialiased">
     <slot />
   </body>
 </html>

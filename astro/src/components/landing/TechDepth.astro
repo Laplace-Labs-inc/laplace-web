@@ -7,7 +7,7 @@
         <span class="h-3 w-3 rounded-full bg-probe/70"></span>
         <span class="ml-2 text-xs text-brand-muted">laplace verify --harness meter_inner</span>
       </div>
-      <pre class="whitespace-pre-wrap leading-relaxed text-green-400"><code>{`[DPOR+POR] Exploring state space...
+      <pre class="whitespace-pre-wrap leading-relaxed text-green-400"><code>{`[DPOR] Exploring state space...
   Threads:    4
   Resources:  2 (credits_row, ledger)
   States:     8,192 explored
@@ -26,14 +26,14 @@
         <span class="text-brand-accent">not guesswork.</span>
       </h2>
       <p class="text-lg leading-relaxed text-brand-muted">
-        DPOR+POR doesn&apos;t sample. It exhaustively explores every thread interleaving up to a configurable depth.
+        DPOR doesn&apos;t sample. It exhaustively explores every thread interleaving up to a configurable depth.
         If a bug exists, it will be found. If the verdict is Clean, you can ship with confidence.
       </p>
       <div class="grid grid-cols-2 gap-6">
         {[
           { label: "State spaces explored", value: "8,192+" },
           { label: "Kani formal proofs", value: "10" },
-          { label: "Latency (DPOR+POR step)", value: "14ns" },
+          { label: "Latency (DPOR step)", value: "14ns" },
           { label: "False negative rate", value: "0%" },
         ].map((m) => (
           <div class="rounded-xl border border-brand-border bg-brand-surface p-4">

@@ -1,18 +1,8 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
-const docs = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/docs" }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    section: z
-      .enum(["getting-started", "concepts", "tasks", "tutorials", "reference"])
-      .optional(),
-    order: z.number().optional(),
-  }),
-});
-
+// Docs now live on the dedicated Starlight site (docs.laplace-labs.com); the
+// main site is marketing-only. Only the case-studies collection remains here.
 const caseStudies = defineCollection({
   loader: glob({
     pattern: "F*.md",
@@ -50,4 +40,4 @@ const caseStudies = defineCollection({
   }),
 });
 
-export const collections = { docs, caseStudies };
+export const collections = { caseStudies };

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { Github, ShieldAlert } from "lucide-react";
+import { Github } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { DEV_AUTH_ENABLED, GITHUB_CLIENT_ID } from "../lib/api";
+import { ThemeToggle } from "../components/ThemeToggle";
 
 export const LoginPage = () => {
   const { isAuthenticated, startGithubLogin, devLogin } = useAuth();
@@ -32,48 +33,65 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[70vh]">
-      <div className="p-8 border border-gray-800 bg-gray-900/50 rounded-2xl w-96 text-center">
-        <ShieldAlert className="w-12 h-12 text-blue-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold mb-6">Sign in to Laplace</h2>
+    <div className="flex min-h-screen flex-col bg-bg text-fg">
+      <header className="flex items-center justify-between px-6 py-5">
+        <img
+          src="/images/Laplace_labs.png"
+          alt="Laplace"
+          className="h-8 w-auto object-contain dark:invert dark:brightness-90"
+        />
+        <ThemeToggle />
+      </header>
 
-        <button
-          onClick={startGithubLogin}
-          disabled={!githubReady}
-          className="w-full flex items-center justify-center gap-2 bg-white text-black py-2 rounded-lg font-bold hover:bg-gray-200 transition disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <Github className="w-4 h-4" /> Continue with GitHub
-        </button>
-        {!githubReady && (
-          <p className="mt-3 text-xs text-gray-500">
-            GitHub sign-in is not configured for this deployment yet.
+      <div className="flex flex-1 items-center justify-center px-6 pb-24">
+        <div className="w-full max-w-sm">
+          <h1 className="text-center text-2xl font-semibold tracking-tight">
+            Sign in to Laplace
+          </h1>
+          <p className="mt-2 text-center text-sm text-muted">
+            Access your verification console.
           </p>
-        )}
 
-        {DEV_AUTH_ENABLED && (
-          <form onSubmit={onDevSubmit} className="mt-6 border-t border-gray-800 pt-6 text-left">
-            <label className="block text-xs uppercase tracking-wide text-gray-500 mb-2">
-              Dev sign-in
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:border-blue-500"
-            />
+          <div className="mt-8 rounded-2xl border border-border bg-surface p-6 shadow-[var(--shadow)]">
             <button
-              type="submit"
-              disabled={busy}
-              className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-500 transition disabled:opacity-40"
+              onClick={startGithubLogin}
+              disabled={!githubReady}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-fg py-2.5 font-medium text-bg transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {busy ? "Signing in…" : "Sign in (dev)"}
+              <Github className="h-4 w-4" /> Continue with GitHub
             </button>
-          </form>
-        )}
+            {!githubReady && (
+              <p className="mt-3 text-center text-xs text-faint">
+                GitHub sign-in is not configured for this deployment yet.
+              </p>
+            )}
 
-        {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
+            {DEV_AUTH_ENABLED && (
+              <form onSubmit={onDevSubmit} className="mt-6 border-t border-border pt-6">
+                <label className="mb-2 block text-[11px] font-medium uppercase tracking-wide text-faint">
+                  Dev sign-in
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="mb-3 w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm focus:border-accent focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={busy}
+                  className="w-full rounded-lg bg-accent py-2 font-medium text-accent-fg transition hover:bg-accent-hover disabled:opacity-40"
+                >
+                  {busy ? "Signing in…" : "Sign in (dev)"}
+                </button>
+              </form>
+            )}
+
+            {error && <p className="mt-4 text-center text-sm text-danger">{error}</p>}
+          </div>
+        </div>
       </div>
     </div>
   );

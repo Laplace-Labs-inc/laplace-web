@@ -6,16 +6,19 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Legacy `brand-*` utilities (345 uses) now follow the shared theme
+        // tokens, so the entire existing markup becomes light/dark aware with no
+        // per-component edits. Alpha modifiers (bg-brand-surface/80, …) resolve
+        // via Tailwind v4 color-mix, which accepts these var() values.
         brand: {
-          bg: "#030712",
-          surface: "#0D1117",
-          border: "#1C2333",
-          muted: "#8B9DB5",
-          accent: "#00E5CC",
+          bg: "var(--bg)",
+          surface: "var(--surface)",
+          border: "var(--border)",
+          muted: "var(--muted)",
+          accent: "var(--accent)",
         },
-        axiom: { DEFAULT: "#7C3AED", light: "#A78BFA" },
-        kraken: { DEFAULT: "#DC2626", light: "#F87171" },
-        probe: { DEFAULT: "#16A34A", light: "#4ADE80" },
+        // axiom/kraken/probe product hues live in shared/laplace-theme.css
+        // (@theme) so every surface shares them.
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
