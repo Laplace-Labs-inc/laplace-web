@@ -19,7 +19,7 @@ pub async fn process_payment(account_id: String, amount: u64) -> Result<Receipt,
 }
 ```
 
-The `#[laplace_sdk::verify(threads = 3)]` macro generates a test that spawns 3 concurrent OS threads, each executing `process_payment`, and runs DPOR+POR over all possible interleavings.
+The `#[laplace_sdk::verify(threads = 3)]` macro generates a test that spawns 3 concurrent OS threads, each executing `process_payment`, and runs DPOR over all possible interleavings.
 
 ## What Gets Generated
 
@@ -28,7 +28,7 @@ The `#[laplace_sdk::verify(threads = 3)]` macro generates a test that spawns 3 c
 #[test]
 fn __laplace_verify_process_payment() {
     // Spawns the configured threads, collects ProbeEvents,
-    // and runs Classic DPOR+POR over the distinct interleavings.
+    // and runs Classic DPOR over the distinct interleavings.
     // The generated harness asserts the run is CLEAN.
 }
 ```

@@ -24,7 +24,7 @@ laplace login --token <LICENSE_KEY>
 
 ## laplace axiom verify
 
-Run Classic DPOR+POR verification against a target crate or a named harness.
+Run Classic DPOR verification against a target crate or a named harness.
 
 ```bash
 # Verify an external crate that uses supported primitives (zero-rewrite path)

@@ -7,7 +7,7 @@ order: 1
 
 # Quickstart
 
-Laplace formally verifies the concurrency correctness of your Rust code using **Classic DPOR+POR** —
+Laplace formally verifies the concurrency correctness of your Rust code using **Classic DPOR** —
 deterministic state-space exploration that systematically searches the distinct thread interleavings
 and **proves** the absence of deadlocks, AB-BA cycles, and starvation within a bounded search.
 
@@ -96,7 +96,7 @@ mod tests {
 cargo test
 ```
 
-Laplace's DPOR+POR engine explores the distinct thread interleavings and reports any violation,
+Laplace's DPOR engine explores the distinct thread interleavings and reports any violation,
 along with the **determinism assurance grade** and the seed used — the same seed, code, and config
 reproduce the result bit-for-bit.
 
@@ -104,4 +104,4 @@ reproduce the result bit-for-bit.
 
 - [One-Line Integration](/getting-started/one-line) — verify an existing function with a single annotation
 - [Verify Concurrent Code](/tasks/verify) — deeper end-to-end walkthrough
-- [Concepts: Axiom](/concepts/axiom) — understand how DPOR+POR works
+- [Concepts: Axiom](/concepts/axiom) — understand how DPOR works

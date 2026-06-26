@@ -1,13 +1,13 @@
 ---
-title: "Axiom — DPOR+POR Verification"
-description: "How Laplace's DPOR+POR engine proves concurrency correctness within a bounded search."
+title: "Axiom — DPOR Verification"
+description: "How Laplace's DPOR engine proves concurrency correctness within a bounded search."
 section: "concepts"
 order: 1
 ---
 
-# Axiom — DPOR+POR Verification
+# Axiom — DPOR Verification
 
-Axiom is Laplace's formal verification engine. It uses **Classic DPOR+POR** (Dynamic Partial-Order
+Axiom is Laplace's formal verification engine. It uses **Classic DPOR** (Dynamic Partial-Order
 Reduction with sleep-set partial-order reduction) to systematically explore the *distinct* thread
 interleavings of your concurrent code and prove the absence of concurrency bugs within a bounded search.
 

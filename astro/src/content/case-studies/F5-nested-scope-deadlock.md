@@ -7,7 +7,7 @@ library: "rayon"
 author: "Laplace Labs"
 publishedAt: 2026-07-11
 updatedAt: 2026-05-28
-tags: ["case-study", "rayon", "scope", "mutex", "DPOR+POR"]
+tags: ["case-study", "rayon", "scope", "mutex", "DPOR"]
 cover:
   image: "/assets/case-studies/nested-scope-deadlock.svg"
   alt: "Nested scope wait-for graph cover"
@@ -41,7 +41,7 @@ This scenario targets a mistake that looks like ordinary structured concurrency:
 
 The L-2 audit corpus already had simple mutex cycles. LQ-6 needed one case where the cycle is not written as two obvious threads calling `lock()` in opposite order. Nested scopes provide that. The parent is waiting for scoped children. A child is waiting for the parent's mutex. The parent cannot drop the mutex because it is inside the lexical block that waits for the child.
 
-DPOR+POR found the failure by modelling `scope` completion as a wait edge. That is the important part. If the model only tracks mutexes, the child waits on the parent, but the parent's wait on the child remains implicit. Once scope completion is represented as a resource, the cycle is direct.
+DPOR found the failure by modelling `scope` completion as a wait edge. That is the important part. If the model only tracks mutexes, the child waits on the parent, but the parent's wait on the child remains implicit. Once scope completion is represented as a resource, the cycle is direct.
 
 The external placeholder is `https://github.com/laplace-labs/case-study-05`. It must be created later with the minimized repro and fixed variants.
 
@@ -90,7 +90,7 @@ case-study-05/
 
 The README should include a note that this is not a Rayon scheduler bug. The scope API is doing what it promises: it waits for nested work before returning.
 
-## 3. DPOR+POR Search Tree
+## 3. DPOR Search Tree
 
 The search tree labels scope completion as a wait:
 
@@ -108,7 +108,7 @@ root
 
 The cycle is between `P3` and `C1`. The parent waits for the nested child because of scope semantics. The child waits for the parent because of mutex ownership. The parent only drops the mutex after the nested scope returns, so neither edge can clear.
 
-DPOR+POR prunes schedules where the parent drops the guard before spawning nested work because the child can then acquire the mutex. It also prunes schedules where the nested child never starts before timeout because they do not prove the cycle. The retained schedule is minimal and stable.
+DPOR prunes schedules where the parent drops the guard before spawning nested work because the child can then acquire the mutex. It also prunes schedules where the nested child never starts before timeout because they do not prove the cycle. The retained schedule is minimal and stable.
 
 ## 4. Equivalence, Sleep Set, Wait-For Graph
 
