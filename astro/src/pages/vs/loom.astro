@@ -51,10 +51,10 @@ const jsonLd = JSON.stringify(comparisonJsonLd(`https://laplace-labs.com/vs/${co
           <tbody class="divide-y divide-brand-border">
             {comparisonDimensions.map((dimension) => (
               <tr>
-                <td class="px-4 py-4 font-semibold text-white">{dimension.label}</td>
+                <td class="px-4 py-4 font-semibold text-fg">{dimension.label}</td>
                 {comparedTools.map((tool) => (
                   <td class="px-4 py-4 align-top">
-                    <div class="font-semibold text-white">{dimension.cells[tool].label}</div>
+                    <div class="font-semibold text-fg">{dimension.cells[tool].label}</div>
                     <div class="mt-1 text-xs leading-5 text-brand-muted">{dimension.cells[tool].detail}</div>
                   </td>
                 ))}
@@ -90,7 +90,7 @@ const jsonLd = JSON.stringify(comparisonJsonLd(`https://laplace-labs.com/vs/${co
       <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {profile.migrationExamples.map((item) => (
           <div class="border border-brand-border bg-brand-surface/70 p-4">
-            <h3 class="font-semibold text-white">{item}</h3>
+            <h3 class="font-semibold text-fg">{item}</h3>
             <p class="mt-2 text-xs leading-5 text-brand-muted">Convert this pattern to tracked Laplace harness primitives.</p>
           </div>
         ))}
@@ -116,11 +116,11 @@ const jsonLd = JSON.stringify(comparisonJsonLd(`https://laplace-labs.com/vs/${co
               return (
                 <tr>
                   <td class="px-4 py-4">
-                    <div class="font-semibold text-white">{scenario.name}</div>
+                    <div class="font-semibold text-fg">{scenario.name}</div>
                     <div class="mt-1 text-xs text-brand-muted">{scenario.description}</div>
                   </td>
                   <td class="px-4 py-4 font-mono text-brand-accent">{formatMs(laplace.metrics.wall_clock_ms.median)} / {formatMiB(laplace.metrics.peak_rss_mb.peak)}</td>
-                  <td class="px-4 py-4 font-mono text-white">{formatMs(other.metrics.wall_clock_ms.median)} / {formatMiB(other.metrics.peak_rss_mb.peak)}</td>
+                  <td class="px-4 py-4 font-mono text-fg">{formatMs(other.metrics.wall_clock_ms.median)} / {formatMiB(other.metrics.peak_rss_mb.peak)}</td>
                 </tr>
               );
             })}
@@ -135,7 +135,7 @@ const jsonLd = JSON.stringify(comparisonJsonLd(`https://laplace-labs.com/vs/${co
       <div class="mt-5 grid gap-4 md:grid-cols-2">
         {profile.faq.map((item) => (
           <article class="border border-brand-border bg-brand-surface/70 p-4">
-            <h3 class="font-semibold text-white">{item.question}</h3>
+            <h3 class="font-semibold text-fg">{item.question}</h3>
             <p class="mt-2 text-sm leading-6 text-brand-muted">{item.answer}</p>
           </article>
         ))}

@@ -32,7 +32,7 @@ export const WaitlistForm = () => {
             placeholder="Waitlist opens before M1 launch"
             disabled
             aria-disabled="true"
-            className="flex-1 cursor-not-allowed rounded-full border border-brand-border bg-brand-surface px-5 py-3 text-white opacity-60 placeholder:text-brand-muted"
+            className="flex-1 cursor-not-allowed rounded-full border border-brand-border bg-brand-surface px-5 py-3 text-fg opacity-60 placeholder:text-brand-muted"
           />
           <button
             type="button"
@@ -101,7 +101,7 @@ export const WaitlistForm = () => {
         placeholder="you@company.com"
         required
         disabled={loading}
-        className="flex-1 rounded-full border border-brand-border bg-brand-surface px-5 py-3 text-white placeholder:text-brand-muted transition-colors focus:border-brand-accent focus:outline-none disabled:opacity-60"
+        className="flex-1 rounded-full border border-brand-border bg-brand-surface px-5 py-3 text-fg placeholder:text-brand-muted transition-colors focus:border-brand-accent focus:outline-none disabled:opacity-60"
       />
       <button
         type="submit"

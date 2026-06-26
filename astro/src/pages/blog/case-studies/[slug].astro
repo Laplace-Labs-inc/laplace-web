@@ -54,7 +54,7 @@ const coverSvg = await readFile(coverPath, "utf8");
     <meta name="twitter:image" content={entry.data.seo.ogImage} />
     <script type="application/ld+json" set:html={jsonLd} />
   </head>
-  <body class="bg-brand-bg text-white font-sans antialiased">
+  <body class="bg-brand-bg text-fg font-sans antialiased">
     <Nav />
 
     <main class="mx-auto max-w-6xl px-6 pb-20 pt-14 lg:px-10">
@@ -65,7 +65,7 @@ const coverSvg = await readFile(coverPath, "utf8");
           <p class="font-mono text-sm uppercase tracking-[0.18em] text-brand-accent">
             {entry.data.scenario}
           </p>
-          <h1 class="mt-4 max-w-4xl text-4xl font-extrabold leading-tight text-white md:text-6xl">
+          <h1 class="mt-4 max-w-4xl text-4xl font-extrabold leading-tight text-fg md:text-6xl">
             {entry.data.title}
           </h1>
           <p class="mt-5 max-w-3xl text-lg leading-8 text-brand-muted">
@@ -74,15 +74,15 @@ const coverSvg = await readFile(coverPath, "utf8");
 
           <dl class="mt-8 grid gap-4 border-y border-brand-border py-5 text-sm text-brand-muted sm:grid-cols-3">
             <div>
-              <dt class="font-mono uppercase text-white">Library</dt>
+              <dt class="font-mono uppercase text-fg">Library</dt>
               <dd class="mt-1">{entry.data.library}</dd>
             </div>
             <div>
-              <dt class="font-mono uppercase text-white">Published</dt>
+              <dt class="font-mono uppercase text-fg">Published</dt>
               <dd class="mt-1">{published}</dd>
             </div>
             <div>
-              <dt class="font-mono uppercase text-white">Updated</dt>
+              <dt class="font-mono uppercase text-fg">Updated</dt>
               <dd class="mt-1">{updated}</dd>
             </div>
           </dl>
@@ -93,17 +93,17 @@ const coverSvg = await readFile(coverPath, "utf8");
 
           <div
             class="
-              prose prose-invert mt-10 max-w-none
-              prose-headings:font-semibold prose-headings:text-white
+              prose dark:prose-invert mt-10 max-w-none
+              prose-headings:font-semibold prose-headings:text-fg
               prose-h2:border-t prose-h2:border-brand-border prose-h2:pt-8
               prose-p:text-brand-muted prose-p:leading-relaxed
               prose-a:text-brand-accent prose-a:no-underline hover:prose-a:underline
               prose-code:text-brand-accent prose-code:bg-brand-surface prose-code:px-1 prose-code:rounded
               prose-pre:bg-brand-surface prose-pre:border prose-pre:border-brand-border
-              prose-strong:text-white
+              prose-strong:text-fg
               prose-li:text-brand-muted
               prose-table:border-collapse
-              prose-th:bg-brand-surface prose-th:text-white prose-th:p-2 prose-th:border prose-th:border-brand-border
+              prose-th:bg-brand-surface prose-th:text-fg prose-th:p-2 prose-th:border prose-th:border-brand-border
               prose-td:p-2 prose-td:border prose-td:border-brand-border prose-td:text-brand-muted
             "
           >
@@ -113,13 +113,13 @@ const coverSvg = await readFile(coverPath, "utf8");
 
         <aside class="hidden lg:block">
           <div class="sticky top-24 rounded border border-brand-border bg-brand-surface p-5">
-            <h2 class="font-mono text-sm uppercase text-white">Sections</h2>
+            <h2 class="font-mono text-sm uppercase text-fg">Sections</h2>
             <nav class="mt-4 space-y-3 text-sm text-brand-muted">
               {
                 headings
                   .filter((heading) => heading.depth === 2)
                   .map((heading) => (
-                    <a class="block hover:text-white" href={`#${heading.slug}`}>
+                    <a class="block hover:text-fg" href={`#${heading.slug}`}>
                       {heading.text}
                     </a>
                   ))

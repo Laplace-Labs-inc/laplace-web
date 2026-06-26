@@ -29,9 +29,9 @@
   --fg: #21201c;          /* warm near-black */
   --muted: #57544c;
   --faint: #8a867a;
-  /* interactive accent (Laplace teal, darkened for AA on cream) */
-  --accent: #0f9e8e;
-  --accent-hover: #0c8576;
+  /* interactive accent (Laplace teal, darkened for contrast on cream) */
+  --accent: #0a7d6e;
+  --accent-hover: #086456;
   --accent-fg: #ffffff;
   /* feedback */
   --danger: #c0392b;

@@ -28,14 +28,14 @@ const sections = docsNav;
           <p class="text-xs font-semibold uppercase tracking-wider text-brand-muted">
             {section.icon} {section.section}
           </p>
-          <h2 class="mt-2 text-lg font-semibold text-white">
+          <h2 class="mt-2 text-lg font-semibold text-fg">
             {first.title}
           </h2>
           <ul class="mt-3 space-y-1 text-sm text-brand-muted">
             {section.items.slice(0, 4).map((item) => (
               <li class="flex items-center gap-2">
                 <span class="h-1 w-1 rounded-full bg-brand-muted/60" />
-                <span class="group-hover:text-white">{item.title}</span>
+                <span class="group-hover:text-fg">{item.title}</span>
               </li>
             ))}
           </ul>

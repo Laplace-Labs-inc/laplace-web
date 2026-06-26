@@ -124,7 +124,7 @@ function bestMemoryFor(id: string): number {
           <tbody class="divide-y divide-brand-border">
             {results.map((result) => (
               <tr>
-                <td class="px-4 py-3 font-semibold capitalize text-white">{result.tool.name}</td>
+                <td class="px-4 py-3 font-semibold capitalize text-fg">{result.tool.name}</td>
                 <td class="px-4 py-3 font-mono text-brand-accent">{result.tool.version}</td>
                 <td class="px-4 py-3 text-brand-muted">{result.tool.category}</td>
                 <td class="px-4 py-3 font-mono text-xs text-brand-muted">{result.tool.runner}</td>
@@ -156,7 +156,7 @@ function bestMemoryFor(id: string): number {
               return (
                 <tr>
                   <td class="px-4 py-4">
-                    <div class="font-semibold text-white">{scenario.name}</div>
+                    <div class="font-semibold text-fg">{scenario.name}</div>
                     <div class="mt-1 max-w-xl text-xs leading-5 text-brand-muted">{scenario.description}</div>
                   </td>
                   {results.map((result) => {
@@ -164,7 +164,7 @@ function bestMemoryFor(id: string): number {
                     const isBest = item.metrics.wall_clock_ms.median === best;
                     return (
                       <td class={`px-4 py-4 ${isBest ? "bg-brand-accent/10" : ""}`}>
-                        <div class="font-mono text-base font-semibold text-white">
+                        <div class="font-mono text-base font-semibold text-fg">
                           {formatMs(item.metrics.wall_clock_ms.median)}
                         </div>
                         <div class="mt-1 font-mono text-xs text-brand-muted">
@@ -201,12 +201,12 @@ function bestMemoryFor(id: string): number {
               const best = bestMemoryFor(scenario.id);
               return (
                 <tr>
-                  <td class="px-4 py-4 font-semibold text-white">{scenario.name}</td>
+                  <td class="px-4 py-4 font-semibold text-fg">{scenario.name}</td>
                   {results.map((result) => {
                     const item = scenarioFor(result, scenario.id);
                     const isBest = item.metrics.peak_rss_mb.peak === best;
                     return (
-                      <td class={`px-4 py-4 font-mono text-base font-semibold text-white ${isBest ? "bg-brand-accent/10" : ""}`}>
+                      <td class={`px-4 py-4 font-mono text-base font-semibold text-fg ${isBest ? "bg-brand-accent/10" : ""}`}>
                         {formatMemory(item.metrics.peak_rss_mb.peak)}
                       </td>
                     );

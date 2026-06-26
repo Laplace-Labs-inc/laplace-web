@@ -68,10 +68,10 @@ const jsonLd = JSON.stringify(comparisonJsonLd("https://laplace-labs.com/vs/"));
           <tbody class="divide-y divide-brand-border">
             {comparisonDimensions.map((dimension) => (
               <tr>
-                <td class="px-4 py-4 font-semibold text-white">{dimension.label}</td>
+                <td class="px-4 py-4 font-semibold text-fg">{dimension.label}</td>
                 {toolOrder.map((tool) => (
                   <td class="px-4 py-4 align-top">
-                    <div class="font-semibold text-white">{dimension.cells[tool].label}</div>
+                    <div class="font-semibold text-fg">{dimension.cells[tool].label}</div>
                     <div class="mt-1 text-xs leading-5 text-brand-muted">{dimension.cells[tool].detail}</div>
                   </td>
                 ))}
@@ -96,7 +96,7 @@ const jsonLd = JSON.stringify(comparisonJsonLd("https://laplace-labs.com/vs/"));
           <tbody class="divide-y divide-brand-border">
             {toolOrder.map((tool) => (
               <tr>
-                <td class="px-4 py-3 font-semibold capitalize text-white">{tool}</td>
+                <td class="px-4 py-3 font-semibold capitalize text-fg">{tool}</td>
                 <td class="px-4 py-3 font-mono text-brand-accent">{benchmarkResults[tool].tool.version}</td>
                 <td class="px-4 py-3 text-brand-muted">{latestVersionStatus[tool]}</td>
               </tr>

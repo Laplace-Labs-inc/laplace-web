@@ -16,7 +16,7 @@ const next = idx < allDocItems.length - 1 ? allDocItems[idx + 1] : null;
     prev ? (
       <a
         href={`/docs/${prev.slug}`}
-        class="flex items-center gap-2 text-brand-muted hover:text-white transition-colors group"
+        class="flex items-center gap-2 text-brand-muted hover:text-fg transition-colors group"
       >
         <span class="text-xl group-hover:-translate-x-1 transition-transform">←</span>
         <span class="text-sm">
@@ -33,7 +33,7 @@ const next = idx < allDocItems.length - 1 ? allDocItems[idx + 1] : null;
     next ? (
       <a
         href={`/docs/${next.slug}`}
-        class="flex items-center gap-2 text-brand-muted hover:text-white transition-colors group text-right"
+        class="flex items-center gap-2 text-brand-muted hover:text-fg transition-colors group text-right"
       >
         <span class="text-sm">
           <span class="block text-xs text-brand-muted">Next</span>

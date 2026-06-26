@@ -98,7 +98,7 @@ const tiers = [
             <h2 class={`mb-1 text-lg font-bold ${tier.highlight ? "text-brand-accent" : "text-brand-muted"}`}>
               {tier.name}
             </h2>
-            <p class="text-sm text-white">{tier.tagline}</p>
+            <p class="text-sm text-fg">{tier.tagline}</p>
           </div>
 
           <div class="mb-8">
@@ -111,7 +111,7 @@ const tiers = [
             class={`mb-8 w-full rounded-full px-6 py-3 text-center text-sm font-semibold transition-opacity ${
               tier.ctaStyle === "accent"
                 ? "bg-brand-accent text-brand-bg hover:opacity-90"
-                : "border border-brand-border text-white hover:bg-brand-surface"
+                : "border border-brand-border text-fg hover:bg-brand-surface"
             }`}
           >
             {tier.cta}
@@ -139,7 +139,7 @@ const tiers = [
       </div>
       <a
         href="mailto:contact@laplace-labs.com"
-        class="shrink-0 whitespace-nowrap rounded-full border border-brand-border px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-surface"
+        class="shrink-0 whitespace-nowrap rounded-full border border-brand-border px-6 py-3 text-sm font-semibold text-fg transition-colors hover:bg-brand-surface"
       >
         Contact Sales →
       </a>
@@ -163,7 +163,7 @@ const tiers = [
           },
         ].map((item) => (
           <div class="border-b border-brand-border pb-6">
-            <dt class="mb-2 font-semibold text-white">{item.q}</dt>
+            <dt class="mb-2 font-semibold text-fg">{item.q}</dt>
             <dd class="text-sm leading-relaxed text-brand-muted">{item.a}</dd>
           </div>
         ))}
