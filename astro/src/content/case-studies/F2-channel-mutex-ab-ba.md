@@ -7,7 +7,7 @@ library: "crossbeam-channel + parking_lot"
 author: "Laplace Labs"
 publishedAt: 2026-07-11
 updatedAt: 2026-05-28
-tags: ["case-study", "crossbeam-channel", "parking_lot", "mutex", "Ki-DPOR"]
+tags: ["case-study", "crossbeam-channel", "parking_lot", "mutex", "DPOR+POR"]
 cover:
   image: "/assets/case-studies/channel-mutex-ab-ba.svg"
   alt: "AB-BA wait-for graph cover for the channel mutex case study"
@@ -41,7 +41,7 @@ This case was designed to test whether the Bug DB could distinguish a library bu
 
 The original experiment came from a BYOC harness that modelled worker A as the producer and worker B as the consumer. Worker A locks `a`, sends a unit message, then tries to lock `b`. Worker B locks `b`, receives the unit message, then tries to lock `a`. In a casual code review, each worker appears to do a small amount of work before crossing into the other resource. Under a bounded channel, the handoff aligns both workers at exactly the wrong time.
 
-Ki-DPOR found the failing schedule quickly because the channel operation is a synchronization boundary. The send makes the receive runnable, and the receive makes the consumer's second lock attempt enabled. Once both second lock attempts are enabled, the AB-BA cycle is concrete.
+DPOR+POR found the failing schedule quickly because the channel operation is a synchronization boundary. The send makes the receive runnable, and the receive makes the consumer's second lock attempt enabled. Once both second lock attempts are enabled, the AB-BA cycle is concrete.
 
 The external repo placeholder is `https://github.com/laplace-labs/case-study-02`. It must be created later with the same code and a README that states the case is an application-level lock ordering failure. No remote repo was created for this local task.
 
@@ -96,7 +96,7 @@ case-study-02/
 
 The README should include dependency versions and a note that the published repo is a minimized educational repro, not a claim of unsoundness in either dependency.
 
-## 3. Ki-DPOR Search Tree
+## 3. DPOR+POR Search Tree
 
 The ARD-derived search tree has two pruning wins. First, all schedules where worker A obtains both locks before worker B runs are equivalent. Second, all schedules where worker B waits on the channel before holding `right` are safe. The failing region begins only after each worker owns one mutex.
 
@@ -114,7 +114,7 @@ root
     `-- B1 recv pending
 ```
 
-The key schedule is not large. The channel rendezvous is a hinge. Once the rendezvous happens, both second-lock operations are enabled, and neither can complete. Ki-DPOR records this as a two-resource wait-for cycle rather than as a channel stall.
+The key schedule is not large. The channel rendezvous is a hinge. Once the rendezvous happens, both second-lock operations are enabled, and neither can complete. DPOR+POR records this as a two-resource wait-for cycle rather than as a channel stall.
 
 The visual SVG cover uses the same shape: two vertical lanes, a horizontal channel rendezvous, and two diagonal lock waits crossing in the middle.
 
@@ -168,7 +168,7 @@ Publication is blocked until maintainer notification and the required waiting pe
 
 The finished article should emphasize that the channel is not the villain. A zero-capacity or bounded channel is often the cleanest way to express backpressure. The dangerous part is using the rendezvous as a bridge while each side still owns a different mutex. Once the send and receive meet, both workers can proceed to their second critical section. If those second critical sections are acquired in opposite order, the channel has simply made the lock-order bug reachable at a precise moment. This distinction matters because the wrong remediation is to increase buffer size and hope the schedule disappears. A larger buffer may change how often the cycle appears, but it does not define a global resource order.
 
-This case is useful for readers because it looks like common pipeline code. A producer owns one piece of state, sends a message, and then records a result. A consumer owns another piece of state, receives the message, and then updates the producer-facing cache. The two halves may live in separate modules, and each module can look locally correct. The producer has no direct call to the consumer's lock acquisition. The consumer has no direct call to the producer's first lock acquisition. The channel hides the coupling. Ki-DPOR exposes it because it treats the rendezvous as an event that changes enabled operations on both sides.
+This case is useful for readers because it looks like common pipeline code. A producer owns one piece of state, sends a message, and then records a result. A consumer owns another piece of state, receives the message, and then updates the producer-facing cache. The two halves may live in separate modules, and each module can look locally correct. The producer has no direct call to the consumer's lock acquisition. The consumer has no direct call to the producer's first lock acquisition. The channel hides the coupling. DPOR+POR exposes it because it treats the rendezvous as an event that changes enabled operations on both sides.
 
 The final repro repository should therefore include a timeline table. Before the rendezvous, producer owns `left` and is waiting for a receiver. Consumer owns `right` and is ready to receive. During the rendezvous, the send completes and both sides move past the channel boundary. After the rendezvous, producer tries to acquire `right` and consumer tries to acquire `left`. That table turns a generic AB-BA explanation into the exact shape of the program. It also shows why a buffered channel can obscure the timeline: the producer may get past send before the consumer owns `right`, but a later schedule can still bring the same ownership pattern back.
 
@@ -176,7 +176,7 @@ The article should also discuss ownership transfer. In many systems, a channel i
 
 For the Bug DB, this pattern should be indexed under "channel-enabled lock-order violation." That wording separates it from plain mutex AB-BA and from plain channel deadlock. Plain mutex AB-BA can be found by scanning lock acquisition order inside two functions. Plain channel deadlock can be found by matching send and receive availability. This pattern needs both views. The cycle is a lock cycle, but the schedule that creates it is a channel schedule. A search system that only stores lock order will miss why the cycle is reachable; a search system that only stores channel operations will miss why the program cannot recover after the rendezvous.
 
-The Sleep Set explanation deserves special care because it is a good teaching moment for partial-order reduction. The producer's work before the channel and the consumer's work before the channel may commute in several schedules. Ki-DPOR can prune those branches when they do not change the ownership state that matters. It cannot prune the rendezvous branch, because after that branch both second-lock attempts are enabled. In other words, the channel event is not independent of the future lock operations. It changes the set of possible lock operations. That is why the resulting trace is compact while still being complete for the bug.
+The Sleep Set explanation deserves special care because it is a good teaching moment for partial-order reduction. The producer's work before the channel and the consumer's work before the channel may commute in several schedules. DPOR+POR can prune those branches when they do not change the ownership state that matters. It cannot prune the rendezvous branch, because after that branch both second-lock attempts are enabled. In other words, the channel event is not independent of the future lock operations. It changes the set of possible lock operations. That is why the resulting trace is compact while still being complete for the bug.
 
 The remediation section should include organizational guidance, not just code patches. Teams should document lock levels for state that crosses channel boundaries. A simple convention such as "pipeline state before result state" is often enough. Code review checklists should ask whether a channel operation happens while any mutex guard is live. Tracing should record when a task sends or receives while holding a guard in debug builds. These practices make the failure visible before a model checker is even run, and they give Laplace better labels when a deterministic trace is generated.
 

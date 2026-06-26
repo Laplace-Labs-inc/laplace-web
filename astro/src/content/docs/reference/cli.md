@@ -24,13 +24,34 @@ laplace login --token <LICENSE_KEY>
 
 ## laplace axiom verify
 
-Run Ki-DPOR verification on a harness.
+Run Classic DPOR+POR verification against a target crate or a named harness.
 
 ```bash
-laplace axiom verify --harness <NAME>
-laplace axiom verify --harness all
-laplace axiom verify --harness deadlock_ab_ba --max-depth 5000
+# Verify an external crate that uses supported primitives (zero-rewrite path)
+laplace axiom verify --target my-crate
+
+# Verify a named in-repo harness
+laplace axiom verify --harness deadlock_ab_ba --max-depth 1000
+
+# CI gate mode: refuse any assurance weaker than FullyDeterministic
+laplace axiom verify --target my-crate --strict
 ```
+
+Key flags:
+
+- `--target <CRATE>` — verify an external crate (conflicts with `--harness`)
+- `--harness <NAME>` — verify a named harness (conflicts with `--target`)
+- `--max-depth <N>` — bounded search depth (default: `1000`)
+- `--strict` — gate mode; exit non-zero unless the run is `FullyDeterministic`
+- `--share-name` / `--crate-version` — opt-in metadata for the Bug DB
+
+**Exit-code contract** (use it as a CI gate):
+
+| Code | Meaning |
+|------|---------|
+| `0` | clean — no violation; assurance acceptable |
+| `1` | violation found (`.ard` recorded), or `--strict` refused a non-`FullyDeterministic` assurance |
+| `2` | usage / infra error (no mode selected, unknown harness, missing build feature) |
 
 ## laplace axiom forensic replay
 

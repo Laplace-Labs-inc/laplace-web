@@ -4,13 +4,13 @@ const products = [
     name: "Axiom",
     tagline: "Deterministic Concurrency Verification",
     description:
-      "Ki-DPOR exhaustively explores every thread interleaving. No random sampling, no false negatives. Every deadlock, every race condition - found.",
+      "DPOR+POR systematically explores every distinct thread interleaving within a bounded search. No random sampling, no false positives. Deadlocks, AB-BA cycles, and starvation - found deterministically.",
     logo: "/images/Laplace_Axiom.png",
     accentText: "text-axiom",
     accentArrow: "text-axiom",
     borderHover: "hover:border-axiom",
     features: [
-      "Ki-DPOR + A* heuristic scheduling",
+      "Sleep-set / partial-order reduction",
       "Kani formal proofs on core algorithms",
       "ARD forensic binary dump",
       "BYOC macro - no code changes",
