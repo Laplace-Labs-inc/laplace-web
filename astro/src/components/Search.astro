@@ -1,4 +1,14 @@
 ---
+// FABLE-032: docs search.
+// REAL connection via Algolia DocSearch when the three PUBLIC_ALGOLIA_* env vars
+// are configured at build time; HONEST explicit gate (disabled, "coming soon")
+// when any is missing — never a silently-broken search box.
+//
+// Env contract (see astro/.env.example):
+//   PUBLIC_ALGOLIA_APP_ID     — Algolia application id
+//   PUBLIC_ALGOLIA_SEARCH_KEY — Algolia *search-only* API key (public-safe;
+//                               do NOT use an admin/write key here)
+//   PUBLIC_ALGOLIA_INDEX_NAME — DocSearch index name
 interface Props {
   placeholder?: string;
 }
@@ -11,12 +21,38 @@ const enabled = Boolean(
 );
 ---
 
-<div class="doc-search" data-enabled={enabled ? "true" : "false"}>
-  <label class="doc-search__fallback">
-    <span class="sr-only">{placeholder}</span>
-    <input type="search" placeholder={enabled ? "DocSearch registration pending" : placeholder} disabled />
-  </label>
+<div class="doc-search">
+  {
+    enabled ? (
+      <div id="docsearch" />
+    ) : (
+      <label class="doc-search__fallback">
+        <span class="sr-only">{placeholder}</span>
+        <input type="search" placeholder={`${placeholder} (coming soon)`} disabled aria-disabled="true" />
+      </label>
+    )
+  }
 </div>
+
+<script>
+  // Guard on PUBLIC_ env vars: when unset they are statically inlined as
+  // `undefined`, so the condition is false at build time and the dynamic
+  // imports are tree-shaken out (no DocSearch JS/CSS shipped on the gated path).
+  const appId = import.meta.env.PUBLIC_ALGOLIA_APP_ID;
+  const apiKey = import.meta.env.PUBLIC_ALGOLIA_SEARCH_KEY;
+  const indexName = import.meta.env.PUBLIC_ALGOLIA_INDEX_NAME;
+
+  if (appId && apiKey && indexName && document.getElementById("docsearch")) {
+    const { default: docsearch } = await import("@docsearch/js");
+    await import("@docsearch/css");
+    docsearch({
+      container: "#docsearch",
+      appId,
+      apiKey,
+      indexName,
+    });
+  }
+</script>
 
 <style>
   .doc-search {
@@ -30,6 +66,8 @@ const enabled = Boolean(
     background: var(--color-surface, #111);
     color: inherit;
     padding: 0.625rem 0.75rem;
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 
   .sr-only {
