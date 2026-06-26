@@ -51,7 +51,14 @@ export function OrgsProjectsPage() {
 
   return (
     <div className="space-y-8">
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      <header>
+        <h1 className="text-xl font-semibold tracking-tight">Orgs &amp; Projects</h1>
+        <p className="mt-1 text-sm text-muted">
+          Create organizations and the projects scoped under them.
+        </p>
+      </header>
+
+      {error && <p className="text-sm text-danger">{error}</p>}
 
       <section className="grid gap-6 md:grid-cols-2">
         <Panel title="Organizations">
@@ -70,7 +77,7 @@ export function OrgsProjectsPage() {
 
         <Panel title={selectedOrg ? `Projects in ${selectedOrg.name}` : "Projects"}>
           {!selectedOrg ? (
-            <p className="text-gray-500 text-sm">Select an organization first.</p>
+            <p className="text-faint text-sm">Select an organization first.</p>
           ) : (
             <>
               <List
@@ -92,7 +99,7 @@ export function OrgsProjectsPage() {
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
+    <div className="rounded-2xl border border-border bg-surface p-6">
       <h3 className="text-lg font-semibold mb-4">{title}</h3>
       {children}
     </div>
@@ -110,7 +117,7 @@ function List({
   activeId?: string;
   onPick?: (id: string) => void;
 }) {
-  if (items.length === 0) return <p className="text-gray-500 text-sm">{empty}</p>;
+  if (items.length === 0) return <p className="text-faint text-sm">{empty}</p>;
   return (
     <ul className="space-y-1">
       {items.map((it) => (
@@ -121,12 +128,12 @@ function List({
             disabled={!onPick}
             className={`w-full text-left px-3 py-2 rounded-lg border transition ${
               activeId === it.id
-                ? "border-blue-500 bg-blue-500/10"
-                : "border-gray-800 hover:border-gray-700"
+                ? "border-accent bg-accent/10"
+                : "border-border hover:border-border-strong"
             } ${onPick ? "cursor-pointer" : "cursor-default"}`}
           >
-            <span className="text-white text-sm">{it.primary}</span>
-            <span className="text-gray-500 text-xs ml-2">{it.secondary}</span>
+            <span className="text-fg text-sm">{it.primary}</span>
+            <span className="text-faint text-xs ml-2">{it.secondary}</span>
           </button>
         </li>
       ))}
@@ -151,7 +158,7 @@ function Input({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       required={required}
-      className="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent"
     />
   );
 }
@@ -161,7 +168,7 @@ function SubmitButton({ busy, children }: { busy: boolean; children: React.React
     <button
       type="submit"
       disabled={busy}
-      className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-bold hover:bg-blue-500 transition disabled:opacity-40"
+      className="w-full bg-accent text-fg py-2 rounded-lg text-sm font-bold hover:bg-accent-hover transition disabled:opacity-40"
     >
       {busy ? "Working…" : children}
     </button>

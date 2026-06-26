@@ -4,7 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <!-- Pre-paint theme bootstrap — MUST stay before styles to avoid FOUC.
+         Keep byte-identical to shared/theme-init.js. -->
+    <script>
+      (function () {
+        try {
+          var s = localStorage.getItem("laplace-theme");
+          var t = s === "light" || s === "dark" ? s
+            : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
+    <title>Laplace Console</title>
   </head>
   <body>
     <div id="root"></div>

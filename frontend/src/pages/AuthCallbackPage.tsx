@@ -34,22 +34,22 @@ export const AuthCallbackPage = () => {
   }, [staticError, code, state, completeOAuth, navigate]);
 
   return (
-    <div className="flex items-center justify-center min-h-[70vh]">
-      <div className="p-8 border border-gray-800 bg-gray-900/50 rounded-2xl w-96 text-center">
+    <div className="flex min-h-screen items-center justify-center bg-bg text-fg">
+      <div className="p-8 border border-border bg-surface rounded-2xl w-96 text-center">
         {error ? (
           <>
-            <h2 className="text-xl font-bold mb-3 text-red-400">Sign-in failed</h2>
-            <p className="text-sm text-gray-400 mb-6">{error}</p>
+            <h2 className="text-xl font-bold mb-3 text-danger">Sign-in failed</h2>
+            <p className="text-sm text-muted mb-6">{error}</p>
             <button
               onClick={() => navigate("/login", { replace: true })}
-              className="w-full bg-white text-black py-2 rounded-lg font-bold hover:bg-gray-200 transition"
+              className="w-full bg-fg text-bg py-2 rounded-lg font-bold hover:opacity-90 transition"
             >
               Back to sign in
             </button>
           </>
         ) : (
-          <div className="flex flex-col items-center gap-3 text-gray-300">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+          <div className="flex flex-col items-center gap-3 text-muted">
+            <Loader2 className="w-8 h-8 animate-spin text-accent" />
             <p>Completing sign-in…</p>
           </div>
         )}

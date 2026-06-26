@@ -99,22 +99,29 @@ export function AccessPage() {
   };
 
   if (!selectedOrg) {
-    return <p className="text-gray-500 text-sm">Select an organization to manage access.</p>;
+    return <p className="text-faint text-sm">Select an organization to manage access.</p>;
   }
 
   return (
     <div className="space-y-6">
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      <header>
+        <h1 className="text-xl font-semibold tracking-tight">Access</h1>
+        <p className="mt-1 text-sm text-muted">
+          Manage IAM role bindings for this organization and its projects.
+        </p>
+      </header>
+
+      {error && <p className="text-sm text-danger">{error}</p>}
 
       <div className="flex items-center gap-2 text-sm">
-        <span className="text-gray-400">Scope:</span>
+        <span className="text-muted">Scope:</span>
         {(["org", "project"] as const).map((s) => (
           <button
             key={s}
             onClick={() => setScope(s)}
             disabled={s === "project" && !selectedProject}
             className={`px-3 py-1 rounded-lg border transition ${
-              scope === s ? "border-blue-500 bg-blue-500/10 text-white" : "border-gray-800 text-gray-400"
+              scope === s ? "border-accent bg-accent/10 text-fg" : "border-border text-muted"
             } disabled:opacity-40`}
           >
             {s === "org" ? `Org: ${selectedOrg.name}` : `Project: ${selectedProject?.name ?? "—"}`}
@@ -122,13 +129,13 @@ export function AccessPage() {
         ))}
       </div>
 
-      <section className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
+      <section className="rounded-2xl border border-border bg-surface p-6">
         <h3 className="text-lg font-semibold mb-4">Role bindings</h3>
         {bindings.length === 0 ? (
-          <p className="text-gray-500 text-sm">No bindings in this scope yet.</p>
+          <p className="text-faint text-sm">No bindings in this scope yet.</p>
         ) : (
           <table className="w-full text-sm">
-            <thead className="text-gray-500 text-xs uppercase">
+            <thead className="text-faint text-xs uppercase">
               <tr>
                 <th className="text-left py-2">Principal</th>
                 <th className="text-left py-2">Role</th>
@@ -138,17 +145,17 @@ export function AccessPage() {
             </thead>
             <tbody>
               {bindings.map((b) => (
-                <tr key={b.id} className="border-t border-gray-800">
-                  <td className="py-2 text-gray-300">
-                    <span className="text-gray-500">{b.principal_kind}</span>{" "}
+                <tr key={b.id} className="border-t border-border">
+                  <td className="py-2 text-muted">
+                    <span className="text-faint">{b.principal_kind}</span>{" "}
                     <span className="font-mono text-xs">{b.principal_id}</span>
                   </td>
-                  <td className="py-2 text-white">{b.role_name}</td>
-                  <td className="py-2 text-gray-400">{b.scope_kind}</td>
+                  <td className="py-2 text-fg">{b.role_name}</td>
+                  <td className="py-2 text-muted">{b.scope_kind}</td>
                   <td className="py-2 text-right">
                     <button
                       onClick={() => onRemove(b.id)}
-                      className="text-gray-500 hover:text-red-400 transition"
+                      className="text-faint hover:text-danger transition"
                       title="Remove binding"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -161,12 +168,12 @@ export function AccessPage() {
         )}
       </section>
 
-      <section className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
+      <section className="rounded-2xl border border-border bg-surface p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Assign a role</h3>
           <button
             onClick={grantMyself}
-            className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300"
+            className="flex items-center gap-2 text-xs text-accent hover:text-accent-hover"
           >
             <UserPlus className="w-4 h-4" /> Fill in my user
           </button>
@@ -175,7 +182,7 @@ export function AccessPage() {
           <select
             value={principalKind}
             onChange={(e) => setPrincipalKind(e.target.value as "user" | "service_account")}
-            className="bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm"
+            className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm"
           >
             <option value="user">user</option>
             <option value="service_account">service_account</option>
@@ -183,7 +190,7 @@ export function AccessPage() {
           <select
             value={roleName}
             onChange={(e) => setRoleName(e.target.value)}
-            className="bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm"
+            className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm"
           >
             {roles.map((r) => (
               <option key={r.name} value={r.name}>
@@ -196,12 +203,12 @@ export function AccessPage() {
             onChange={(e) => setPrincipalId(e.target.value)}
             placeholder="principal id (UUID)"
             required
-            className="sm:col-span-2 w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:border-blue-500"
+            className="sm:col-span-2 w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:border-accent"
           />
           <button
             type="submit"
             disabled={busy}
-            className="sm:col-span-2 bg-blue-600 text-white py-2 rounded-lg text-sm font-bold hover:bg-blue-500 transition disabled:opacity-40"
+            className="sm:col-span-2 bg-accent text-fg py-2 rounded-lg text-sm font-bold hover:bg-accent-hover transition disabled:opacity-40"
           >
             {busy ? "Working…" : "Add binding"}
           </button>

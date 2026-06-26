@@ -51,46 +51,53 @@ export function StatusPage() {
 
   return (
     <div className="space-y-6">
+      <header>
+        <h1 className="text-xl font-semibold tracking-tight">Status</h1>
+        <p className="mt-1 text-sm text-muted">
+          Control-plane health and probe telemetry for the selected project.
+        </p>
+      </header>
+
       <section className="grid gap-4 sm:grid-cols-3">
         <Card label="Signed in" value={session?.email ?? "—"} />
         <Card label="Organization" value={selectedOrg?.name ?? "— none —"} />
         <Card label="Project" value={selectedProject?.name ?? "— none —"} />
       </section>
 
-      <section className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
+      <section className="rounded-2xl border border-border bg-surface p-6">
         <h3 className="text-lg font-semibold mb-3">Control plane</h3>
         {!API_BASE ? (
-          <p className="text-amber-400 text-sm">API base URL not configured.</p>
+          <p className="text-warning text-sm">API base URL not configured.</p>
         ) : health.kind === "ok" ? (
-          <p className="flex items-center gap-2 text-green-400 text-sm">
+          <p className="flex items-center gap-2 text-success text-sm">
             <CheckCircle2 className="w-4 h-4" /> Connected — {JSON.stringify(health.data)}
           </p>
         ) : health.kind === "error" ? (
-          <p className="flex items-center gap-2 text-red-400 text-sm">
+          <p className="flex items-center gap-2 text-danger text-sm">
             <XCircle className="w-4 h-4" /> {health.message}
           </p>
         ) : (
-          <p className="text-gray-400 text-sm">Checking…</p>
+          <p className="text-muted text-sm">Checking…</p>
         )}
       </section>
 
-      <section className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
+      <section className="rounded-2xl border border-border bg-surface p-6">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <Activity className="w-5 h-5 text-blue-500" /> Telemetry
+          <Activity className="w-5 h-5 text-accent" /> Telemetry
         </h3>
         {!hasScope ? (
-          <p className="text-gray-400 text-sm">
+          <p className="text-muted text-sm">
             Select an organization and project to load probe telemetry.
           </p>
         ) : metrics.kind === "loading" ? (
-          <p className="text-gray-400 text-sm">Loading…</p>
+          <p className="text-muted text-sm">Loading…</p>
         ) : metrics.kind === "error" ? (
           <div className="text-sm">
-            <p className="text-amber-400">Could not load telemetry.</p>
-            <p className="text-gray-500 mt-1">{metrics.message}</p>
+            <p className="text-warning">Could not load telemetry.</p>
+            <p className="text-faint mt-1">{metrics.message}</p>
           </div>
         ) : (
-          <pre className="text-xs text-gray-300 overflow-auto max-h-80 bg-gray-950 rounded-lg p-4">
+          <pre className="text-xs text-muted overflow-auto max-h-80 bg-surface-2 rounded-lg p-4">
             {JSON.stringify(metrics.data, null, 2)}
           </pre>
         )}
@@ -101,9 +108,9 @@ export function StatusPage() {
 
 function Card({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-gray-800 bg-gray-900/50 p-4">
-      <p className="text-xs uppercase tracking-wide text-gray-500">{label}</p>
-      <p className="mt-1 text-white truncate">{value}</p>
+    <div className="rounded-2xl border border-border bg-surface p-4">
+      <p className="text-xs uppercase tracking-wide text-faint">{label}</p>
+      <p className="mt-1 text-fg truncate">{value}</p>
     </div>
   );
 }
