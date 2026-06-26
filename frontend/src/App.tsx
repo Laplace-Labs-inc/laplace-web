@@ -4,7 +4,10 @@ import { LogIn, LogOut, Settings } from 'lucide-react';
 // 페이지 컴포넌트 임포트
 import { LandingPage } from './pages/LandingPage';
 import { GatewayPage } from './pages/GatewayPage';
-import { ConsolePage } from './pages/ConsolePage';
+import { ConsoleLayout } from './pages/console/ConsoleLayout';
+import { StatusPage } from './pages/console/StatusPage';
+import { OrgsProjectsPage } from './pages/console/OrgsProjectsPage';
+import { AccessPage } from './pages/console/AccessPage';
 import { LoginPage } from './pages/LoginPage';
 import { ContactPage } from './pages/ContactPage';
 import { AuthCallbackPage } from './pages/AuthCallbackPage';
@@ -72,10 +75,14 @@ function App() {
                 path="/console"
                 element={
                   <RequireAuth>
-                    <ConsolePage />
+                    <ConsoleLayout />
                   </RequireAuth>
                 }
-              />
+              >
+                <Route index element={<StatusPage />} />
+                <Route path="orgs" element={<OrgsProjectsPage />} />
+                <Route path="access" element={<AccessPage />} />
+              </Route>
             </Routes>
           </main>
         </div>
