@@ -1,0 +1,30 @@
+# Cloudflare Tunnel ingress for the three Laplace web surfaces.
+#
+# Each subdomain maps 1:1 to a locally-running dev/preview server. Replace
+# <TUNNEL_ID> and the credentials path with your named tunnel's values
+# (`cloudflared tunnel create laplace` prints both), then point the three DNS
+# records at the tunnel:
+#
+#   cloudflared tunnel route dns laplace laplace-labs.com
+#   cloudflared tunnel route dns laplace docs.laplace-labs.com
+#   cloudflared tunnel route dns laplace console.laplace-labs.com
+#
+# Run it:   cloudflared tunnel --config deploy/cloudflared/config.yml run laplace
+#
+# Start each surface on its mapped port first (see deploy/cloudflared/README.md):
+#   astro main  -> 4321   docs (starlight) -> 4322   console (vite) -> 5173
+
+tunnel: <TUNNEL_ID>
+credentials-file: ~/.cloudflared/<TUNNEL_ID>.json
+
+ingress:
+  - hostname: laplace-labs.com
+    service: http://localhost:4321        # astro — marketing
+  - hostname: www.laplace-labs.com
+    service: http://localhost:4321
+  - hostname: docs.laplace-labs.com
+    service: http://localhost:4322        # starlight — docs
+  - hostname: console.laplace-labs.com
+    service: http://localhost:5173        # react/vite — console
+  # Required catch-all.
+  - service: http_status:404
