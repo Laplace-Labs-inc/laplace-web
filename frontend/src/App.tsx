@@ -4,6 +4,7 @@ import { ConsoleLayout } from "./pages/console/ConsoleLayout";
 import { StatusPage } from "./pages/console/StatusPage";
 import { OrgsProjectsPage } from "./pages/console/OrgsProjectsPage";
 import { AccessPage } from "./pages/console/AccessPage";
+import { ExplorationPage } from "./pages/console/ExplorationPage";
 import { LoginPage } from "./pages/LoginPage";
 import { AuthCallbackPage } from "./pages/AuthCallbackPage";
 import { AuthProvider, useAuth } from "./lib/auth";
@@ -22,6 +23,15 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<RootRedirect />} />
+          {/* Public, ungated live demo of the exploration view (no auth/DB). */}
+          <Route
+            path="/demo/explore"
+            element={
+              <div className="mx-auto max-w-4xl px-6 py-10">
+                <ExplorationPage />
+              </div>
+            }
+          />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route
@@ -33,6 +43,7 @@ function App() {
             }
           >
             <Route index element={<StatusPage />} />
+            <Route path="explore" element={<ExplorationPage />} />
             <Route path="orgs" element={<OrgsProjectsPage />} />
             <Route path="access" element={<AccessPage />} />
           </Route>
