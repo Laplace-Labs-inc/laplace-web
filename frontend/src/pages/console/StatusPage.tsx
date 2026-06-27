@@ -13,6 +13,7 @@ type Health = { status?: string; db?: string } & Record<string, unknown>;
 type Metrics = {
   total_events_1h?: number;
   by_source?: { source?: string; count?: number }[];
+  series?: { bucket_unix?: number; count?: number }[];
   generated_at_unix?: number;
 } & Record<string, unknown>;
 
@@ -122,6 +123,7 @@ export function StatusPage() {
 function Telemetry({ data }: { data: Metrics }) {
   const total = data.total_events_1h ?? 0;
   const sources = data.by_source ?? [];
+  const series = (data.series ?? []).map((b) => b.count ?? 0);
   const generated = data.generated_at_unix
     ? new Date(data.generated_at_unix * 1000).toLocaleString()
     : null;
@@ -136,6 +138,13 @@ function Telemetry({ data }: { data: Metrics }) {
 
       <div>
         <p className="mb-2 text-[11px] font-medium uppercase tracking-wide text-faint">
+          Events over last hour (5-min buckets)
+        </p>
+        <Sparkline values={series} />
+      </div>
+
+      <div>
+        <p className="mb-2 text-[11px] font-medium uppercase tracking-wide text-faint">
           Events by source
         </p>
         {sources.length === 0 ? (
@@ -143,22 +152,81 @@ function Telemetry({ data }: { data: Metrics }) {
             No probe events in the last hour.
           </p>
         ) : (
-          <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border">
-            {sources.map((s, i) => (
-              <li
-                key={`${s.source ?? "src"}-${i}`}
-                className="flex items-center justify-between px-4 py-2.5 text-sm"
-              >
-                <span className="font-mono text-muted">{s.source ?? "unknown"}</span>
-                <span className="font-medium tabular-nums">
-                  {(s.count ?? 0).toLocaleString()}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <SourceBars sources={sources} total={total} />
         )}
       </div>
     </div>
+  );
+}
+
+function Sparkline({ values }: { values: number[] }) {
+  if (values.length === 0) {
+    return (
+      <p className="rounded-lg border border-dashed border-border px-4 py-6 text-center text-sm text-faint">
+        No events in the last hour.
+      </p>
+    );
+  }
+  const W = 600;
+  const H = 64;
+  const pad = 4;
+  const max = Math.max(1, ...values);
+  // Single point: render a flat baseline dot rather than a degenerate path.
+  const n = values.length;
+  const x = (i: number) => (n === 1 ? W / 2 : pad + (i * (W - 2 * pad)) / (n - 1));
+  const y = (v: number) => H - pad - (v / max) * (H - 2 * pad);
+  const line = values.map((v, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  const area = `${line} L${x(n - 1).toFixed(1)},${H - pad} L${x(0).toFixed(1)},${H - pad} Z`;
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      preserveAspectRatio="none"
+      className="h-16 w-full rounded-lg border border-border bg-bg"
+      role="img"
+      aria-label="Events over the last hour"
+    >
+      <path d={area} className="fill-accent/10" />
+      <path d={line} className="fill-none stroke-accent" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+      {values.map((v, i) => (
+        <circle key={i} cx={x(i)} cy={y(v)} r={2} className="fill-accent" />
+      ))}
+    </svg>
+  );
+}
+
+function SourceBars({
+  sources,
+  total,
+}: {
+  sources: { source?: string; count?: number }[];
+  total: number;
+}) {
+  const max = Math.max(1, ...sources.map((s) => s.count ?? 0));
+  return (
+    <ul className="space-y-2.5">
+      {sources.map((s, i) => {
+        const count = s.count ?? 0;
+        const widthPct = Math.max(2, Math.round((count / max) * 100));
+        const sharePct = total ? Math.round((count / total) * 100) : 0;
+        return (
+          <li key={`${s.source ?? "src"}-${i}`}>
+            <div className="mb-1 flex items-baseline justify-between text-sm">
+              <span className="font-mono text-muted">{s.source ?? "unknown"}</span>
+              <span className="tabular-nums">
+                <span className="font-medium">{count.toLocaleString()}</span>
+                <span className="ml-2 text-faint">{sharePct}%</span>
+              </span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-bg">
+              <div
+                className="h-full rounded-full bg-accent transition-[width] duration-500 ease-out"
+                style={{ width: `${widthPct}%` }}
+              />
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

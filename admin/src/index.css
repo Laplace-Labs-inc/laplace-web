@@ -1,0 +1,40 @@
+@import "tailwindcss";
+/* Shared design tokens (warm cream / warm dark) + Tailwind v4 wiring.
+ * Single source of truth: laplace-web/shared/laplace-theme.css. */
+@import "../../shared/laplace-theme.css";
+
+/* ── Admin-only overrides ─────────────────────────────────────────────────
+ * The operator console keeps the warm paper neutrals but uses an indigo
+ * accent (distinct from the user console's clay and the marketing teal) to
+ * signal "internal / operator" at a glance. Defined AFTER the shared import
+ * so it wins, keyed on data-theme so it tracks light/dark. */
+:root,
+[data-theme="light"] {
+  --bg: #faf9f5;
+  --bg-subtle: #f3f1ea;
+  --surface: #ffffff;
+  --surface-2: #f1efe7;
+  --border: #e8e4d8;
+  --border-strong: #d8d3c3;
+  --accent: #5650d6;        /* indigo (operator) */
+  --accent-hover: #4843c0;
+  --accent-fg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg: #1d1b17;
+  --bg-subtle: #232017;
+  --surface: #26231b;
+  --surface-2: #2f2b22;
+  --border: #3a352b;
+  --border-strong: #4b463a;
+  --accent: #8b86f0;        /* indigo (lighter for dark) */
+  --accent-hover: #9d99f3;
+  --accent-fg: #1a1813;
+}
+
+html,
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+}
