@@ -178,6 +178,33 @@ export interface AddBindingInput {
 export const addBinding = (token: string, input: AddBindingInput) =>
   authedJson<RoleBinding>("POST", "/api/v1/iam/bindings", token, input);
 
+// ── Live exploration view (unauthenticated demo; built-in models only) ───────
+export type ExploreCase = "deadlock" | "clean" | "cycle3";
+
+export interface ExploreSnapshot {
+  running: boolean;
+  explored: number;
+  pruned: number;
+  frontier: string;
+  verdict: "idle" | "running" | "clean" | "violation";
+  detail: string;
+}
+
+/** Kick off a built-in Axiom verification demo on the API (in-process). */
+export async function startExploration(demo: ExploreCase, delayMs = 15): Promise<void> {
+  const res = await fetch(`${requireBase()}/api/explore/start`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ case: demo, delay_ms: delayMs }),
+  });
+  if (!res.ok) throw new ApiError(res.status, `Failed to start exploration (${res.status})`);
+}
+
+/** SSE endpoint URL for the live exploration stream (consume via EventSource). */
+export function explorationStreamUrl(): string {
+  return `${requireBase()}/api/explore/stream`;
+}
+
 /** Probe telemetry summary; requires org/project scope headers + probe.events.read. */
 export async function getMetrics<T>(token: string, orgId: string, projectId: string): Promise<T> {
   const res = await fetch(`${requireBase()}/api/metrics`, {
