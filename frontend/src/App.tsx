@@ -23,6 +23,15 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<RootRedirect />} />
+          {/* Public, ungated live demo of the exploration view (no auth/DB). */}
+          <Route
+            path="/demo/explore"
+            element={
+              <div className="mx-auto max-w-4xl px-6 py-10">
+                <ExplorationPage />
+              </div>
+            }
+          />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route
