@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Pre-paint theme bootstrap — MUST stay before styles to avoid FOUC.
+         Keep byte-identical to shared/theme-init.js. -->
+    <script>
+      (function () {
+        try {
+          var s = localStorage.getItem("laplace-theme");
+          var t = s === "light" || s === "dark" ? s
+            : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
+    <title>Laplace Admin</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
