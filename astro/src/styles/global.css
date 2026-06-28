@@ -50,6 +50,17 @@
 .prose :not(pre) > code::before,
 .prose :not(pre) > code::after { content: ""; }
 
+/* Case-study cover diagram: inlined SVG had no size constraint and overflowed.
+ * Make it scale to the container, centered, with a sane cap. */
+.cs-cover { padding: 1rem 1.25rem; }
+.cs-cover svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 360px;
+  margin-inline: auto;
+}
+
 /* Long-form rhythm + tighter heading typography. */
 .prose { font-size: 1.02rem; line-height: 1.75; }
 .prose h2 { font-size: 1.6rem; letter-spacing: -0.01em; margin-top: 2.5rem; }
