@@ -30,7 +30,13 @@ export default defineConfig({
   integrations: [react(), mdx()],
   markdown: {
     shikiConfig: {
-      theme: "github-dark",
+      // Dual theme bound to the site's data-theme attribute (see global.css).
+      // defaultColor:false emits --shiki-light / --shiki-dark CSS vars so code
+      // blocks match the warm-cream / warm-dark palette instead of a single
+      // dark block that washes out on the light page.
+      themes: { light: "github-light", dark: "github-dark" },
+      defaultColor: false,
+      wrap: true,
       langs: ["rust", "bash", "toml", "yaml", "json", "typescript"],
     },
   },

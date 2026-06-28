@@ -4,3 +4,53 @@
 /* Shared design tokens (warm cream / warm dark) + Tailwind v4 wiring.
  * Single source of truth: laplace-web/shared/laplace-theme.css. */
 @import "../../../shared/laplace-theme.css";
+
+/* ── Prose code blocks + long-form typography (case studies / articles) ──────
+ * Fixes: (1) inline-code chip styling was leaking into block code inside <pre>,
+ * painting a light chip background under Shiki's dark tokens → unreadable;
+ * (2) single dark Shiki theme washed out on the cream page. Now Shiki owns
+ * block code with a data-theme-bound dual palette, and inline code is a chip. */
+
+/* Dual Shiki theme bound to [data-theme] (defaultColor:false in astro.config). */
+.astro-code { background-color: var(--shiki-light-bg); }
+.astro-code,
+.astro-code span { color: var(--shiki-light); }
+[data-theme="dark"] .astro-code { background-color: var(--shiki-dark-bg); }
+[data-theme="dark"] .astro-code,
+[data-theme="dark"] .astro-code span { color: var(--shiki-dark); }
+
+/* Block code: let Shiki own it — strip any chip styling that cascades in. */
+.prose pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.1rem 1.25rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.prose pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  font-weight: 400;
+}
+
+/* Inline code: a subtle chip (block code is excluded by :not(pre)). */
+.prose :not(pre) > code {
+  background-color: var(--surface);
+  color: var(--accent);
+  padding: 0.12em 0.4em;
+  border-radius: 0.35rem;
+  font-size: 0.875em;
+  font-weight: 500;
+}
+.prose :not(pre) > code::before,
+.prose :not(pre) > code::after { content: ""; }
+
+/* Long-form rhythm + tighter heading typography. */
+.prose { font-size: 1.02rem; line-height: 1.75; }
+.prose h2 { font-size: 1.6rem; letter-spacing: -0.01em; margin-top: 2.5rem; }
+.prose h3 { font-size: 1.25rem; letter-spacing: -0.005em; }
