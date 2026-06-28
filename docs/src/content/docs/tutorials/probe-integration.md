@@ -1,5 +1,6 @@
 ---
 title: "Probe Integration"
+draft: true  # M1 scope: non-Axiom/CLI product hidden until post-launch
 description: "Emit minimal verification telemetry from a service without changing request behavior."
 section: tutorials
 category: "LQ-3"

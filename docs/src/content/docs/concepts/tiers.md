@@ -14,8 +14,8 @@ See the full [Pricing page](/pricing) for current rates.
 | Feature | FREE | PRO/ULTRA | ENTERPRISE | TRINITY |
 |---------|------|-----------|------------|---------|
 | Axiom verification depth | 500 | 10,000 | Unlimited | Unlimited |
-| Kraken load testing | ❌ | ✅ | ✅ | ✅ |
-| Probe observation mesh | ❌ | ✅ | ✅ | ✅ |
+| Kraken load testing *(post-launch)* | ❌ | ✅ | ✅ | ✅ |
+| Probe observation mesh *(post-launch)* | ❌ | ✅ | ✅ | ✅ |
 | BYOC / On-premise | ❌ | ❌ | ✅ | ✅ |
 | Vanguard real-time defense | ❌ | ❌ | ❌ | ✅ |
 | Phantom Monopoly slots | — | — | 10/domain | 3/domain |

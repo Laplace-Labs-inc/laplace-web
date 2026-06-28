@@ -1,5 +1,6 @@
 ---
 title: "Probe — Observation Mesh"
+draft: true  # M1 scope: non-Axiom/CLI product hidden until post-launch
 description: "Zero-overhead production monitoring via QUIC-based observation mesh."
 section: "concepts"
 order: 3

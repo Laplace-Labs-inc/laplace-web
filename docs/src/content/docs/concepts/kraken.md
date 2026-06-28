@@ -1,5 +1,6 @@
 ---
 title: "Kraken — Load Engine"
+draft: true  # M1 scope: non-Axiom/CLI product hidden until post-launch
 description: "Deterministic chaos and load simulation for your production services."
 section: "concepts"
 order: 2
