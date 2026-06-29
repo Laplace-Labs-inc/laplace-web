@@ -1,5 +1,6 @@
 ---
 title: "빠른 시작 (Quickstart)"
+draft: true  # M1 scope: 3-engine (Kraken/Probe) bootstrap hidden until post-launch
 description: "3분 안에 Axiom·Kraken·Probe를 로컬에서 부트스트랩하고 무중단 핫리로딩을 경험합니다."
 section: tutorials
 order: 10

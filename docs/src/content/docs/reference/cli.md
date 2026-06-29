@@ -1,13 +1,15 @@
 ---
 title: "CLI Reference"
-description: "Complete reference for the laplace CLI — Axiom, Kraken, Probe commands."
+description: "Complete reference for the laplace CLI — Axiom verification commands."
 section: "reference"
 order: 1
 ---
 
 # CLI Reference
 
-The `laplace` CLI controls Axiom formal verification, Kraken load testing, and Probe observation.
+The `laplace` CLI drives Axiom formal verification: scaffold a project, verify
+your concurrent code, and replay any bug it finds. (Kraken load testing and the
+Probe observation mesh ship post-launch and are documented separately then.)
 
 ## Global Options
 
@@ -61,20 +63,45 @@ Replay a recorded bug from an `.ard` file.
 laplace axiom forensic replay --ard bug_report_1234.ard
 ```
 
-## laplace kraken run
+## laplace axiom replay
 
-Run a load test scenario.
+Replay a recorded schedule file deterministically.
 
 ```bash
-laplace kraken run scenarios/my-load.yaml
-laplace kraken run scenarios/my-load.yaml --data "jwt=<TOKEN>"
+laplace axiom replay --schedule schedule.json
 ```
 
-## laplace probe agent
+## laplace init
 
-Manage the cloud observation agent.
+Scaffold a new project wired for Axiom verification (no license required).
 
 ```bash
-laplace probe agent start --edge-url wss://edge.laplace-labs.com:8443
-laplace probe agent status
+laplace init my-project --template byoc        # byoc | byoc-probe | kraken-scenario | byoc-axum | byoc-tokio
+laplace init my-project --channel alpha-1
+```
+
+## laplace axiom mock-verify
+
+Run a no-license demo verification — useful as a smoke test in CI.
+
+```bash
+laplace axiom mock-verify --scenario clean      # must exit 0
+laplace axiom mock-verify --scenario deadlock   # must exit 1 (writes an .ard)
+```
+
+## laplace status
+
+Show the current license/credit state.
+
+```bash
+laplace status
+```
+
+## laplace install / uninstall
+
+Install an optional engine plugin, or remove local Laplace state.
+
+```bash
+laplace install axiom        # plugin: axiom (kraken/probe/sentinel ship post-launch)
+laplace uninstall
 ```

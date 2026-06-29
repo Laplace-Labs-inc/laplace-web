@@ -21,7 +21,7 @@ export default defineConfig({
     starlight({
       title: "Laplace Docs",
       description:
-        "Deterministic concurrency verification — Axiom engine, Probe mesh, and the Laplace CLI.",
+        "Deterministic concurrency verification — the Axiom engine and the Laplace CLI.",
       logo: {
         light: "./public/images/Laplace_labs.png",
         dark: "./public/images/Laplace_labs.png",

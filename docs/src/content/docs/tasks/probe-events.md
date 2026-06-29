@@ -1,5 +1,6 @@
 ---
 title: "Inspect Probe Events"
+draft: true  # M1 scope: non-Axiom/CLI product hidden until post-launch
 description: "Stream and analyze real-time probe events from your running service."
 section: "tasks"
 order: 3

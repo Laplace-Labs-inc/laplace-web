@@ -1,5 +1,6 @@
 ---
 title: "Run a Load Test"
+draft: true  # M1 scope: non-Axiom/CLI product hidden until post-launch
 description: "Use Kraken to run a deterministic load test against your API."
 section: "tasks"
 order: 2
