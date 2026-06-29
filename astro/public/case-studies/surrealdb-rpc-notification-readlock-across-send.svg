@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">surrealdb live-query notification lock-hold case study cover</title>
+  <desc id="desc">AB-BA wait-for cycle between notification dispatch and connection lifecycle. Classic DPOR. Licensed CC-BY-4.0.</desc>
+  <rect width="1200" height="630" fill="#030712"/>
+  <path d="M0 96H1200M0 534H1200M164 0V630M1036 0V630" stroke="#1C2333" stroke-width="2"/>
+  <rect x="86" y="72" width="1028" height="486" rx="8" fill="#0D1117" stroke="#1C2333" stroke-width="2"/>
+  <text x="116" y="136" fill="#00E5CC" font-family="JetBrains Mono, monospace" font-size="24">CASE STUDY — surrealdb</text>
+  <text x="116" y="196" fill="#FFFFFF" font-family="Inter, system-ui, sans-serif" font-size="50" font-weight="800">Read guard held across the client send</text>
+  <text x="116" y="242" fill="#8B9DB5" font-family="Inter, system-ui, sans-serif" font-size="23">live-query fan-out blocks on a send while holding WEBSOCKETS.read()</text>
+  <g fill="none" stroke-width="4" font-family="JetBrains Mono, monospace" font-size="17">
+    <rect x="190" y="330" width="190" height="92" rx="8" fill="#071B20" stroke="#00E5CC"/>
+    <rect x="820" y="330" width="190" height="92" rx="8" fill="#210D12" stroke="#DC2626"/>
+    <rect x="500" y="300" width="200" height="48" rx="6" fill="#0E1726" stroke="#7C3AED"/>
+    <rect x="500" y="404" width="200" height="48" rx="6" fill="#0E1726" stroke="#7C3AED"/>
+    <path d="M380 352H500" stroke="#00E5CC"/>
+    <path d="M700 428H820" stroke="#DC2626"/>
+    <path d="M820 376C740 376 700 428 700 428" stroke="#DC2626" stroke-dasharray="6 6"/>
+    <path d="M500 324H400C390 324 380 334 380 352" stroke="#00E5CC" stroke-dasharray="6 6"/>
+    <text x="206" y="382" fill="#FFFFFF">dispatch</text>
+    <text x="206" y="406" fill="#8B9DB5" font-size="14">holds read</text>
+    <text x="836" y="382" fill="#FFFFFF">lifecycle</text>
+    <text x="836" y="406" fill="#8B9DB5" font-size="14">wants write</text>
+    <text x="520" y="330" fill="#FFFFFF" font-size="15">WEBSOCKETS</text>
+    <text x="556" y="434" fill="#FFFFFF" font-size="15">send</text>
+  </g>
+  <text x="116" y="510" fill="#DC2626" font-family="JetBrains Mono, monospace" font-size="18">Deadlock { cycle: [ThreadId(0), ThreadId(1)] }</text>
+  <text x="116" y="536" fill="#8B9DB5" font-family="JetBrains Mono, monospace" font-size="16">CC-BY-4.0 · Laplace Labs · regression sentinel (fixed upstream by PR #4328)</text>
+</svg>
