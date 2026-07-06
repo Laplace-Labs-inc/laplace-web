@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
 @plugin "@tailwindcss/typography";
 @config "../../tailwind.config.mjs";
 /* Shared design tokens (warm cream / warm dark) + Tailwind v4 wiring.
@@ -65,3 +68,18 @@
 .prose { font-size: 1.02rem; line-height: 1.75; }
 .prose h2 { font-size: 1.6rem; letter-spacing: -0.01em; margin-top: 2.5rem; }
 .prose h3 { font-size: 1.25rem; letter-spacing: -0.005em; }
+
+.hero-gradient-word {
+  background: linear-gradient(to right, #00e5cc, #a78bfa, #00e5cc);
+  background-clip: text;
+  display: inline-block;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .hero-gradient-word {
+  /* Light --accent #0a7d6e on --bg #faf9f5 is 4.78:1. */
+  background: linear-gradient(to right, var(--accent), #5b21b6, var(--accent));
+  background-clip: text;
+  -webkit-background-clip: text;
+}

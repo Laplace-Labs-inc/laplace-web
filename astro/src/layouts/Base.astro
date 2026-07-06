@@ -6,6 +6,7 @@ interface Props {
   description?: string;
 }
 const { title, description = "Enterprise concurrency verification platform." } = Astro.props;
+const pageTitle = `${title} - Laplace Labs`;
 ---
 <!doctype html>
 <html lang="en">
@@ -27,13 +28,12 @@ const { title, description = "Enterprise concurrency verification platform." } =
         }
       })();
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <title>{title} - Laplace Labs</title>
+    <meta property="og:site_name" content="Laplace Labs" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary" />
+    <title>{pageTitle}</title>
   </head>
   <body class="bg-brand-bg text-fg font-sans antialiased">
     <slot />

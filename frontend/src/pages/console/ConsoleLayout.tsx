@@ -82,11 +82,18 @@ function ConsoleShell() {
     <div className="flex min-h-screen bg-bg text-fg">
       <aside className="flex w-64 shrink-0 flex-col border-r border-border bg-bg-subtle">
         <div className="flex items-center gap-2 px-4 py-4">
-          <img
-            src="/images/Laplace_labs.png"
-            alt="Laplace"
-            className="h-7 w-auto object-contain dark:invert dark:brightness-90"
-          />
+          <div>
+            <img
+              src="/images/Laplace_labs.svg"
+              alt="Laplace"
+              className="h-7 w-auto object-contain dark:hidden"
+            />
+            <img
+              src="/images/Laplace_labs-dark.svg"
+              alt="Laplace"
+              className="hidden h-7 w-auto object-contain dark:block"
+            />
+          </div>
           <span className="text-[13px] font-semibold tracking-tight text-muted">
             Console
           </span>

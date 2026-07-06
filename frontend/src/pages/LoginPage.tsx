@@ -35,11 +35,18 @@ export const LoginPage = () => {
   return (
     <div className="flex min-h-screen flex-col bg-bg text-fg">
       <header className="flex items-center justify-between px-6 py-5">
-        <img
-          src="/images/Laplace_labs.png"
-          alt="Laplace"
-          className="h-8 w-auto object-contain dark:invert dark:brightness-90"
-        />
+        <div>
+          <img
+            src="/images/Laplace_labs.svg"
+            alt="Laplace"
+            className="h-8 w-auto object-contain dark:hidden"
+          />
+          <img
+            src="/images/Laplace_labs-dark.svg"
+            alt="Laplace"
+            className="hidden h-8 w-auto object-contain dark:block"
+          />
+        </div>
         <ThemeToggle />
       </header>
 
