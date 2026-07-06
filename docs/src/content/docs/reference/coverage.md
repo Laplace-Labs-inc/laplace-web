@@ -4,9 +4,6 @@ description: "What Laplace catches and what it does not catch."
 section: "reference"
 order: 2
 ---
-
-# Coverage Boundaries
-
 ## What Laplace catches
 
 Laplace catches these classes for blocking and Tokio synchronization primitives within the explored bound:

@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 102
 last_updated: "2026-05-30"
 ---
-
-# First BYOC Audit
-
 BYOC audits keep third-party crate instrumentation local until the audit result is stable enough to publish. The first-launch live BYOC scaffold is SQLx under `laplace-cloud/vendor/sqlx-0.8.6-patched` and `laplace-cloud/crates/byoc/sqlx-byoc`.
 
 ## 1. Pick a Crate

@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 302
 last_updated: "2026-05-30"
 ---
-
-# ARD File Format
-
 An `.ard` file stores enough schedule information to replay a verification failure. Treat it as an evidence artifact: keep it with the command, commit SHA, and dependency versions that produced it.
 
 ## Logical Sections
@@ -37,8 +34,8 @@ The on-disk encoding may be binary or framed, but exported diagnostics should pr
     "manifest_path": "crates/byoc/sqlx-byoc/Cargo.toml"
   },
   "resources": [
-    "hyper.idle_pool",
-    "hyper.conn_state"
+    "sqlx.pool_state",
+    "sqlx.close_event"
   ],
   "verdict": {
     "status": "BugFound",

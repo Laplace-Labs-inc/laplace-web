@@ -4,9 +4,6 @@ description: "Install the Laplace CLI and SDK on Linux, macOS, or Windows."
 section: "getting-started"
 order: 3
 ---
-
-# Installation
-
 ## CLI
 
 The `laplace` CLI ships as a prebuilt binary. Pick the channel for your platform.
@@ -57,7 +54,7 @@ Add to `Cargo.toml`:
 
 ```toml
 [dev-dependencies]
-# Until laplace-sdk is published to crates.io, use the public git dependency.
+  # Until laplace-sdk is published to crates.io, use the public git dependency.
 laplace-sdk = { git = "https://github.com/Laplace-Labs-inc/laplace" }
 ```
 

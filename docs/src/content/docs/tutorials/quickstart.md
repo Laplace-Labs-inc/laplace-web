@@ -5,9 +5,6 @@ description: "3분 안에 Axiom·Kraken·Probe를 로컬에서 부트스트랩�
 section: tutorials
 order: 10
 ---
-
-# 🚀 빠른 시작 (Quickstart)
-
 이 가이드는 단 **3분** 만에 Laplace의 3대 코어 엔진(Axiom, Kraken, Probe)을 로컬 환경에 부트스트랩하고, 제로 다운타임(Zero-Downtime) 핫리로딩을 경험하는 과정을 안내합니다.
 
 ## 1. 사전 준비 (Prerequisites)
@@ -23,7 +20,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 Laplace의 통제 평면(Control Plane)인 CLI 도구를 설치합니다. (현재는 소스 빌드 방식을 제공합니다.)
 
 ```bash
-# 저장소 클론 및 CLI 설치
+  # 저장소 클론 및 CLI 설치
 git clone https://github.com/Laplace-Labs-inc/laplace-dev.git
 cd laplace-dev
 cargo build --release -p laplace-cli
@@ -34,7 +31,7 @@ cargo build --release -p laplace-cli
 Laplace는 쿠버네티스의 철학을 계승하여 단 하나의 선언적(Declarative) 파일로 시스템을 통제합니다. 프로젝트 루트에 `laplace.toml` 파일을 생성하고 아래 내용을 복사해 넣습니다.
 
 ```toml
-# laplace.toml
+  # laplace.toml
 [axiom]
 max_threads = 8
 max_depth = 20

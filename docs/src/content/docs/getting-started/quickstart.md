@@ -4,9 +4,6 @@ description: "Get from zero to your first verified concurrency bug in 10 minutes
 section: "getting-started"
 order: 1
 ---
-
-# Quickstart
-
 Laplace formally verifies the concurrency correctness of your Rust code using **Classic DPOR** —
 deterministic state-space exploration that systematically searches the distinct thread interleavings
 and **proves** the absence of deadlocks, AB-BA cycles, and lost wakeups within a bounded search.
@@ -72,7 +69,7 @@ Add `laplace-sdk` to your `Cargo.toml`:
 
 ```toml
 [dev-dependencies]
-# Until laplace-sdk is published to crates.io, use the public git dependency.
+  # Until laplace-sdk is published to crates.io, use the public git dependency.
 laplace-sdk = { git = "https://github.com/Laplace-Labs-inc/laplace" }
 ```
 
@@ -120,7 +117,7 @@ reproduce the result bit-for-bit.
 
 ## Next Steps
 
-- [One-Line Integration](/getting-started/one-line) — verify an existing function with a single annotation
+- [Targeted Integration](/getting-started/one-line) — verify an existing function with a single annotation
 - [Verify Concurrent Code](/tasks/verify) — deeper end-to-end walkthrough
 - [Concepts: Axiom](/concepts/axiom) — understand how DPOR works
 - [Coverage Boundaries](/reference/coverage) — what Laplace catches and what it does not catch

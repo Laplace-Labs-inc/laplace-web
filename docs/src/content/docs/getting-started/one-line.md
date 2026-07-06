@@ -4,9 +4,6 @@ description: "Integrate Laplace with targeted verification annotations."
 section: "getting-started"
 order: 2
 ---
-
-# Targeted Integration
-
 Laplace follows a **targeted-annotation** approach: you annotate the state and function you want to
 verify, and Laplace generates the concurrent test scaffolding automatically.
 

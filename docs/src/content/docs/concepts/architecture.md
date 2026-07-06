@@ -3,10 +3,8 @@ title: "Sovereign Architecture"
 description: "OS의 간섭을 배제하고 자원·스케줄링을 스스로 통제하는 주권적 커널 아키텍처."
 section: concepts
 order: 5
+draft: true
 ---
-
-# 💡 Sovereign Architecture란?
-
 **Laplace Framework**는 단순한 애플리케이션 프레임워크가 아닙니다. 초고성능 AI 에이전트 구동을 위해 OS의 간섭을 배제하고, 스스로 자원과 스케줄링을 통제하는 **'주권적 커널(Sovereign Kernel)'**입니다.
 
 ## 왜 Sovereign(주권적)인가?

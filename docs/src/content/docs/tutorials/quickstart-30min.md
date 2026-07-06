@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 101
 last_updated: "2026-05-30"
 ---
-
-# Quickstart in 30 Minutes
-
 This tutorial takes a new Rust service from zero Laplace state to one local verification run.
 
 ## 1. Install

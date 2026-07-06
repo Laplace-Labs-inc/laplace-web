@@ -4,9 +4,6 @@ description: "Reference for the laplace CLI surface."
 section: "reference"
 order: 1
 ---
-
-# CLI Reference
-
 The `laplace` CLI drives project scaffolding, authentication, Axiom verification, replay, and local diagnostics. Kraken and Probe remain post-launch hidden commands in first-touch help.
 
 ## Global Options

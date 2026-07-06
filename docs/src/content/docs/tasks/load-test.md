@@ -5,9 +5,6 @@ description: "Use Kraken to run a deterministic load test against your API."
 section: "tasks"
 order: 2
 ---
-
-# Run a Load Test
-
 ## 1. Write a Scenario
 
 Create `scenarios/my-load.yaml`:

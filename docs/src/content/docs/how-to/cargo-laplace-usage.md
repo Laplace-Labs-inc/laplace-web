@@ -5,9 +5,6 @@ category: "how-to"
 order: 206
 last_updated: "2026-07-06"
 ---
-
-# Use cargo-laplace
-
 `cargo laplace` is a thin Cargo subcommand wrapper around the `laplace` binary. If the wrapper is not installed in your environment yet, use the equivalent `laplace` command shown in each section.
 
 ## 1. Install the Laplace CLI

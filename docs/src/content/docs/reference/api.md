@@ -4,9 +4,6 @@ description: "REST API reference for laplace-api — auth, credits, probe events
 section: "reference"
 order: 2
 ---
-
-# API Reference
-
 Base URL: `https://api.laplace-labs.com`
 
 All requests require `Authorization: Bearer <JWT>` unless noted.

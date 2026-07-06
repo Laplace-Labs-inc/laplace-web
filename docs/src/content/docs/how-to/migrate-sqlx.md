@@ -5,9 +5,6 @@ category: "how-to"
 order: 204
 last_updated: "2026-05-30"
 ---
-
-# Migrate SQLx Code to Laplace BYOC
-
 This guide cites `laplace-cloud/vendor/sqlx-0.8.6-patched` and `laplace-cloud/crates/byoc/sqlx-byoc`. The local manifest records SQLx audit patterns, including pool close ABBA, transaction rollback race, statement cache deadlock, migration advisory-lock fairness boundary, listener shutdown cycle, and row decode buffer race.
 
 ## 1. Keep the Patch Local to the Audit

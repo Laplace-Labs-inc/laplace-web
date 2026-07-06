@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 105
 last_updated: "2026-05-30"
 ---
-
-# CI Integration
-
 CI should run bounded verification on the smallest useful harness set. Expensive internal sweeps belong in scheduled jobs.
 
 ## 1. Add a Pull Request Job

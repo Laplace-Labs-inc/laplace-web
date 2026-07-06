@@ -4,9 +4,6 @@ description: "Step-by-step guide to verifying a Rust concurrent data structure w
 section: "tasks"
 order: 1
 ---
-
-# Verify Concurrent Code
-
 This task walks through verifying a concurrent Rust service end-to-end.
 
 ## 1. Instrument Your Struct

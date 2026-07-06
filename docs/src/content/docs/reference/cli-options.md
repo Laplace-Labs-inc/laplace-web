@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 301
 last_updated: "2026-07-06"
 ---
-
-# CLI Options Reference
-
 Use `laplace --help` and subcommand help as the authoritative runtime source. This page lists the common options used by the tutorials.
 
 ## Global
@@ -32,7 +29,7 @@ Use `laplace --help` and subcommand help as the authoritative runtime source. Th
 | `--budget full|smoke` | Select full or shallow PR-gate budget. |
 | `--no-cache` | Force a fresh run instead of using the verdict cache. |
 | `--strict` | Fail unless assurance is acceptable. |
-| `--receipt <PATH>` | Write a reproducibility receipt. |
+| `--receipt <PATH>` | Write an assurance receipt. |
 | `--ard-out <DIR>` | Preserve BugFound ARD files for pinning. |
 
 Examples:

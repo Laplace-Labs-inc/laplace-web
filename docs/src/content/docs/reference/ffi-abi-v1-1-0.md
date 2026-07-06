@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 303
 last_updated: "2026-05-30"
 ---
-
-# FFI ABI v1.1.0
-
 The FFI boundary should pass plain data and explicit lengths. Ownership must be visible at the function name or documented next to the type.
 
 ## Types

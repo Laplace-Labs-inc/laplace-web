@@ -5,9 +5,6 @@ description: "Stream and analyze real-time probe events from your running servic
 section: "tasks"
 order: 3
 ---
-
-# Inspect Probe Events
-
 ## Stream Live Events
 
 ```bash

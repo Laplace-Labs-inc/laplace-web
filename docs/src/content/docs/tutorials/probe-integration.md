@@ -7,9 +7,6 @@ category: "LQ-3"
 order: 104
 last_updated: "2026-05-30"
 ---
-
-# Probe Integration
-
 Probe should observe verification and replay events without becoming part of the critical path. Start with explicit event emission around verification boundaries.
 
 ## 1. Define Events

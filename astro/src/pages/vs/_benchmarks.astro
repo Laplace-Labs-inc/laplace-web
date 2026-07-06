@@ -59,7 +59,7 @@ function formatMemory(value: number): string {
 function scenarioFor(result: BenchmarkResult, id: string): ScenarioResult {
   const scenario = result.scenarios.find((entry) => entry.id === id);
   if (!scenario) {
-    throw new Error(`Missing LQ-9 scenario ${id} for ${result.tool.name}`);
+    throw new Error(`Missing benchmark scenario ${id} for ${result.tool.name}`);
   }
   return scenario;
 }
@@ -74,14 +74,14 @@ function bestMemoryFor(id: string): number {
 ---
 <Base
   title="Concurrency Benchmark Comparison"
-  description="LQ-9 benchmark comparison for Laplace, Loom, Shuttle, Stateright, and madsim."
+  description="Benchmark comparison for Laplace, Loom, Shuttle, Stateright, and madsim."
 >
   <Nav />
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
     <section class="border-b border-brand-border pb-10">
       <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div class="max-w-3xl">
-          <p class="mb-3 font-mono text-xs font-medium uppercase text-brand-accent">LQ-9 Benchmark War Page</p>
+          <p class="mb-3 font-mono text-xs font-medium uppercase text-brand-accent">Benchmark Matrix</p>
           <h1 class="text-4xl font-black leading-tight md:text-5xl">
             Concurrency tool benchmark matrix
           </h1>

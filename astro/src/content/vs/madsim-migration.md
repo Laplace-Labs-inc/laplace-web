@@ -3,14 +3,14 @@ title: "Migrating from madsim to Laplace"
 competitor: "madsim"
 fixture_date: "2026-05-28"
 version: "0.2.34"
-version_status: "fixture version from LQ-9 JSON; verify latest before publish"
+version_status: "pinned from benchmark run (2026-05-28)"
 ---
 
 # Migrating from madsim to Laplace
 
 Use madsim when deterministic distributed simulation, simulated time, and service-level failure injection are the center of the test. Use Laplace when the target is local Rust synchronization with deterministic replay and forensic artifacts.
 
-The examples below map the five LQ-9 scenario fixtures to Laplace-style harness code. The compiled after examples live in `laplace-cloud/tests/lq10/migration-examples/from-madsim`.
+The examples below map the five benchmark scenario fixtures to Laplace-style harness code. The compiled after examples live in `laplace-cloud/tests/lq10/migration-examples/from-madsim`.
 
 ## 1. ABBA 4-thread deadlock
 
