@@ -1,12 +1,12 @@
 ---
 title: "Quickstart in 30 Minutes"
-description: "Install the CLI, run a small ABBA harness, and read the first verification report."
+description: "Install the CLI, authenticate, run the scaffolded verification gate, and prove a real deadlock."
 section: tutorials
 category: "LQ-3"
 order: 101
-last_updated: "2026-05-30"
+last_updated: "2026-07-06"
 ---
-This tutorial takes a new Rust service from zero Laplace state to one local verification run.
+This tutorial takes you from zero Laplace state to a passing verification gate and one engine-proven deadlock. Every command below is part of the supported first-launch surface — you can follow it top to bottom.
 
 ## 1. Install
 
@@ -24,92 +24,75 @@ gh release download --repo Laplace-Labs-inc/laplace \
   --pattern laplace-cli-x86_64-unknown-linux-musl.tar.xz
 ```
 
-## 2. Create a Harness
+## 2. Authenticate
 
-Create a small crate and add a deterministic two-lock scenario. This intentionally models an ABBA ordering error.
+`laplace axiom verify` is entitlement-gated, so log in before running the gate. All you need is a GitHub account:
 
 ```bash
-cargo new laplace-quickstart
+laplace login
+```
+
+The CLI starts GitHub Device Flow (enter the code it prints in your browser), then bootstraps an
+organization and project, issues a FREE license automatically, and stores a service-account key
+for later CLI calls. Pass `--org` / `--project` to reuse existing context instead.
+
+## 3. Scaffold a Gated Project
+
+`laplace init` (no license required) creates a project with the verification gate already wired:
+
+```bash
+laplace init laplace-quickstart --template byoc-tokio
 cd laplace-quickstart
-mkdir -p tests
 ```
 
-```rust
-// tests/abba.rs
-use std::sync::{Arc, Mutex};
-use std::thread;
-
-#[test]
-fn abba_lock_order_can_deadlock() {
-    let left = Arc::new(Mutex::new(()));
-    let right = Arc::new(Mutex::new(()));
-
-    let left_a = Arc::clone(&left);
-    let right_a = Arc::clone(&right);
-    let first = thread::spawn(move || {
-        let _left_guard = left_a.lock().expect("left lock");
-        let _right_guard = right_a.lock().expect("right lock");
-    });
-
-    let left_b = Arc::clone(&left);
-    let right_b = Arc::clone(&right);
-    let second = thread::spawn(move || {
-        let _right_guard = right_b.lock().expect("right lock");
-        let _left_guard = left_b.lock().expect("left lock");
-    });
-
-    first.join().expect("first thread");
-    second.join().expect("second thread");
-}
-```
-
-## 3. Run Verification
-
-Keep the first run bounded. The exact CLI surface may vary by package source, so prefer `laplace --help` before wiring CI.
+The template ships a scenario gate at `tests/laplace_gate.rs`: two workers take two
+`std::sync::Mutex` locks in the same `a -> b` order under
+`#[laplace_sdk::verify(scenario, expected = "clean")]`. Run tier 1 — the in-process check —
+first:
 
 ```bash
-laplace axiom verify --harness abba_lock_order_can_deadlock --max-depth 64
+cargo test --features laplace-gate
 ```
 
-Expected report shape:
+## 4. Run the Verification Gate (Tier 2)
 
-```text
-verdict: BugFound
-class: Deadlock
-resource_order: left -> right, right -> left
-replay: target/laplace/abba_lock_order_can_deadlock.ard
+Tier 2 hands the captured synchronization events to the Axiom engine:
+
+```bash
+laplace axiom verify --capture --capture-args="--features laplace-gate"
 ```
 
-## 4. Read the Result
+`--capture` orchestrates `cargo test` with event capture and then drives the engine over the
+captured interleavings. A clean run exits `0` and reports the verdict, the determinism assurance
+grade, and the replay seed — the same seed, code, and config reproduce the result bit-for-bit.
 
-The important fields are the verdict, the lock order, and the replay file. A `BugFound` result is actionable when the replay file names both conflicting resources.
+## 5. Prove a Real Deadlock
 
-## 5. Fix the Ordering
+You do not have to break your own build to see a failure. Run a modeled dependency-misuse
+contract — the engine explores it and proves the AB-BA deadlock:
 
-Make every path acquire locks in the same order.
-
-```rust
-use std::sync::{Arc, Mutex};
-use std::thread;
-
-#[test]
-fn fixed_lock_order_is_stable() {
-    let left = Arc::new(Mutex::new(()));
-    let right = Arc::new(Mutex::new(()));
-
-    let worker = |left: Arc<Mutex<()>>, right: Arc<Mutex<()>>| {
-        thread::spawn(move || {
-            let _left_guard = left.lock().expect("left lock");
-            let _right_guard = right.lock().expect("right lock");
-        })
-    };
-
-    let first = worker(Arc::clone(&left), Arc::clone(&right));
-    let second = worker(Arc::clone(&left), Arc::clone(&right));
-
-    first.join().expect("first thread");
-    second.join().expect("second thread");
-}
+```bash
+laplace axiom verify --contract tokio-mutex-across-await
 ```
 
-Run the verifier again and attach the `.ard` file only when the result remains `BugFound`.
+This exits `1` (violation found). Use `laplace axiom verify --contract list` to see the contract
+library.
+
+If you would rather see the ABBA shape in the scaffolded scenario itself, flip `worker_two` in
+`tests/laplace_gate.rs` to take the locks in `b -> a` order — but note the template's own caveat:
+a real native deadlock can hang during tier-1 capture, so the contract path above is the
+canonical bug demo.
+
+## 6. Read the Result
+
+The exit code is the CI contract: `0` clean, `1` violation found (or `--strict` refused a weaker
+assurance), `2` usage/infra error. BugFound runs can preserve `.ard` forensic records
+(`--ard-out <DIR>`); replay one for human inspection with:
+
+```bash
+laplace axiom forensic replay --ard <file>.ard
+```
+
+Honest scope: a green gate means "safe within the supported model primitives captured by this
+scenario" — see [Coverage Boundaries](/reference/coverage) for what Laplace does and does not
+catch.

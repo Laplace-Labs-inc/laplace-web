@@ -4,9 +4,12 @@ description: "Run bounded Laplace verification in pull requests and archive repl
 section: tutorials
 category: "LQ-3"
 order: 105
-last_updated: "2026-05-30"
+last_updated: "2026-07-06"
 ---
-CI should run bounded verification on the smallest useful harness set. Expensive internal sweeps belong in scheduled jobs.
+CI should run the bounded capture gate on pull requests. Deeper contract sweeps belong in scheduled jobs.
+
+`laplace axiom verify` is entitlement-gated in CI too: create a service-account key once
+(`laplace service-accounts keys create <sa> --ttl 30d`) and store it as a repository secret.
 
 ## 1. Add a Pull Request Job
 
@@ -26,9 +29,12 @@ jobs:
       - name: Install Laplace
         run: |
           curl -fsSL https://install.laplace-labs.com | sh
-      - name: Verify changed harnesses
+      - name: Authenticate
         run: |
-          laplace axiom verify --harness changed --max-depth 128
+          laplace login --service-account-key "${{ secrets.LAPLACE_SA_KEY }}"
+      - name: Run the verification gate
+        run: |
+          laplace axiom verify --capture --capture-args="--features laplace-gate" --budget smoke
       - name: Archive replays
         if: always()
         uses: actions/upload-artifact@v4
@@ -40,10 +46,11 @@ jobs:
 
 ## 2. Separate Required and Informational Checks
 
-Use a fast required job for harnesses directly touched by the pull request. Run deeper contract or capture jobs on a schedule.
+Use a fast required job with the shallow `smoke` budget for pull requests — a smoke green is
+never reported as a full green. Run the full-budget capture and contract jobs on a schedule.
 
 ```bash
-laplace axiom verify --harness changed --max-depth 128
+laplace axiom verify --capture --capture-args="--features laplace-gate" --budget smoke
 laplace axiom verify --capture --capture-args="--features laplace-gate" --budget full
 laplace axiom verify --contract tokio-mutex-across-await --budget full
 ```
