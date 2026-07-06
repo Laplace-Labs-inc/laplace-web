@@ -25,7 +25,7 @@ entries.sort(
         Bugs Laplace finds that production CI did not
       </h1>
       <p class="mt-5 max-w-2xl text-base leading-7 text-brand-muted md:text-lg">
-        Each study reproduces a real deadlock or starvation pattern Laplace
+        Each study reproduces a real deadlock, lost-wakeup, or lock-ordering pattern Laplace
         surfaced under DPOR exhaustive verification — with the trace, the
         minimal repro, and the upstream notification status.
       </p>
@@ -62,14 +62,6 @@ entries.sort(
       })}
     </ul>
 
-    <section class="mt-16 rounded-lg border border-brand-border bg-brand-surface/30 p-8">
-      <h2 class="text-lg font-semibold text-fg">Want to compare tools head-to-head?</h2>
-      <p class="mt-2 max-w-2xl text-sm text-brand-muted">
-        See the same five scenarios run on Loom, Shuttle, Stateright, and madsim on the
-        <a href="/vs/benchmarks/" class="font-medium text-brand-accent hover:underline">Benchmark Comparison</a>
-        page.
-      </p>
-    </section>
   </main>
 
   <Footer />

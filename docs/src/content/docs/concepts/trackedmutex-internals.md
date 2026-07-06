@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 402
 last_updated: "2026-05-30"
 ---
-
-# TrackedMutex Internals
-
 Tracked synchronization primitives exist to make schedules explainable. A normal mutex can tell the verifier that a lock was acquired. A tracked mutex also gives the resource a stable name that appears in reports and replay files.
 
 ## Minimum State

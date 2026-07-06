@@ -5,10 +5,7 @@ category: "how-to"
 order: 204
 last_updated: "2026-05-30"
 ---
-
-# Migrate SQLx Code to Laplace BYOC
-
-This guide cites `laplace-cloud/vendor/sqlx-0.8.6-patched` and `laplace-cloud/crates/external/sqlx-byoc`. The local manifest records six SQLx patterns, including pool close ABBA, transaction rollback race, statement cache deadlock, migration advisory lock starvation, listener shutdown cycle, and row decode buffer race.
+This guide cites `laplace-cloud/vendor/sqlx-0.8.6-patched` and `laplace-cloud/crates/byoc/sqlx-byoc`. The local manifest records SQLx audit patterns, including pool close ABBA, transaction rollback race, statement cache deadlock, migration advisory-lock fairness boundary, listener shutdown cycle, and row decode buffer race.
 
 ## 1. Keep the Patch Local to the Audit
 
@@ -110,9 +107,9 @@ This maps to `sqlx_notify_listener_shutdown_cycle`.
 
 ```bash
 cd laplace-cloud
-cargo test --manifest-path crates/external/sqlx-byoc/Cargo.toml
+cargo test --manifest-path crates/byoc/sqlx-byoc/Cargo.toml
 laplace axiom verify \
-  --manifest-path crates/external/sqlx-byoc/Cargo.toml \
+  --manifest-path crates/byoc/sqlx-byoc/Cargo.toml \
   --pattern sqlx_pool_acquire_close_abba \
   --seed 0xA1100ACE \
   --max-depth 128
@@ -124,7 +121,7 @@ If the report names generic resources such as `state` or `lock`, improve resourc
 
 SQLx bugs often appear near pools, transactions, statement caches, listeners, and migration locks. The first BYOC harness should model those resources directly. Avoid connecting to a real database unless the pattern depends on server behavior. A real database adds timing, network, authentication, and cleanup variables that make schedule replay harder.
 
-For `sqlx_pool_acquire_close_abba`, model pool state and close event. For `sqlx_transaction_drop_rollback_race`, model transaction state and rollback future. For `sqlx_migrate_advisory_lock_starvation`, model advisory lock and migration table. These resources are named directly in `vendor/sqlx-0.8.6-patched/src/lib.rs`.
+For `sqlx_pool_acquire_close_abba`, model pool state and close event. For `sqlx_transaction_drop_rollback_race`, model transaction state and rollback future. For migration advisory-lock fairness boundaries, model the advisory lock and migration table. These resources are named directly in `vendor/sqlx-0.8.6-patched/src/lib.rs`.
 
 ## 7. Keep Transaction Cleanup Explicit
 
@@ -153,7 +150,7 @@ This makes `sqlx_transaction_drop_rollback_race` reviewable without requiring a 
 
 ## 8. Classify the Result
 
-The SQLx manifest contains deadlock, race, and starvation patterns. Do not collapse them into a single "concurrency bug" bucket. A statement cache deadlock usually needs lock ordering changes. A row decode shared-buffer race usually needs ownership or copy boundaries. Migration advisory lock starvation usually needs fairness or timeout policy.
+The SQLx manifest contains several audit pattern classes. Do not collapse them into a single "concurrency bug" bucket. A statement cache deadlock usually needs lock ordering changes. A row decode shared-buffer race usually needs ownership or copy boundaries. Migration advisory-lock fairness findings usually need policy, timeout, or ownership review rather than a DPOR safety verdict.
 
 When a run returns `BugFound`, attach the pattern name and class to the issue title:
 
@@ -171,7 +168,7 @@ Use CI retention limits for replay artifacts. Store long-lived reproductions in 
 
 ## 10. Acceptance Checklist
 
-The SQLx BYOC crate should compile with `cargo test --manifest-path crates/external/sqlx-byoc/Cargo.toml`. Verification should select one pattern and should use synthetic pool, transaction, statement, migration, listener, or row decode resources. No command should require a live database for the first audit pass. If a live database becomes necessary later, isolate credentials in CI secrets and keep them out of replay metadata.
+The SQLx BYOC crate should compile with `cargo test --manifest-path crates/byoc/sqlx-byoc/Cargo.toml`. Verification should select one pattern and should use synthetic pool, transaction, statement, migration, listener, or row decode resources. No command should require a live database for the first audit pass. If a live database becomes necessary later, isolate credentials in CI secrets and keep them out of replay metadata.
 
 Reviewers should check that the migration keeps query behavior unchanged. A tracked wrapper must not alter transaction lifetime, statement cache keys, listener shutdown order, or row decoding ownership unless that is the intended fix. For transaction cleanup, prefer an explicit harness helper over relying on hidden drop timing. For statement cache fixes, verify that every path uses the same lock order.
 

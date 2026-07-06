@@ -93,10 +93,10 @@ export const benchmarkResults = Object.fromEntries(
 
 const latestVersionStatus: Record<ToolId, string> = {
   laplace: "project release tag",
-  loom: "fixture version from LQ-9 JSON; verify latest before publish",
-  shuttle: "fixture version from LQ-9 JSON; verify latest before publish",
-  stateright: "fixture version from LQ-9 JSON; verify latest before publish",
-  madsim: "fixture version from LQ-9 JSON; verify latest before publish",
+  loom: "pinned from benchmark run (2026-05-28)",
+  shuttle: "pinned from benchmark run (2026-05-28)",
+  stateright: "pinned from benchmark run (2026-05-28)",
+  madsim: "pinned from benchmark run (2026-05-28)",
 };
 
 const staticCells: Record<
@@ -187,7 +187,7 @@ export const competitorProfiles: Record<CompetitorId, CompetitorProfile> = {
     laplaceChoice: [
       "Choose Laplace when the target is code that cannot be fully rewritten around loom primitives.",
       "Choose Laplace when the review artifact needs replayable .ard output and Probe context for a postmortem.",
-      "Choose Laplace when the same page must compare BYOC dependency patches and LQ-9 fixture results.",
+      "Choose Laplace when the same page must compare BYOC dependency patches and benchmark fixture results.",
     ],
     migrationExamples: ["loom::sync::Mutex", "loom::sync::Arc", "loom::thread::spawn", "loom::model", "loom atomics"],
     faq: commonFaq("Loom"),
@@ -204,7 +204,7 @@ export const competitorProfiles: Record<CompetitorId, CompetitorProfile> = {
     laplaceChoice: [
       "Choose Laplace when deterministic replay and forensic output are release gates.",
       "Choose Laplace when patched external crates are part of the behavior under test.",
-      "Choose Laplace when LQ-9 fixture comparisons need a deterministic baseline across the same scenarios.",
+      "Choose Laplace when benchmark fixture comparisons need a deterministic baseline across the same scenarios.",
     ],
     migrationExamples: ["shuttle::sync::Mutex", "shuttle::sync::Arc", "shuttle::thread::spawn", "shuttle::check_pct", "schedule replay"],
     faq: commonFaq("Shuttle"),
@@ -238,7 +238,7 @@ export const competitorProfiles: Record<CompetitorId, CompetitorProfile> = {
     laplaceChoice: [
       "Choose Laplace when the target is local Rust concurrency with forensic replay requirements.",
       "Choose Laplace when the migration path should stay in standard Cargo projects with tracked primitives.",
-      "Choose Laplace when the LQ-9 fixture table is the source of timing and memory claims.",
+      "Choose Laplace when the benchmark fixture table is the source of timing and memory claims.",
     ],
     migrationExamples: ["madsim runtime", "spawned tasks", "simulated channels", "time control", "service harness"],
     faq: commonFaq("madsim"),
@@ -305,7 +305,7 @@ function metricCells(kind: "time" | "memory"): Record<ToolId, ComparisonCell> {
   return Object.fromEntries(
     toolOrder.map((tool) => [
       tool,
-      cell(metricRange(tool, kind), `Derived from ${benchmarkDate} LQ-9 JSON scenarios.`, "lq9-json"),
+      cell(metricRange(tool, kind), `Derived from ${benchmarkDate} benchmark JSON scenarios.`, "lq9-json"),
     ]),
   ) as Record<ToolId, ComparisonCell>;
 }
@@ -318,7 +318,7 @@ function commonFaq(tool: string): Array<{ question: string; answer: string }> {
     },
     {
       question: "Are the benchmark numbers production measurements?",
-      answer: "No. The checked LQ-9 JSON marks them as deterministic fixtures for CI shape checks and static rendering.",
+      answer: "No. The checked benchmark JSON marks them as deterministic fixtures for CI shape checks and static rendering.",
     },
     {
       question: "Can I keep existing tests?",
@@ -338,7 +338,7 @@ function commonFaq(tool: string): Array<{ question: string; answer: string }> {
     },
     {
       question: "Do the examples compile?",
-      answer: "The LQ-10 migration projects under tests/lq10/migration-examples are standalone Cargo projects and are built by CI.",
+      answer: "The migration fixture projects under tests/lq10/migration-examples are standalone Cargo projects and are built by CI.",
     },
     {
       question: "Are community and license claims final?",
@@ -346,7 +346,7 @@ function commonFaq(tool: string): Array<{ question: string; answer: string }> {
     },
     {
       question: "Can these pages cite the raw JSON directly?",
-      answer: "Yes. Numeric timing and memory values are read from the committed LQ-9 JSON fixtures.",
+      answer: "Yes. Numeric timing and memory values are read from the committed benchmark JSON fixtures.",
     },
     {
       question: "What is the fastest validation path?",

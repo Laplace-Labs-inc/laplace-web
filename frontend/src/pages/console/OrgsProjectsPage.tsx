@@ -168,7 +168,7 @@ function SubmitButton({ busy, children }: { busy: boolean; children: React.React
     <button
       type="submit"
       disabled={busy}
-      className="w-full bg-accent text-fg py-2 rounded-lg text-sm font-bold hover:bg-accent-hover transition disabled:opacity-40"
+      className="w-full bg-accent text-accent-fg py-2 rounded-lg text-sm font-bold hover:bg-accent-hover transition disabled:opacity-40"
     >
       {busy ? "Working…" : children}
     </button>

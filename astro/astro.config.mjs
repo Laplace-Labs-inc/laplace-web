@@ -6,15 +6,7 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
   site: "https://laplace-labs.com",
   output: "static",
-  // Docs (incl. the retired Ki-DPOR page) moved to docs.laplace-labs.com; no
-  // /docs/* routes remain on the marketing site, so the legacy redirects are gone.
-  i18n: {
-    locales: ["en", "ko", "ja", "zh-CN"],
-    defaultLocale: "en",
-    routing: {
-      prefixDefaultLocale: false,
-    },
-  },
+  prefetch: true,
   vite: {
     plugins: [tailwindcss()],
     server: {

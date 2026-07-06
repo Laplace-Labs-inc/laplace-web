@@ -5,9 +5,6 @@ description: "Zero-overhead production monitoring via QUIC-based observation mes
 section: "concepts"
 order: 3
 ---
-
-# Probe — Observation Mesh
-
 Probe provides **zero-overhead production monitoring** by routing telemetry events through a
 QUIC-based mesh network with 0-RTT session resumption.
 

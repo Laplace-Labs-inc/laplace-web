@@ -3,14 +3,14 @@ title: "Migrating from Shuttle to Laplace"
 competitor: "shuttle"
 fixture_date: "2026-05-28"
 version: "0.9.1"
-version_status: "fixture version from LQ-9 JSON; verify latest before publish"
+version_status: "pinned from benchmark run (2026-05-28)"
 ---
 
 # Migrating from Shuttle to Laplace
 
 Use Shuttle when randomized or PCT scheduling is the simplest way to expose a bug and persisted schedules are enough for replay. Use Laplace when the release gate requires deterministic harness replay and forensic output.
 
-The examples below map the five LQ-9 scenario fixtures to Laplace-style harness code. The compiled after examples live in `laplace-cloud/tests/lq10/migration-examples/from-shuttle`.
+The examples below map the five benchmark scenario fixtures to Laplace-style harness code. The compiled after examples live in `laplace-cloud/tests/lq10/migration-examples/from-shuttle`.
 
 ## 1. ABBA 4-thread deadlock
 

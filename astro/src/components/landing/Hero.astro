@@ -12,7 +12,7 @@
 
     <h1 class="text-6xl font-black leading-[0.9] tracking-tighter md:text-8xl">
       Eradicate<br />
-      <span style="background: linear-gradient(to right, #00E5CC, #A78BFA, #00E5CC); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: inline-block;">
+      <span class="hero-gradient-word">
         Heisenbugs.
       </span><br />
       Provably.
@@ -23,13 +23,36 @@
       Find concurrency bugs your test suite missed - deterministically, before they reach production.
     </p>
 
-    <div class="flex flex-col justify-center gap-4 sm:flex-row">
-      <a href="#waitlist" class="rounded-full bg-brand-accent px-8 py-4 text-lg font-bold text-brand-bg transition-opacity hover:opacity-90">
-        Join Beta Waitlist ->
-      </a>
+    <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <button
+        type="button"
+        data-copy-install
+        data-command="curl -fsSL https://install.laplace-labs.com | sh"
+        class="group rounded-2xl border border-brand-border bg-brand-surface px-5 py-3 text-left font-mono text-sm text-fg transition-colors hover:border-brand-accent"
+      >
+        <span class="block text-xs uppercase text-brand-muted" data-copy-label>Copy install</span>
+        <code>curl -fsSL https://install.laplace-labs.com | sh</code>
+      </button>
       <a href="https://docs.laplace-labs.com/" class="rounded-full border border-brand-border px-8 py-4 text-lg font-semibold text-fg transition-colors hover:bg-brand-surface">
         View Docs ↗
       </a>
     </div>
+    <p class="text-sm text-brand-muted">
+      Beta waitlist: <a href="/#waitlist" class="font-medium text-brand-accent hover:underline">request access</a>
+    </p>
   </div>
+  <script is:inline>
+    document.querySelectorAll("[data-copy-install]").forEach(function (button) {
+      button.addEventListener("click", async function () {
+        var label = button.querySelector("[data-copy-label]");
+        try {
+          await navigator.clipboard.writeText(button.getAttribute("data-command") || "");
+          label.textContent = "Copied";
+          setTimeout(function () { label.textContent = "Copy install"; }, 1600);
+        } catch (e) {
+          label.textContent = "Copy failed";
+        }
+      });
+    });
+  </script>
 </section>

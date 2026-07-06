@@ -5,9 +5,6 @@ description: "3분 안에 Axiom·Kraken·Probe를 로컬에서 부트스트랩�
 section: tutorials
 order: 10
 ---
-
-# 🚀 빠른 시작 (Quickstart)
-
 이 가이드는 단 **3분** 만에 Laplace의 3대 코어 엔진(Axiom, Kraken, Probe)을 로컬 환경에 부트스트랩하고, 제로 다운타임(Zero-Downtime) 핫리로딩을 경험하는 과정을 안내합니다.
 
 ## 1. 사전 준비 (Prerequisites)

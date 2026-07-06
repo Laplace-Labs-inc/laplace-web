@@ -1,5 +1,6 @@
 ---
 import { WaitlistForm } from "./WaitlistForm";
+const waitlistEndpoint = import.meta.env.PUBLIC_WAITLIST_ENDPOINT;
 ---
 <section id="waitlist" class="mx-auto max-w-4xl px-6 py-24 text-center">
   <h2 class="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
@@ -9,5 +10,30 @@ import { WaitlistForm } from "./WaitlistForm";
     Join the waitlist. Get early access to Axiom before public launch.
     Free tier included.
   </p>
-  <WaitlistForm client:load />
+  {waitlistEndpoint ? (
+    <WaitlistForm client:visible />
+  ) : (
+    <div class="mx-auto flex max-w-md flex-col gap-3 text-center">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-center">
+        <input
+          type="email"
+          placeholder="Waitlist opens before M1 launch"
+          disabled
+          aria-disabled="true"
+          class="flex-1 cursor-not-allowed rounded-full border border-brand-border bg-brand-surface px-5 py-3 text-fg opacity-60 placeholder:text-brand-muted"
+        />
+        <button
+          type="button"
+          disabled
+          aria-disabled="true"
+          class="cursor-not-allowed whitespace-nowrap rounded-full bg-brand-accent px-7 py-3 font-bold text-brand-bg opacity-50"
+        >
+          Notify Me -&gt;
+        </button>
+      </div>
+      <p class="text-sm text-brand-muted">
+        Sign-up is not open yet. Reach us at <a href="mailto:hello@laplace-labs.com" class="text-brand-accent hover:underline">hello@laplace-labs.com</a> in the meantime.
+      </p>
+    </div>
+  )}
 </section>

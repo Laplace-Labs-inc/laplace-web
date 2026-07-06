@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 403
 last_updated: "2026-05-30"
 ---
-
-# Sovereign Pool Sharding
-
 Sovereign pool sharding splits a shared pool into deterministic ownership lanes. Each lane has its own synchronization resources, and routing decides which lane handles a request.
 
 ## Goal

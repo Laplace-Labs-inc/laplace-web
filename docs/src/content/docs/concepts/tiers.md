@@ -4,9 +4,6 @@ description: "Compare Laplace tiers: FREE, PRO, ULTRA, ENTERPRISE, TRINITY."
 section: "concepts"
 order: 4
 ---
-
-# Tiers & Pricing
-
 See the full [Pricing page](/pricing) for current rates.
 
 ## Feature Comparison
@@ -18,5 +15,5 @@ See the full [Pricing page](/pricing) for current rates.
 | Probe observation mesh *(post-launch)* | ❌ | ✅ | ✅ | ✅ |
 | BYOC / On-premise | ❌ | ❌ | ✅ | ✅ |
 | Vanguard real-time defense | ❌ | ❌ | ❌ | ✅ |
-| Phantom Monopoly slots | — | — | 10/domain | 3/domain |
+| Advanced audit slots | — | — | 10/domain | 3/domain |
 | Bug DB contribution | Opt-in | Opt-in | Isolated | Isolated |

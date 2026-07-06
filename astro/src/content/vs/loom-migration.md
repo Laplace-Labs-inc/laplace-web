@@ -3,14 +3,14 @@ title: "Migrating from Loom to Laplace"
 competitor: "loom"
 fixture_date: "2026-05-28"
 version: "0.7.2"
-version_status: "fixture version from LQ-9 JSON; verify latest before publish"
+version_status: "pinned from benchmark run (2026-05-28)"
 ---
 
 # Migrating from Loom to Laplace
 
 Use Loom when the target code already fits `loom::model` and loom-aware primitives. Use Laplace when the test must stay closer to production dependencies, emit replayable forensic artifacts, or become part of a deterministic release gate.
 
-The examples below map the five LQ-9 scenario fixtures to Laplace-style harness code. The compiled after examples live in `laplace-cloud/tests/lq10/migration-examples/from-loom`.
+The examples below map the five benchmark scenario fixtures to Laplace-style harness code. The compiled after examples live in `laplace-cloud/tests/lq10/migration-examples/from-loom`.
 
 ## 1. ABBA 4-thread deadlock
 

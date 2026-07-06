@@ -1,11 +1,16 @@
 ---
+import { Image } from "astro:assets";
+import axiomLogo from "../../assets/Laplace_Axiom.png";
+import krakenLogo from "../../assets/Laplace_Kraken.png";
+import probeLogo from "../../assets/Laplace_Probe.png";
+
 const products = [
   {
     name: "Axiom",
     tagline: "Deterministic Concurrency Verification",
     description:
-      "DPOR systematically explores every distinct thread interleaving within a bounded search. No random sampling, no false positives. Deadlocks, AB-BA cycles, and starvation - found deterministically.",
-    logo: "/images/Laplace_Axiom.png",
+      "DPOR systematically explores every distinct thread interleaving within a bounded search. No random sampling, no false positives. Deadlocks, AB-BA cycles, and lost wakeups - found deterministically.",
+    logo: axiomLogo,
     accentText: "text-axiom",
     accentArrow: "text-axiom",
     borderHover: "hover:border-axiom",
@@ -21,7 +26,7 @@ const products = [
     tagline: "Ruthless Deterministic Load Generation",
     description:
       "ChaCha8 seeded, reproducible chaos. Replay exact failure conditions every time. Your load tests, finally deterministic.",
-    logo: "/images/Laplace_Kraken.png",
+    logo: krakenLogo,
     accentText: "text-kraken",
     accentArrow: "text-kraken",
     borderHover: "hover:border-kraken",
@@ -37,7 +42,7 @@ const products = [
     tagline: "Edge-Based State Collection",
     description:
       "QUIC 0-RTT mesh. LZ4 compressed event streams. TrackedMutex auto-instruments your sync primitives - zero manual annotation.",
-    logo: "/images/Laplace_Probe.png",
+    logo: probeLogo,
     accentText: "text-probe",
     accentArrow: "text-probe",
     borderHover: "hover:border-probe",
@@ -62,7 +67,7 @@ const products = [
     {products.map((p) => (
       <div class={`flex flex-col rounded-2xl border border-brand-border bg-brand-surface p-8 transition-all duration-300 hover:bg-brand-surface/80 ${p.borderHover}`}>
         <div class="mb-6 flex h-28 items-center justify-center">
-          <img src={p.logo} alt={p.name} class="max-h-full object-contain" />
+          <Image src={p.logo} alt={p.name} width={340} format="webp" loading="lazy" decoding="async" class="max-h-full object-contain" />
         </div>
         <h3 class="mb-1 text-2xl font-bold">{p.name}</h3>
         <p class={`mb-4 text-sm font-semibold ${p.accentText}`}>{p.tagline}</p>

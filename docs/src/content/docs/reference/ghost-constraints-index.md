@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 304
 last_updated: "2026-05-30"
 ---
-
-# Ghost Constraints Index
-
 This index derives from `laplace-cloud/task/coder_task.md` and the files under `laplace-cloud/tests/ghost_constraints/`.
 
 ## Step 3 LQ-3 Constraints

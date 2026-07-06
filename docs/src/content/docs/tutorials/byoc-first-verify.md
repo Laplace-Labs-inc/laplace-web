@@ -1,37 +1,34 @@
 ---
-title: "First BYOC Verification"
-description: "Run a Bring Your Own Crate audit scaffold against a local patched vendor crate."
+title: "First BYOC Audit"
+description: "Inspect a Bring Your Own Crate audit scaffold against a local patched vendor crate."
 section: tutorials
 category: "LQ-3"
 order: 102
 last_updated: "2026-05-30"
 ---
-
-# First BYOC Verification
-
-BYOC audits keep third-party crate instrumentation local until the audit result is stable enough to publish. The LQ-1 scaffolds live under `laplace-cloud/vendor/*-patched` and `laplace-cloud/crates/external/*-byoc`.
+BYOC audits keep third-party crate instrumentation local until the audit result is stable enough to publish. The first-launch live BYOC scaffold is SQLx under `laplace-cloud/vendor/sqlx-0.8.6-patched` and `laplace-cloud/crates/byoc/sqlx-byoc`.
 
 ## 1. Pick a Crate
 
-Start with Hyper because its local scaffold is small and exposes six manifest scenarios:
+Start with SQLx because it is a live workspace member:
 
-- `laplace-cloud/vendor/hyper-1.5.0-patched`
-- `laplace-cloud/crates/external/hyper-byoc`
+- `laplace-cloud/vendor/sqlx-0.8.6-patched`
+- `laplace-cloud/crates/byoc/sqlx-byoc`
 
-The vendor crate exposes `hyper::laplace_patch::patterns()`. The detached audit crate reads those patterns without importing the full upstream source snapshot.
+The vendor crate exposes audit resource names. The detached audit crate reads those patterns without importing the full upstream source snapshot.
 
 ## 2. Inspect the Pattern Manifest
 
 ```bash
 cd laplace-cloud
-cargo test --manifest-path crates/external/hyper-byoc/Cargo.toml
+cargo test --manifest-path crates/byoc/sqlx-byoc/Cargo.toml
 ```
 
 The current detached crate is compile-safe. Full `#[axiom_harness]` execution requires the workspace sync noted in the BYOC README.
 
 ## 3. Select One Scenario
 
-Use a scenario with an expected `BugFound` verdict for the first run:
+Pick one scenario name for evidence tracking:
 
 ```rust
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -41,10 +38,10 @@ struct AuditSelection {
     expected: &'static str,
 }
 
-fn first_hyper_selection() -> AuditSelection {
+fn first_sqlx_selection() -> AuditSelection {
     AuditSelection {
-        crate_name: "hyper",
-        pattern_name: "hyper_pool_idle_reuse_abba",
+        crate_name: "sqlx",
+        pattern_name: "sqlx_pool_acquire_close_abba",
         expected: "BugFound",
     }
 }
@@ -52,14 +49,10 @@ fn first_hyper_selection() -> AuditSelection {
 
 ## 4. Create the Verification Command
 
-Use the manifest path as the stable input. Keep output deterministic by pinning seed and depth.
+Use the supported first-launch CLI surface to create the onboarding plan. Keep full pattern execution on the private audit branch until the BYOC README marks it ready.
 
 ```bash
-laplace axiom verify \
-  --manifest-path crates/external/hyper-byoc/Cargo.toml \
-  --pattern hyper_pool_idle_reuse_abba \
-  --seed 0xA1100ACE \
-  --max-depth 128
+laplace axiom init --path . --channel alpha-1 --dry-run
 ```
 
 ## 5. Record Evidence
@@ -67,8 +60,7 @@ laplace axiom verify \
 Keep three artifacts with the audit branch:
 
 - the command line
-- the generated `.ard` replay
+- the generated onboarding plan
 - the vendor path and exact pattern name
 
-Do not edit upstream crate code during the first pass. Treat `vendor/hyper-1.5.0-patched/src/lib.rs` as the local citation source until the full upstream snapshot is synced.
-
+Do not edit upstream crate code during the first pass. Treat `vendor/sqlx-0.8.6-patched/src/lib.rs` as the local citation source until the full upstream snapshot is synced.

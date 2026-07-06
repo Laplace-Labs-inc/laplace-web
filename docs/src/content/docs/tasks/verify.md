@@ -4,9 +4,6 @@ description: "Step-by-step guide to verifying a Rust concurrent data structure w
 section: "tasks"
 order: 1
 ---
-
-# Verify Concurrent Code
-
 This task walks through verifying a concurrent Rust service end-to-end.
 
 ## 1. Instrument Your Struct
@@ -62,7 +59,7 @@ cargo test test_concurrent_deduct
 Add `--strict` to fail the run (exit `1`) unless the assurance grade is `FullyDeterministic`,
 which is what you want when wiring `laplace axiom verify` into a CI gate.
 
-**BUG FOUND**: Deadlock or starvation detected.
+**BUG FOUND**: Deadlock or lost wakeup detected.
 
 ```
 ✗ BUG FOUND: Deadlock { cycle: [ThreadId(0), ThreadId(1)] }

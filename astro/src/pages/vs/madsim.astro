@@ -22,7 +22,7 @@ const jsonLd = JSON.stringify(comparisonJsonLd(`https://laplace-labs.com/vs/${co
 ---
 <Base
   title="Laplace vs madsim — Deterministic Concurrency Verification Comparison"
-  description="Compare Laplace and madsim for deterministic Rust concurrency verification, distributed simulation, migration, and LQ-9 fixtures."
+  description="Compare Laplace and madsim for deterministic Rust concurrency verification, distributed simulation, migration, and benchmark fixtures."
 >
   <Nav />
   <script type="application/ld+json" set:html={jsonLd} />
@@ -85,7 +85,7 @@ const jsonLd = JSON.stringify(comparisonJsonLd(`https://laplace-labs.com/vs/${co
       <p class="mt-2 max-w-3xl text-sm leading-6 text-brand-muted">
         The full diff-style guide lives in <span class="font-mono text-brand-accent">src/content/vs/madsim-migration.md</span>.
         The Cargo project at <span class="font-mono text-brand-accent">tests/lq10/migration-examples/from-madsim</span>
-        compiles the after examples for the five LQ-9 scenarios.
+        compiles the after examples for the five benchmark scenarios.
       </p>
       <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {profile.migrationExamples.map((item) => (
@@ -98,7 +98,7 @@ const jsonLd = JSON.stringify(comparisonJsonLd(`https://laplace-labs.com/vs/${co
     </section>
 
     <section class="py-10">
-      <h2 class="text-2xl font-bold">LQ-9 Fixture Metrics</h2>
+      <h2 class="text-2xl font-bold">Benchmark Fixture Metrics</h2>
       <p class="mt-2 text-sm text-brand-muted">Fixture date {benchmarkDate}. Scope: {benchmarkResults.laplace.measurement_scope}</p>
       <div class="mt-5 overflow-x-auto border border-brand-border">
         <table class="min-w-full divide-y divide-brand-border text-left text-sm">

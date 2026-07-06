@@ -4,30 +4,37 @@ description: "Get from zero to your first verified concurrency bug in 10 minutes
 section: "getting-started"
 order: 1
 ---
-
-# Quickstart
-
 Laplace formally verifies the concurrency correctness of your Rust code using **Classic DPOR** —
 deterministic state-space exploration that systematically searches the distinct thread interleavings
-and **proves** the absence of deadlocks, AB-BA cycles, and starvation within a bounded search.
+and **proves** the absence of deadlocks, AB-BA cycles, and lost wakeups within a bounded search.
 
 This guide takes you from installation to your first verified bug in under 10 minutes.
 
 ## Prerequisites
 
 - **Rust 1.88+** (stable channel) — `rustup update stable`
-- **License key** — get one at [laplace-labs.com](https://laplace-labs.com)
-- **OS**: Linux or macOS (Windows via WSL2)
+- **GitHub account** — `laplace login` uses GitHub Device Flow and issues a FREE license during onboarding.
+- **OS**: Linux, macOS, or Windows
 
 ## Step 1: Install the CLI
 
-**macOS / Linux (Homebrew):**
+**macOS / Linux:**
+
+```bash
+curl -fsSL https://install.laplace-labs.com | sh
+```
+
+**Windows PowerShell:**
+
+```powershell
+irm https://install.laplace-labs.com/install.ps1 | iex
+```
+
+Package-manager installs are also available:
 
 ```bash
 brew install laplace-labs-inc/homebrew-tap/laplace
 ```
-
-**Windows (Scoop):**
 
 ```powershell
 scoop bucket add laplace https://github.com/Laplace-Labs-inc/scoop-bucket
@@ -46,11 +53,15 @@ laplace --version
 ## Step 2: Authenticate
 
 ```bash
-laplace login --token LAPLACE-YOUR-KEY-HERE
+laplace login
 ```
 
+The CLI opens GitHub Device Flow, asks you to enter the browser code, then bootstraps an org/project.
+You can also pass `--org` or `--project` to select existing context. A FREE license is issued
+automatically and a service-account key is saved for later CLI calls.
+
 On first login, you'll be asked whether to contribute anonymized bug patterns to the Laplace Bug DB.
-Opting in earns **50 bonus credits** on the Free and Plus tiers.
+The cloud implementation grants **50 bonus credits** for Free and Plus accounts that opt in.
 
 ## Step 3: Instrument Your Code
 
@@ -58,8 +69,12 @@ Add `laplace-sdk` to your `Cargo.toml`:
 
 ```toml
 [dev-dependencies]
-laplace-sdk = "0.1.0-alpha-1"
+# Until laplace-sdk is published to crates.io, use the public git dependency.
+laplace-sdk = { git = "https://github.com/Laplace-Labs-inc/laplace" }
 ```
+
+Alternatively, `laplace init demo --template byoc-tokio` creates a project with this dependency
+wired automatically.
 
 Wrap your concurrent struct fields. `#[laplace_tracked]` swaps the `#[track]` fields for
 instrumented `Tracked*` primitives at test time:
@@ -102,6 +117,7 @@ reproduce the result bit-for-bit.
 
 ## Next Steps
 
-- [One-Line Integration](/getting-started/one-line) — verify an existing function with a single annotation
+- [Targeted Integration](/getting-started/one-line) — verify an existing function with a single annotation
 - [Verify Concurrent Code](/tasks/verify) — deeper end-to-end walkthrough
 - [Concepts: Axiom](/concepts/axiom) — understand how DPOR works
+- [Coverage Boundaries](/reference/coverage) — what Laplace catches and what it does not catch

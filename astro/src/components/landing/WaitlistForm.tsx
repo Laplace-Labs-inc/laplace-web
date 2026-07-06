@@ -111,11 +111,11 @@ export const WaitlistForm = () => {
         {loading ? "Submitting..." : "Notify Me ->"}
       </button>
       {status === "success" && (
-        <p className="mt-2 w-full text-center text-sm text-green-400">
+        <p className="mt-2 w-full text-center text-sm text-[var(--success)]">
           ✓ You&apos;re on the list. We&apos;ll reach out before M1 launch.
         </p>
       )}
-      {status === "error" && <p className="mt-2 w-full text-center text-sm text-red-400">{message}</p>}
+      {status === "error" && <p className="mt-2 w-full text-center text-sm text-[var(--danger)]">{message}</p>}
     </form>
   );
 };

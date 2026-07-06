@@ -17,19 +17,19 @@ const jsonLd = JSON.stringify(comparisonJsonLd("https://laplace-labs.com/vs/"));
 ---
 <Base
   title="Laplace vs Concurrency Verification Tools"
-  description="Compare Laplace with Loom, Shuttle, Stateright, and madsim using LQ-9 fixture data and migration guidance."
+  description="Compare Laplace with Loom, Shuttle, Stateright, and madsim using benchmark fixture data and migration guidance."
 >
   <Nav />
   <script type="application/ld+json" set:html={jsonLd} />
   <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
     <section class="border-b border-brand-border pb-10">
-      <p class="mb-3 font-mono text-xs font-medium uppercase text-brand-accent">LQ-10 Comparison Hub</p>
+      <p class="mb-3 font-mono text-xs font-medium uppercase text-brand-accent">Comparison Hub</p>
       <h1 class="max-w-4xl text-4xl font-black leading-tight md:text-5xl">
         Pick the concurrency verification tool that fits the failure mode.
       </h1>
       <p class="mt-4 max-w-3xl text-base leading-7 text-brand-muted md:text-lg">
         These pages compare Laplace with Loom, Shuttle, Stateright, and madsim. Timing and memory values are read
-        from the checked LQ-9 JSON fixtures dated {benchmarkDate}; unverified community and license fields are marked
+        from the checked benchmark JSON fixtures dated {benchmarkDate}; unverified community and license fields are marked
         before publish instead of guessed.
       </p>
     </section>
@@ -52,7 +52,7 @@ const jsonLd = JSON.stringify(comparisonJsonLd("https://laplace-labs.com/vs/"));
       <div class="mb-5">
         <h2 class="text-2xl font-bold">10-Dimension Matrix</h2>
         <p class="mt-1 text-sm text-brand-muted">
-          Numeric efficiency cells are derived directly from LQ-9 JSON scenario values.
+          Numeric efficiency cells are derived directly from benchmark JSON scenario values.
         </p>
       </div>
       <div class="overflow-x-auto border border-brand-border">

@@ -3,14 +3,14 @@ title: "Migrating from Stateright to Laplace"
 competitor: "stateright"
 fixture_date: "2026-05-28"
 version: "0.31.0"
-version_status: "fixture version from LQ-9 JSON; verify latest before publish"
+version_status: "pinned from benchmark run (2026-05-28)"
 ---
 
 # Migrating from Stateright to Laplace
 
 Use Stateright when a protocol is clearer as an explicit model with transitions and invariants. Use Laplace when the target is implementation-level Rust concurrency and the output must be a replayable harness artifact.
 
-The examples below map the five LQ-9 scenario fixtures to Laplace-style harness code. The compiled after examples live in `laplace-cloud/tests/lq10/migration-examples/from-stateright`.
+The examples below map the five benchmark scenario fixtures to Laplace-style harness code. The compiled after examples live in `laplace-cloud/tests/lq10/migration-examples/from-stateright`.
 
 ## 1. ABBA 4-thread deadlock
 

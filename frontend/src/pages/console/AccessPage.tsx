@@ -208,7 +208,7 @@ export function AccessPage() {
           <button
             type="submit"
             disabled={busy}
-            className="sm:col-span-2 bg-accent text-fg py-2 rounded-lg text-sm font-bold hover:bg-accent-hover transition disabled:opacity-40"
+            className="sm:col-span-2 bg-accent text-accent-fg py-2 rounded-lg text-sm font-bold hover:bg-accent-hover transition disabled:opacity-40"
           >
             {busy ? "Working…" : "Add binding"}
           </button>

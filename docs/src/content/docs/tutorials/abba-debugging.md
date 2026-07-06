@@ -6,9 +6,6 @@ category: "LQ-3"
 order: 103
 last_updated: "2026-05-30"
 ---
-
-# Debug an ABBA Deadlock
-
 ABBA means one path acquires `A` then `B`, while another path acquires `B` then `A`. Laplace reports the conflicting resource order and writes an `.ard` replay for the failing schedule.
 
 ## 1. Start from the Report

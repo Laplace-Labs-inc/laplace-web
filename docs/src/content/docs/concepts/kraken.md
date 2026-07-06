@@ -5,9 +5,6 @@ description: "Deterministic chaos and load simulation for your production servic
 section: "concepts"
 order: 2
 ---
-
-# Kraken — Load Engine
-
 Kraken is Laplace's deterministic load and chaos simulation engine. Unlike traditional load
 testing tools that rely on random timing, Kraken uses **ChaCha8 RNG** with a fixed seed —
 making every load test fully reproducible.

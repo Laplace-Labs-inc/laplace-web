@@ -23,8 +23,8 @@ export default defineConfig({
       description:
         "Deterministic concurrency verification — the Axiom engine and the Laplace CLI.",
       logo: {
-        light: "./public/images/Laplace_labs.png",
-        dark: "./public/images/Laplace_labs.png",
+        light: "./src/assets/Laplace_labs.svg",
+        dark: "./src/assets/Laplace_labs-dark.svg",
         replacesTitle: false,
       },
       social: [

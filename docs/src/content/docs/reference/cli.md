@@ -1,107 +1,284 @@
 ---
 title: "CLI Reference"
-description: "Complete reference for the laplace CLI — Axiom verification commands."
+description: "Reference for the laplace CLI surface."
 section: "reference"
 order: 1
 ---
-
-# CLI Reference
-
-The `laplace` CLI drives Axiom formal verification: scaffold a project, verify
-your concurrent code, and replay any bug it finds. (Kraken load testing and the
-Probe observation mesh ship post-launch and are documented separately then.)
+The `laplace` CLI drives project scaffolding, authentication, Axiom verification, replay, and local diagnostics. Kraken and Probe remain post-launch hidden commands in first-touch help.
 
 ## Global Options
 
-- `--version` — print version
-- `--help` — print help
+- `--help` — print help.
+- `--version` — print version.
+- `--output text|json` — select human-readable text or JSON output. The default is `text`.
 
-## laplace login
+## `laplace init`
 
-Authenticate with your license key.
-
-```bash
-laplace login --token <LICENSE_KEY>
-```
-
-## laplace axiom verify
-
-Run Classic DPOR verification against a target crate or a named harness.
+Create a project from a template. The current template names are `byoc`, `byoc-axum`, and `byoc-tokio`; `byoc-probe` and `kraken-scenario` remain post-launch surfaces even if named explicitly.
 
 ```bash
-# Verify an external crate that uses supported primitives (zero-rewrite path)
-laplace axiom verify --target my-crate
-
-# Verify a named in-repo harness
-laplace axiom verify --harness deadlock_ab_ba --max-depth 1000
-
-# CI gate mode: refuse any assurance weaker than FullyDeterministic
-laplace axiom verify --target my-crate --strict
+laplace init demo --template byoc-tokio --channel alpha-1
 ```
 
-Key flags:
+Flags:
 
-- `--target <CRATE>` — verify an external crate (conflicts with `--harness`)
-- `--harness <NAME>` — verify a named harness (conflicts with `--target`)
-- `--max-depth <N>` — bounded search depth (default: `1000`)
-- `--strict` — gate mode; exit non-zero unless the run is `FullyDeterministic`
-- `--share-name` / `--crate-version` — opt-in metadata for the Bug DB
+- `--template <NAME>` — template name, default `byoc`.
+- `--channel alpha-1|alpha-2|beta` — SDK channel, default `alpha-1`.
+- `--force` — overwrite if the project directory exists.
 
-**Exit-code contract** (use it as a CI gate):
+## `laplace scan`
 
-| Code | Meaning |
-|------|---------|
-| `0` | clean — no violation; assurance acceptable |
-| `1` | violation found (`.ard` recorded), or `--strict` refused a non-`FullyDeterministic` assurance |
-| `2` | usage / infra error (no mode selected, unknown harness, missing build feature) |
-
-## laplace axiom forensic replay
-
-Replay a recorded bug from an `.ard` file.
+Scan a Rust source tree for concurrency primitive surfaces.
 
 ```bash
-laplace axiom forensic replay --ard bug_report_1234.ard
+laplace scan crates/my-service
 ```
 
-## laplace axiom replay
+## `laplace login`
 
-Replay a recorded schedule file deterministically.
+Authenticate with GitHub Device Flow by default. The CLI bootstraps org/project context, issues a FREE license when needed, and stores a service-account key for later calls.
 
 ```bash
-laplace axiom replay --schedule schedule.json
+laplace login
+laplace login --org acme --project default
 ```
 
-## laplace init
+Flags:
 
-Scaffold a new project wired for Axiom verification (no license required).
+- `--org <SLUG>` — organization slug for device-flow onboarding.
+- `--project <SLUG>` — project slug for device-flow onboarding.
+- `--no-input` — disable prompts; non-TTY stdin is treated the same way.
+- `--session-token <JWT>` — store an IAM/session JWT as bearer auth.
+- `--service-account-key <KEY>` — store a service-account key as bearer auth.
+- `--token <KEY>` — legacy license key flag, deprecated for API calls and kept for local module gates.
 
-```bash
-laplace init my-project --template byoc        # byoc | byoc-probe | kraken-scenario | byoc-axum | byoc-tokio
-laplace init my-project --channel alpha-1
-```
+## `laplace status`
 
-## laplace axiom mock-verify
-
-Run a no-license demo verification — useful as a smoke test in CI.
-
-```bash
-laplace axiom mock-verify --scenario clean      # must exit 0
-laplace axiom mock-verify --scenario deadlock   # must exit 1 (writes an .ard)
-```
-
-## laplace status
-
-Show the current license/credit state.
+Show current license status and credit balance.
 
 ```bash
 laplace status
 ```
 
-## laplace install / uninstall
+## `laplace config`
 
-Install an optional engine plugin, or remove local Laplace state.
+Set or read the active org/project context.
 
 ```bash
-laplace install axiom        # plugin: axiom (kraken/probe/sentinel ship post-launch)
+laplace config set org acme
+laplace config set project default
+laplace config get
+laplace config get project
+```
+
+## `laplace orgs`
+
+Manage organizations and members.
+
+```bash
+laplace orgs list
+laplace orgs create "Acme" --slug acme
+laplace orgs describe org_123
+laplace orgs members add --org org_123 --email dev@example.com
+laplace orgs members remove --org org_123 --member user_123
+```
+
+## `laplace projects`
+
+Manage projects under an organization.
+
+```bash
+laplace projects create "Default" --org org_123
+laplace projects list --org org_123
+laplace projects describe proj_123
+```
+
+## `laplace iam`
+
+List roles, manage bindings, and test permissions.
+
+```bash
+laplace iam roles list
+laplace iam bindings list --project proj_123
+laplace iam bindings add --project proj_123 --member user:dev@example.com --role roles/axiom.runner
+laplace iam bindings remove --project proj_123 --member user:dev@example.com --role roles/axiom.runner
+laplace iam test-permission --project proj_123 --permission axiom.verify
+```
+
+Scope flags are mutually exclusive: use one of `--org`, `--project`, or `--tenant`.
+
+## `laplace service-accounts`
+
+Manage service accounts and keys.
+
+```bash
+laplace service-accounts create ci-runner --project proj_123
+laplace service-accounts list --project proj_123
+laplace service-accounts delete sa_123
+laplace service-accounts keys create sa_123 --ttl 30d
+laplace service-accounts keys revoke key_123
+```
+
+## `laplace install` / `laplace uninstall`
+
+Install an engine plugin or remove local Laplace state.
+
+```bash
+laplace install axiom
 laplace uninstall
 ```
+
+## `laplace report`
+
+Create a local diagnostic package for a user-reviewed bug report. Upload is disabled by default.
+
+```bash
+laplace report --bug --ard target/laplace/failure.ard --include-system-info
+laplace report --bug --upload=true
+```
+
+Flags:
+
+- `--bug` — required for the current report path.
+- `--ard <ARD_PATH>` — include a scrubbed ARD file.
+- `--include-system-info` — include OS, architecture, and CLI version.
+- `--upload[=true|false]` — request upload after a confirmation prompt.
+
+## `laplace hunt`
+
+Run the observation-to-Axiom entry point: capture, WFG triage, engine bridge, and optional ARD output.
+
+```bash
+laplace hunt --demo ab-ba --max-depth 500 --write-ard
+laplace hunt --pid 1234 --duration 10
+```
+
+Flags:
+
+- `--pid <PID>` — live eBPF capture target PID.
+- `--duration <SECONDS>` — eBPF capture duration, default `10`.
+- `--demo ab-ba|clean|data-race` — zero-root demo source.
+- `--max-depth <N>` — DPOR exploration depth, default `500`.
+- `--write-ard` — write an ARD forensic report when a bug is found.
+
+## `laplace axiom verify`
+
+Run Axiom verification against a target, harness, captured model events, one-command capture, or a dependency contract.
+
+```bash
+laplace axiom verify --harness meter_inner
+laplace axiom verify --capture --capture-args="--features laplace-gate"
+laplace axiom verify --model-events target/laplace/events --preflight
+laplace axiom verify --contract tokio-mutex-across-await
+laplace axiom verify --contract list
+```
+
+Mode flags:
+
+| Flag | Purpose |
+|---|---|
+| `--target <CRATE>` | Verify an external target. Conflicts with `--harness` and `--model-events`. |
+| `--harness <NAME>` | Verify a named harness. Conflicts with `--target` and `--model-events`. |
+| `--model-events <PATH>` | Ingest captured model-event files from a file or directory. |
+| `--capture` | Run `cargo test` with `LAPLACE_VERIFY_EVENTS_DIR`, then ingest captured traces. |
+| `--capture-args <ARGS>` | Append extra args to the orchestrated `cargo test` invocation. Requires `--capture`. |
+| `--contract <ID|list>` | Run a modeled dependency-misuse contract or list available contracts. |
+
+Search and gate flags:
+
+| Flag | Purpose |
+|---|---|
+| `--max-depth <N>` | Set exploration depth, default `1000`. |
+| `--budget full|smoke` | Select the verification budget. `smoke` is shallow PR triage and is not full green. |
+| `--no-cache` | Ignore the verdict cache and force a fresh model-events engine run. |
+| `--strict` | Fail unless assurance is acceptable; strict also refuses smoke as full green. |
+| `--share-name` | Opt into sharing the raw crate name with the Bug DB. |
+| `--crate-version <VERSION>` | Attach verified crate version metadata to Bug DB reports. |
+
+Determinism and reporting flags:
+
+| Flag | Purpose |
+|---|---|
+| `--source <PATH>` | Scan a source file or directory for non-deterministic call sites and emit sidecar findings. |
+| `--preflight` | Compare repeated captures of the same target and downgrade assurance if op streams diverge. |
+| `--triage-flake` | With `--model-events`, decide whether a flaky test is a real determinism bug or environmental. |
+| `--baseline <PATH>` | Suppress findings already accepted in a determinism baseline. |
+| `--update-baseline` | Record current findings into the baseline. |
+| `--sarif <PATH>` | Write determinism findings as SARIF 2.1.0. |
+| `--receipt <PATH>` | Write a positive reproducibility receipt. |
+| `--pin-seed` | Write the master Axiom seed to `.laplace/reproducibility.toml`. |
+| `--ard-out <DIR>` | Preserve BugFound ARD files for `laplace axiom pin`. |
+
+Exit-code contract:
+
+| Code | Meaning |
+|---|---|
+| `0` | Clean: no violation; assurance acceptable. |
+| `1` | Violation found, or `--strict` refused non-acceptable assurance. |
+| `2` | Usage or infrastructure error, such as no mode selected, unknown harness, or missing build feature. |
+
+## `laplace axiom pin`
+
+Pin an ARD finding as a seed-fixed regression guard.
+
+```bash
+laplace axiom pin target/laplace/failure.ard --manifest laplace-pins.toml --note "regression guard"
+```
+
+## `laplace axiom replay`
+
+Replay a recorded ARD forensic file.
+
+```bash
+laplace axiom replay --file target/laplace/failure.ard
+```
+
+## `laplace axiom forensic replay`
+
+Run the forensic replay subcommand for an ARD file.
+
+```bash
+laplace axiom forensic replay --ard target/laplace/failure.ard
+```
+
+## `laplace axiom diff`
+
+Compare two ARD files.
+
+```bash
+laplace axiom diff --before before.ard --after after.ard
+```
+
+## `laplace axiom init`
+
+Inspect `Cargo.lock` and generate dependency onboarding artifacts.
+
+```bash
+laplace axiom init --path . --channel alpha-1 --dry-run
+```
+
+Flags:
+
+- `--path <PATH>` — target repo path, default `.`.
+- `--channel alpha-1|alpha-2|beta` — SDK channel, default `alpha-1`.
+- `--dry-run` — print the plan without writing files.
+
+## `laplace axiom mock-verify`
+
+Run the synthetic mock pipeline for CI smoke checks. This is a mock pipeline command, not a product coverage claim.
+
+```bash
+laplace axiom mock-verify --scenario clean
+laplace axiom mock-verify --scenario deadlock --write-ard --output-dir target/laplace
+```
+
+Flags:
+
+- `--scenario deadlock|data-race|livelock|clean` — synthetic scenario.
+- `--max-depth <N>` — mock exploration depth, default `500`.
+- `--write-ard` — write an ARD file when a mock bug is found.
+- `--output-dir <DIR>` — ARD output directory, default `.`.
+
+## Hidden Post-Launch Commands
+
+`laplace kraken` and `laplace probe` are present as hidden post-launch command groups. They are intentionally not part of first-launch user onboarding.
