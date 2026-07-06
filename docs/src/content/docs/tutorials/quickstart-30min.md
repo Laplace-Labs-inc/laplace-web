@@ -1,6 +1,6 @@
 ---
 title: "Quickstart in 30 Minutes"
-description: "Install the rc.2 CLI, run a small ABBA harness, and read the first verification report."
+description: "Install the CLI, run a small ABBA harness, and read the first verification report."
 section: tutorials
 category: "LQ-3"
 order: 101
@@ -9,28 +9,22 @@ last_updated: "2026-05-30"
 
 # Quickstart in 30 Minutes
 
-This tutorial takes a new Rust service from zero Laplace state to one local verification run. It uses the Step 1 release candidate tag `v0.1.0-alpha-1-rc.2`.
+This tutorial takes a new Rust service from zero Laplace state to one local verification run.
 
 ## 1. Install
 
-Use the verified GitHub release asset path for this release candidate. The `cargo-binstall` channel is deferred until crates.io publishing is enabled.
+Use the public install script for the current release.
 
 ```bash
-gh release download v0.1.0-alpha-1-rc.2 \
-  --repo Laplace-Labs-inc/laplace-cloud \
-  --pattern laplace-cli-x86_64-unknown-linux-gnu.tar.xz
-tar -xf laplace-cli-x86_64-unknown-linux-gnu.tar.xz
-install -m 0755 laplace "$HOME/.cargo/bin/laplace"
+curl -fsSL https://install.laplace-labs.com | sh
 laplace --version
 ```
 
-If your environment cannot use binstall, build the CLI from the repository checkout that contains the release tag.
+For pinned assets, use the latest public GitHub release:
 
 ```bash
-git clone https://github.com/Laplace-Labs-inc/laplace-cloud.git
-cd laplace-cloud
-git checkout v0.1.0-alpha-1-rc.2
-cargo build --release -p laplace-cli
+gh release download --repo Laplace-Labs-inc/laplace \
+  --pattern laplace-cli-x86_64-unknown-linux-musl.tar.xz
 ```
 
 ## 2. Create a Harness

@@ -1,25 +1,35 @@
 ---
-title: "One-Line Integration"
-description: "Integrate Laplace without modifying your production code — one annotation."
+title: "Targeted Integration"
+description: "Integrate Laplace with targeted verification annotations."
 section: "getting-started"
 order: 2
 ---
 
-# One-Line Integration
+# Targeted Integration
 
-Laplace follows a **Trojan Horse** approach: you annotate the function you want to verify,
-and Laplace generates the concurrent test scaffolding automatically.
+Laplace follows a **targeted-annotation** approach: you annotate the state and function you want to
+verify, and Laplace generates the concurrent test scaffolding automatically.
 
 ```rust
+use laplace_sdk::prelude::*;
+
+#[laplace_tracked]
+pub struct PaymentState {
+    #[track]
+    account: tokio::sync::Mutex<u64>,
+}
+
 #[laplace_sdk::verify(threads = 3)]
-pub async fn process_payment(account_id: String, amount: u64) -> Result<Receipt, PaymentError> {
-    // Your existing code — unchanged.
-    let account = db::fetch_account(&account_id).await?;
-    account.deduct(amount).await
+pub async fn process_payment(state: &PaymentState) {
+    let mut account = state.account.lock().await;
+    *account += 1;
 }
 ```
 
-The `#[laplace_sdk::verify(threads = 3)]` macro generates a test that spawns 3 concurrent OS threads, each executing `process_payment`, and runs DPOR over all possible interleavings.
+The `#[laplace_tracked]` macro rewrites the marked field to a tracked primitive at test time.
+The `#[laplace_sdk::verify(threads = 3)]` macro generates a test that spawns 3 concurrent OS threads.
+Each worker runs the function with a current-thread Tokio runtime, captures supported synchronization
+events, and runs DPOR over the captured interleavings.
 
 ## What Gets Generated
 
@@ -35,15 +45,17 @@ fn __laplace_verify_process_payment() {
 
 ## Requirements
 
-- The function must use `TrackedMutex` / `TrackedRwLock` (or `#[laplace_tracked]` on the struct)
-- Async functions: the macro handles the tokio runtime setup
+- Supported signatures are `fn name()`, `fn name(state: &T)`, or `fn name(state: Arc<T>)`, sync or async.
+- State types passed by reference or `Arc<T>` must implement `Default`.
+- `#[laplace_tracked]` rewrites tracked `tokio::sync::Mutex` / `tokio::sync::RwLock` fields and std locks into Laplace tracked primitives.
+- `#[laplace_sdk::model]` rewrites supported `std::sync` primitives in model functions and marks recognized unmodeled primitives such as atomics and channels.
 
 ## In CI
 
-Run the generated test as part of `cargo test`, or gate a whole crate with the CLI:
+Run the generated test as part of `cargo test`, or ingest captured verification events with the CLI:
 
 ```bash
-laplace axiom verify --target my-crate --strict
+laplace axiom verify --capture --capture-args="--features laplace-gate"
 ```
 
 ## Next Steps

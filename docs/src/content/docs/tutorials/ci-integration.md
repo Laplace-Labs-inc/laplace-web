@@ -9,7 +9,7 @@ last_updated: "2026-05-30"
 
 # CI Integration
 
-CI should run bounded verification on the smallest useful harness set. Expensive BYOC sweeps belong in scheduled jobs.
+CI should run bounded verification on the smallest useful harness set. Expensive internal sweeps belong in scheduled jobs.
 
 ## 1. Add a Pull Request Job
 
@@ -28,11 +28,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install Laplace
         run: |
-          gh release download v0.1.0-alpha-1-rc.2 \
-            --repo Laplace-Labs-inc/laplace-cloud \
-            --pattern laplace-cli-x86_64-unknown-linux-gnu.tar.xz
-          tar -xf laplace-cli-x86_64-unknown-linux-gnu.tar.xz
-          install -m 0755 laplace "$HOME/.cargo/bin/laplace"
+          curl -fsSL https://install.laplace-labs.com | sh
       - name: Verify changed harnesses
         run: |
           laplace axiom verify --harness changed --max-depth 128
@@ -47,11 +43,12 @@ jobs:
 
 ## 2. Separate Required and Informational Checks
 
-Use a fast required job for harnesses directly touched by the pull request. Run full BYOC manifests nightly.
+Use a fast required job for harnesses directly touched by the pull request. Run deeper contract or capture jobs on a schedule.
 
 ```bash
 laplace axiom verify --harness changed --max-depth 128
-laplace axiom verify --manifest-path crates/external/hyper-byoc/Cargo.toml --max-depth 512
+laplace axiom verify --capture --capture-args="--features laplace-gate" --budget full
+laplace axiom verify --contract tokio-mutex-across-await --budget full
 ```
 
 ## 3. Fail on Regressions

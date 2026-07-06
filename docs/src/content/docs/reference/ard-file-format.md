@@ -28,13 +28,13 @@ The on-disk encoding may be binary or framed, but exported diagnostics should pr
 ```json
 {
   "metadata": {
-    "version": "0.1.0-alpha-1-rc.2",
+    "version": "0.1.0-alpha-1-rc.4",
     "seed": "0xA1100ACE",
     "max_depth": 128
   },
   "harness": {
-    "name": "hyper_pool_idle_reuse_abba",
-    "manifest_path": "crates/external/hyper-byoc/Cargo.toml"
+    "name": "sqlx_pool_acquire_close_abba",
+    "manifest_path": "crates/byoc/sqlx-byoc/Cargo.toml"
   },
   "resources": [
     "hyper.idle_pool",
@@ -53,4 +53,3 @@ The on-disk encoding may be binary or framed, but exported diagnostics should pr
 - Archive `.ard` files from CI with restricted retention.
 - Prefer stable resource names over memory addresses.
 - Re-run `forensic replay` after changing a harness to confirm the failure is no longer reachable.
-
