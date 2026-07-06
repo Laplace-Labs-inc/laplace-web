@@ -69,7 +69,7 @@ Add `laplace-sdk` to your `Cargo.toml`:
 
 ```toml
 [dev-dependencies]
-  # Until laplace-sdk is published to crates.io, use the public git dependency.
+# Until laplace-sdk is published to crates.io, use the public git dependency.
 laplace-sdk = { git = "https://github.com/Laplace-Labs-inc/laplace" }
 ```
 

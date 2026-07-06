@@ -35,7 +35,7 @@ export default defineConfig({
         },
       ],
       customCss: ["./src/styles/laplace-docs.css"],
-      pagefind: false,
+      // Pagefind is on by default — no Algolia/DocSearch dependency.
       sidebar: [
         { label: "Getting Started", items: [{ autogenerate: { directory: "getting-started" } }] },
         { label: "Concepts", items: [{ autogenerate: { directory: "concepts" } }] },
