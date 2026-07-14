@@ -31,9 +31,9 @@ laplace --version
 To pin an exact pre-release build, download the asset for your platform from GitHub Releases:
 
 ```bash
-gh release download v0.1.0-alpha-1-rc.2 \
-  --repo Laplace-Labs-inc/laplace-cloud \
-  --pattern 'laplace-*-x86_64-unknown-linux-gnu.tar.gz'
+gh release download v0.1.0-alpha-1-rc.4 \
+  --repo Laplace-Labs-inc/laplace \
+  --pattern 'laplace-cli-x86_64-unknown-linux-musl.tar.xz'
 ```
 
 > The engine and CLI are distributed as binaries; their source lives in the private
@@ -46,7 +46,7 @@ Add to `Cargo.toml`:
 
 ```toml
 [dev-dependencies]
-laplace-sdk = "0.1.0-alpha-1"
+laplace-sdk = { git = "https://github.com/Laplace-Labs-inc/laplace" }
 ```
 
 The SDK is in **alpha**; the API may change before the `0.1.0` stable release.

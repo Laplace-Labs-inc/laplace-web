@@ -11,15 +11,20 @@ Base URL: `https://api.laplace-labs.com`
 
 All requests require `Authorization: Bearer <JWT>` unless noted.
 
-## POST /auth/activate
+## Authentication
 
-Activate a license key and receive a JWT.
+Interactive authentication is handled by `laplace login` using GitHub device flow. CI and other
+automation use a service-account key. The CLI exchanges that key for an entitlement JWT through
+`POST /auth/sa-exchange`; `/auth/activate` is an internal legacy path and is not a public client
+contract.
+
+## POST /auth/sa-exchange
 
 **Request**
 
 ```json
 {
-  "license_key": "LAPLACE-ABCD-1234-EFGH-5678",
+  "service_account_key": "<SERVICE_ACCOUNT_KEY>",
   "data_consent": true
 }
 ```
@@ -30,8 +35,9 @@ Activate a license key and receive a JWT.
 {
   "jwt": "eyJ...",
   "tier": "FREE",
-  "credits": 150,
-  "expires_at": 1756000000
+  "expires_at": 1756000000,
+  "credits_remaining": 150,
+  "consent_bonus_credits": 50
 }
 ```
 

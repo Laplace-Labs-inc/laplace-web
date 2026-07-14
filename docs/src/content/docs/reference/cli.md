@@ -18,34 +18,40 @@ Probe observation mesh ship post-launch and are documented separately then.)
 
 ## laplace login
 
-Authenticate with your license key.
+Authenticate with GitHub device flow or store an existing session or service-account credential.
 
 ```bash
-laplace login --token <LICENSE_KEY>
+laplace login                              # GitHub device flow (interactive onboarding)
+laplace login --session-token <SESSION_JWT>
+laplace login --service-account-key <KEY>  # CI / automation
 ```
 
 ## laplace axiom verify
 
-Run Classic DPOR verification against a target crate or a named harness.
+Run Classic DPOR verification in one of the supported input modes.
 
 ```bash
-# Verify an external crate that uses supported primitives (zero-rewrite path)
-laplace axiom verify --target my-crate
+# Run the test suite, capture envelopes, and drive the engine (no server required)
+laplace axiom verify --capture
 
-# Verify a named in-repo harness
-laplace axiom verify --harness deadlock_ab_ba --max-depth 1000
+# Inject a previously captured envelope file
+laplace axiom verify --model-events ./capture.json
 
-# CI gate mode: refuse any assurance weaker than FullyDeterministic
-laplace axiom verify --target my-crate --strict
+# Replay a modeled dependency contract
+laplace axiom verify --contract tokio-mutex-across-await
+
+# Live Probe mode
+laplace axiom verify --target http://127.0.0.1:3000
 ```
 
 Key flags:
 
-- `--target <CRATE>` — verify an external crate (conflicts with `--harness`)
-- `--harness <NAME>` — verify a named harness (conflicts with `--target`)
-- `--max-depth <N>` — bounded search depth (default: `1000`)
-- `--strict` — gate mode; exit non-zero unless the run is `FullyDeterministic`
-- `--share-name` / `--crate-version` — opt-in metadata for the Bug DB
+- `--capture` — run the test suite with trace capture, then drive the engine
+- `--model-events <FILE>` — inject a captured envelope file
+- `--contract <ID>` — replay a modeled dependency contract; use `--contract list` to list contracts
+- `--target <URL>` — collect Probe events from a live target
+- `--max-depth <N>` — DPOR schedule budget (default: `20000000`); spending the budget truncates the run and downgrades the verdict to `bounded`
+- `--strict` — return exit code 1 when the run is not clean
 
 **Exit-code contract** (use it as a CI gate):
 
@@ -53,7 +59,7 @@ Key flags:
 |------|---------|
 | `0` | clean — no violation; assurance acceptable |
 | `1` | violation found (`.ard` recorded), or `--strict` refused a non-`FullyDeterministic` assurance |
-| `2` | usage / infra error (no mode selected, unknown harness, missing build feature) |
+| `2` | usage / infra error (no mode selected, unknown contract, missing build feature) |
 
 ## laplace axiom forensic replay
 
@@ -71,15 +77,6 @@ Replay a recorded schedule file deterministically.
 laplace axiom replay --schedule schedule.json
 ```
 
-## laplace init
-
-Scaffold a new project wired for Axiom verification (no license required).
-
-```bash
-laplace init my-project --template byoc        # byoc | byoc-probe | kraken-scenario | byoc-axum | byoc-tokio
-laplace init my-project --channel alpha-1
-```
-
 ## laplace axiom mock-verify
 
 Run a no-license demo verification — useful as a smoke test in CI.
@@ -95,13 +92,4 @@ Show the current license/credit state.
 
 ```bash
 laplace status
-```
-
-## laplace install / uninstall
-
-Install an optional engine plugin, or remove local Laplace state.
-
-```bash
-laplace install axiom        # plugin: axiom (kraken/probe/sentinel ship post-launch)
-laplace uninstall
 ```

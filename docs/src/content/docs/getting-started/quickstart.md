@@ -9,14 +9,15 @@ order: 1
 
 Laplace formally verifies the concurrency correctness of your Rust code using **Classic DPOR** —
 deterministic state-space exploration that systematically searches the distinct thread interleavings
-and **proves** the absence of deadlocks, AB-BA cycles, and starvation within a bounded search.
+and **proves** the absence of deadlocks and AB-BA cycles within a bounded search, and **detects**
+liveness violations such as lost wakeups and starvation when they occur.
 
 This guide takes you from installation to your first verified bug in under 10 minutes.
 
 ## Prerequisites
 
 - **Rust 1.88+** (stable channel) — `rustup update stable`
-- **License key** — get one at [laplace-labs.com](https://laplace-labs.com)
+- **A Laplace account** — sign in with GitHub on first `laplace login`
 - **OS**: Linux or macOS (Windows via WSL2)
 
 ## Step 1: Install the CLI
@@ -46,8 +47,12 @@ laplace --version
 ## Step 2: Authenticate
 
 ```bash
-laplace login --token LAPLACE-YOUR-KEY-HERE
+laplace login
 ```
+
+Run `laplace login` and approve the GitHub device code in your browser. This provisions your org,
+project, and service-account key, and exchanges an entitlement. For CI, use
+`laplace login --service-account-key <KEY>`.
 
 On first login, you'll be asked whether to contribute anonymized bug patterns to the Laplace Bug DB.
 Opting in earns **50 bonus credits** on the Free and Plus tiers.
@@ -58,7 +63,7 @@ Add `laplace-sdk` to your `Cargo.toml`:
 
 ```toml
 [dev-dependencies]
-laplace-sdk = "0.1.0-alpha-1"
+laplace-sdk = { git = "https://github.com/Laplace-Labs-inc/laplace" }
 ```
 
 Wrap your concurrent struct fields. `#[laplace_tracked]` swaps the `#[track]` fields for
