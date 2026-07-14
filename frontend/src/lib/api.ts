@@ -184,7 +184,6 @@ export type ExploreCase = "deadlock" | "clean" | "cycle3";
 export interface ExploreSnapshot {
   running: boolean;
   explored: number;
-  pruned: number;
   frontier: string;
   verdict: "idle" | "running" | "clean" | "violation";
   detail: string;

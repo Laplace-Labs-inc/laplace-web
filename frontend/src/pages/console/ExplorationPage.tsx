@@ -17,7 +17,6 @@ const CASES: { id: ExploreCase; label: string; blurb: string }[] = [
 const IDLE: ExploreSnapshot = {
   running: false,
   explored: 0,
-  pruned: 0,
   frontier: "root",
   verdict: "idle",
   detail: "",
@@ -135,7 +134,6 @@ function VerdictPanel({ snap, hops }: { snap: ExploreSnapshot; hops: string[] })
         <VerdictBadge verdict={snap.verdict} />
         <div className="flex items-center gap-6 text-sm">
           <Stat label="Explored" value={snap.explored} />
-          <Stat label="Pruned" value={snap.pruned} />
         </div>
       </div>
 
