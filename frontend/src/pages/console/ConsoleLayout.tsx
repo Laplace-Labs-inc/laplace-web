@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { Activity, Boxes, ChevronsUpDown, KeyRound, LogOut, Radar } from "lucide-react";
+import { Activity, Boxes, ChevronsUpDown, Key, KeyRound, LogOut, Radar } from "lucide-react";
 import { useAuth } from "../../lib/auth";
 import { ConsoleScopeProvider, useConsoleScope } from "../../lib/console-scope";
 import { ThemeToggle } from "../../components/ThemeToggle";
@@ -113,6 +113,9 @@ function ConsoleShell() {
             </NavLink>
             <NavLink to="/console/access" className={navItem}>
               <KeyRound className="h-[18px] w-[18px]" /> Access
+            </NavLink>
+            <NavLink to="/console/service-accounts" className={navItem}>
+              <Key className="h-[18px] w-[18px]" /> Service accounts
             </NavLink>
           </div>
         </nav>

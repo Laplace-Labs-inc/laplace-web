@@ -4,6 +4,7 @@ import { ConsoleLayout } from "./pages/console/ConsoleLayout";
 import { StatusPage } from "./pages/console/StatusPage";
 import { OrgsProjectsPage } from "./pages/console/OrgsProjectsPage";
 import { AccessPage } from "./pages/console/AccessPage";
+import { ServiceAccountsPage } from "./pages/console/ServiceAccountsPage";
 import { ExplorationPage } from "./pages/console/ExplorationPage";
 import { LoginPage } from "./pages/LoginPage";
 import { AuthCallbackPage } from "./pages/AuthCallbackPage";
@@ -46,6 +47,7 @@ function App() {
             <Route path="explore" element={<ExplorationPage />} />
             <Route path="orgs" element={<OrgsProjectsPage />} />
             <Route path="access" element={<AccessPage />} />
+            <Route path="service-accounts" element={<ServiceAccountsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/console" replace />} />
         </Routes>

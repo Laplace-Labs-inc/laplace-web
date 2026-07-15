@@ -178,13 +178,87 @@ export interface AddBindingInput {
 export const addBinding = (token: string, input: AddBindingInput) =>
   authedJson<RoleBinding>("POST", "/api/v1/iam/bindings", token, input);
 
+export interface ServiceAccount {
+  id: string;
+  org_id: string;
+  project_id: string;
+  name: string;
+  email: string;
+}
+
+export interface ServiceAccountKeyMeta {
+  id: string;
+  service_account_id: string;
+  key_fingerprint: string;
+  created_at: string;
+  expires_at: string;
+  revoked_at: string | null;
+  last_used_at: string | null;
+  active: boolean;
+}
+
+export interface CreatedServiceAccountKey {
+  id: string;
+  service_account_id: string;
+  key_fingerprint: string;
+  key_material: string;
+  expires_at: string;
+}
+
+export const listServiceAccounts = (token: string, orgId: string, projectId: string) => {
+  const q = new URLSearchParams({ org_id: orgId, project_id: projectId });
+  return authedGet<ServiceAccount[]>(`/api/v1/service-accounts?${q}`, token);
+};
+
+export const createServiceAccount = (
+  token: string,
+  orgId: string,
+  projectId: string,
+  name: string,
+) =>
+  authedJson<ServiceAccount>("POST", "/api/v1/service-accounts", token, {
+    org_id: orgId,
+    project_id: projectId,
+    name,
+  });
+
+export const listServiceAccountKeys = (
+  token: string,
+  saId: string,
+  orgId: string,
+  projectId: string,
+) => {
+  const q = new URLSearchParams({ org_id: orgId, project_id: projectId });
+  return authedGet<ServiceAccountKeyMeta[]>(`/api/v1/service-accounts/${saId}/keys?${q}`, token);
+};
+
+export const createServiceAccountKey = (
+  token: string,
+  saId: string,
+  orgId: string,
+  projectId: string,
+  ttlDays?: number,
+) =>
+  authedJson<CreatedServiceAccountKey>(
+    "POST",
+    `/api/v1/service-accounts/${saId}/keys`,
+    token,
+    { org_id: orgId, project_id: projectId, ...(ttlDays ? { ttl_days: ttlDays } : {}) },
+  );
+
+export const revokeServiceAccountKey = (
+  token: string,
+  keyId: string,
+  scope: { org_id: string; project_id: string },
+) =>
+  authedJson<{ state: string }>("POST", `/api/v1/service-account-keys/${keyId}/revoke`, token, scope);
+
 // ── Live exploration view (unauthenticated demo; built-in models only) ───────
 export type ExploreCase = "deadlock" | "clean" | "cycle3";
 
 export interface ExploreSnapshot {
   running: boolean;
   explored: number;
-  pruned: number;
   frontier: string;
   verdict: "idle" | "running" | "clean" | "violation";
   detail: string;
