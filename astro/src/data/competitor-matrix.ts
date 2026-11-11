@@ -153,7 +153,7 @@ const staticCells: Record<
     madsim: cell("verify-before-publish", "GitHub stars and Discord/member counts were not verified in this worker.", "verify-before-publish"),
   },
   license: {
-    laplace: cell("Apache-2.0", "Workspace package license."),
+    laplace: cell("MIT", "Workspace package license."),
     loom: cell("verify-before-publish", "Crates.io API returned no crate license field in this worker.", "verify-before-publish"),
     shuttle: cell("verify-before-publish", "Crates.io API returned no crate license field in this worker.", "verify-before-publish"),
     stateright: cell("verify-before-publish", "Crates.io API returned no crate license field in this worker.", "verify-before-publish"),
