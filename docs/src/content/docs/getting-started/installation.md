@@ -38,7 +38,7 @@ gh release download v0.1.0-alpha-1-rc.4 \
 
 > The engine and CLI are distributed as binaries; their source lives in the private
 > `laplace-cloud` repository. The public [`laplace`](https://github.com/Laplace-Labs-inc/laplace)
-> repository contains the Apache-2.0 SDK and interface crates only.
+> repository contains the MIT-licensed SDK and interface crates only.
 
 ## SDK
 
